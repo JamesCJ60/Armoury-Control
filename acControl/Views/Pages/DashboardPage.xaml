@@ -1,0 +1,179 @@
+﻿<ui:UiPage x:Class="acControl.Views.Pages.DashboardPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:acControl.Views.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    Title="DashboardPage"
+    d:DataContext="{d:DesignInstance local:DashboardPage, IsDesignTimeCreatable=False}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    d:Background="{DynamicResource ApplicationBackgroundBrush}"
+    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+    mc:Ignorable="d">
+
+    <Grid Margin="12,9,0,0">
+        <DockPanel LastChildFill="True">
+            <ScrollViewer VerticalAlignment="Top" HorizontalAlignment="Center" DockPanel.Dock="Right" Width="365" HorizontalScrollBarVisibility="Disabled" CanContentScroll="False">
+                <StackPanel>
+                    <ui:Card Padding="9,5,9,6" Margin="0,6,0,0">
+                        <StackPanel>
+                            <TextBlock FontWeight="Bold" FontSize="17" Margin="0,0,0,2">System Specification:</TextBlock>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontWeight="DemiBold" Margin="0,0,9,0" FontSize="15">CPU:</TextBlock>
+                                <TextBlock FontSize="14" Name="tbxCPUName">Intel Core i9 12900H</TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontWeight="DemiBold" Margin="0,0,9,0" FontSize="15">GPU:</TextBlock>
+                                <TextBlock FontSize="14" Name="tbxiGPUName">Intel Core i9 12900H</TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Name="spdGPU">
+                                <TextBlock FontWeight="DemiBold" Margin="0,0,9,0" FontSize="15">GPU:</TextBlock>
+                                <TextBlock FontSize="14" Name="tbxdGPUName">Intel Core i9 12900H</TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+                    </ui:Card>
+
+                    <ui:Card Padding="9,5,9,6" Margin="0,9,0,0">
+                        <StackPanel>
+                            <TextBlock FontWeight="Bold" FontSize="17" Margin="0,0,0,2">System Fan Speed:</TextBlock>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontWeight="DemiBold" Margin="0,0,9,0" FontSize="15">CPU Fan:</TextBlock>
+                                <TextBlock FontSize="14" Name="tbxCPUFan">1000 RPM</TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontWeight="DemiBold" Margin="0,0,9,0" FontSize="15">GPU Fan:</TextBlock>
+                                <TextBlock FontSize="14" Name="tbxdGPUFan">1000 RPM</TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+                    </ui:Card>
+
+                    <ui:Card Padding="9,5,9,6" Margin="0,9,0,0">
+                        <StackPanel>
+                            <TextBlock FontWeight="Bold" FontSize="17" Margin="0,0,0,2">System Control:</TextBlock>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontWeight="DemiBold" Margin="0,0,9,0" FontSize="15">Brightness:</TextBlock>
+                                <TextBlock Margin="0,0,9,0" FontSize="15" Text="{Binding ElementName=sdBright, Path=Value, StringFormat={}{0}%}"/>
+                            </StackPanel>
+                            <Slider Minimum="0" Maximum="100" Value="80" Name="sdBright" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True" ValueChanged="sdBright_ValueChanged"/>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontWeight="DemiBold" Margin="0,0,9,0" FontSize="15">Charge Limit:</TextBlock>
+                                <TextBlock Margin="0,0,9,0" FontSize="15" Text="{Binding ElementName=sdBattery, Path=Value, StringFormat={}{0}%}"/>
+                            </StackPanel>
+                            <Slider Minimum="50" Maximum="100" Value="100" Name="sdBattery" SmallChange="1" LargeChange="2" IsSnapToTickEnabled="True" ValueChanged="sdBattery_ValueChanged"/>
+                        </StackPanel>
+                    </ui:Card>
+
+                    <ui:Card Padding="9,5,9,6" Margin="0,9,0,0">
+                        <StackPanel>
+                            <TextBlock FontWeight="Bold" FontSize="17">Graphics Performance Mode:</TextBlock>
+                            <UniformGrid Columns="4" VerticalAlignment="Center" Height="54" HorizontalAlignment="Center" Margin="0,2,0,0">
+                                <ToggleButton Width="50" Margin="4.5,0" Name="tbUlti" IsEnabled="False" ToolTip="This option allows for the best performance from your dGPU. Using this option comes at the cost of power consumption when using the battery. Toggling this option requires a system restart to work.">
+                                    <StackPanel Orientation="Horizontal">
+                                        <ui:SymbolIcon Symbol="Rocket16" FontSize="24"/>
+
+                                    </StackPanel>
+                                </ToggleButton>
+
+                                <ToggleButton Width="50" Margin="4.5,0" Name="tbStan" ToolTip="This option is Windows' default system used for multi-GPU systems. Using this option saves on power, as Windows will use the iGPU when the dGPU's performance is not needed for bascis tasks." Click="tbStan_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <ui:SymbolIcon Symbol="Gauge20" FontSize="24"/>
+
+                                    </StackPanel>
+                                </ToggleButton>
+
+                                <ToggleButton Width="50" Margin="4.5,0" Name="tbEco" ToolTip="This option disables the dGPU in order to use as little power as possible. The cost of using this mode is that you will be limited to the performance of your iGPU." Click="tbEco_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <ui:SymbolIcon Symbol="BatterySaver20" FontSize="24"/>
+
+                                    </StackPanel>
+                                </ToggleButton>
+
+                                <ToggleButton Width="50" Margin="4.5,0" Name="tbAuto" ToolTip="This options aims to create the perfect balence for your device. On battery this mode will disable the dGPU to save on power and will re-enable the dGPU when plugged into the wall." Click="tbAuto_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <ui:SymbolIcon Symbol="Scales20" FontSize="24"/>
+
+                                    </StackPanel>
+                                </ToggleButton>
+                            </UniformGrid>
+                        </StackPanel>
+                    </ui:Card>
+
+                    <ui:Card Padding="9,5,9,6" Margin="0,9,0,0">
+                        <StackPanel>
+
+                            <TextBlock FontWeight="Bold" FontSize="17">Display Control:</TextBlock>
+                            <UniformGrid Columns="3" VerticalAlignment="Center" Height="108" HorizontalAlignment="Center" Margin="0,2,0,0">
+                                <ToggleButton Width="100" Margin="4.5,0" Name="tbMax" ToolTip="" Click="tbMax_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <ui:SymbolIcon Symbol="FastAcceleration20" FontSize="24"/>
+                                        <Label Name="lblMaxDisplay" Height="23" FontSize="16" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Manual</Label>
+                                    </StackPanel>
+                                </ToggleButton>
+
+                                <ToggleButton Width="100" Margin="4.5,0" Name="tbMin" ToolTip="" Click="tbMin_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <ui:SymbolIcon Symbol="BatterySaver20" FontSize="24"/>
+                                        <Label Name="lblMinDisplay" Height="23" FontSize="16" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Manual</Label>
+                                    </StackPanel>
+                                </ToggleButton>
+
+                                <ToggleButton Width="100" Margin="4.5,0" Name="tbDisplayAuto" ToolTip="" Click="tbDisplayAuto_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <ui:SymbolIcon Symbol="Scales20" FontSize="24"/>
+                                        <Label Name="lblDisplayAuto" Height="23" FontSize="16" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Manual</Label>
+                                    </StackPanel>
+                                </ToggleButton>
+
+                                <ToggleButton Width="100" Margin="4.5,0" Name="tbDisplayOver" ToolTip="" Click="tbDisplayOver_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <ui:SymbolIcon Symbol="Gauge20" FontSize="24"/>
+                                        <Label Name="lblDisplayOver" Height="23" FontSize="16" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Manual</Label>
+                                    </StackPanel>
+                                </ToggleButton>
+                            </UniformGrid>
+                        </StackPanel>
+                    </ui:Card>
+                </StackPanel>
+            </ScrollViewer>
+            <StackPanel DockPanel.Dock="Top">
+                <TextBlock x:Name="tbxDeviceName" Text="TEST" FontSize="38" FontWeight="SemiBold" Margin="0,-5,0,0"/>
+            </StackPanel>
+            <ui:Card DockPanel.Dock="Bottom" Height="55" Margin="10,0,10,12" Padding="0" MaxWidth="662">
+                <UniformGrid Columns="4" VerticalAlignment="Center" Height="60" HorizontalAlignment="Center">
+                    <ToggleButton Width="155" Margin="4.5,0" Name="tbSilent" Click="tbSilent_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Symbol="LeafTwo16" Margin="0,0,9,0" FontSize="24"/>
+                            <Label Height="23" FontSize="16" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Silent</Label>
+                        </StackPanel>
+                    </ToggleButton>
+
+                    <ToggleButton Width="155" Margin="4.5,0" Name="tbPerf" Click="tbPerf_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Symbol="Scales20" Margin="0,0,9,0" FontSize="24"/>
+                            <Label Height="23" FontSize="16" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Performance</Label>
+                        </StackPanel>
+                    </ToggleButton>
+
+                    <ToggleButton Width="155" Margin="4.5,0" Name="tbTurbo" Click="tbTurbo_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Symbol="Gauge20" Margin="0,0,9,0" FontSize="24"/>
+                            <Label Height="23" FontSize="16" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Turbo</Label>
+                        </StackPanel>
+                    </ToggleButton>
+
+                    <ToggleButton Width="155" Margin="4.5,0,4.5,0" Name="tbMan" IsEnabled="False">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Symbol="Book20" Margin="0,0,9,0" FontSize="24"/>
+                            <Label Height="23" FontSize="16" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Manual</Label>
+                        </StackPanel>
+                    </ToggleButton>
+                </UniformGrid>
+            </ui:Card>
+
+            <Image Name="imgPerformProfile" Stretch="Uniform"  Source="pack://application:,,,/Images/ACProfiles/Bal.png" Margin="18"></Image>
+
+        </DockPanel>
+    </Grid>
+</ui:UiPage>
