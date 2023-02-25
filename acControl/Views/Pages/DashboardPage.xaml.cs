@@ -150,6 +150,9 @@ namespace acControl.Views.Pages
         }
         public async void switchProfile(int ACProfile)
         {
+            Settings.Default.ACMode = ACProfile;
+            Settings.Default.Save();
+
             if (Settings.Default.ACMode == 0)
             {
                 if (tbSilent.IsChecked == false && tbPerf.IsChecked == false && tbTurbo.IsChecked == false && tbMan.IsChecked == false) tbSilent.IsChecked = true;
@@ -190,9 +193,6 @@ namespace acControl.Views.Pages
             {
                 imgPerformProfile.Source = new BitmapImage(new Uri(App.location + "\\Images\\ACProfiles\\Windows.png"));
             }
-
-            Settings.Default.ACMode = ACProfile;
-            Settings.Default.Save();
         }
 
         private void sdBright_ValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
@@ -277,32 +277,17 @@ namespace acControl.Views.Pages
 
         private void tbTurbo_Click(object sender, RoutedEventArgs e)
         {
-            if (tbSilent.IsChecked == false && tbPerf.IsChecked == false && tbTurbo.IsChecked == false && tbMan.IsChecked == false) tbTurbo.IsChecked = true;
-            tbSilent.IsChecked = false;
-            tbPerf.IsChecked = false;
-            tbMan.IsChecked = false;
-
-            RunCLI.RunCommand("Powershell.exe (Get-WmiObject -Namespace root/WMI -Class AsusAtkWmi_WMNB).DEVS(0x00120075, 1)", true);
+            switchProfile(2);
         }
 
         private void tbPerf_Click(object sender, RoutedEventArgs e)
         {
-            if (tbSilent.IsChecked == false && tbPerf.IsChecked == false && tbTurbo.IsChecked == false && tbMan.IsChecked == false) tbPerf.IsChecked = true;
-            tbSilent.IsChecked = false;
-            tbTurbo.IsChecked = false;
-            tbMan.IsChecked = false;
-
-            RunCLI.RunCommand("Powershell.exe (Get-WmiObject -Namespace root/WMI -Class AsusAtkWmi_WMNB).DEVS(0x00120075, 0)", true);
+            switchProfile(1);
         }
 
         private void tbSilent_Click(object sender, RoutedEventArgs e)
         {
-            if (tbSilent.IsChecked == false && tbPerf.IsChecked == false && tbTurbo.IsChecked == false && tbMan.IsChecked == false) tbSilent.IsChecked = true;
-            tbTurbo.IsChecked = false;
-            tbPerf.IsChecked = false;
-            tbMan.IsChecked = false;
-
-            RunCLI.RunCommand("Powershell.exe (Get-WmiObject -Namespace root/WMI -Class AsusAtkWmi_WMNB).DEVS(0x00120075, 2)", true);
+            switchProfile(0);
         }
 
         private void tbDisplayAuto_Click(object sender, RoutedEventArgs e)
