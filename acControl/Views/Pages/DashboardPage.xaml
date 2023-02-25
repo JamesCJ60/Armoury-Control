@@ -15,8 +15,8 @@
 
     <Grid Margin="12,9,0,0">
         <DockPanel LastChildFill="True">
-            <ScrollViewer VerticalAlignment="Top" HorizontalAlignment="Center" DockPanel.Dock="Right" Width="365" HorizontalScrollBarVisibility="Disabled" CanContentScroll="False">
-                <StackPanel>
+            <ScrollViewer VerticalAlignment="Top" HorizontalAlignment="Center" DockPanel.Dock="Right" Width="365" HorizontalScrollBarVisibility="Disabled" CanContentScroll="False" Margin="0,0,0,12">
+                <StackPanel Margin="0,0,4,0">
                     <ui:Card Padding="9,5,9,6" Margin="0,6,0,0">
                         <StackPanel>
                             <TextBlock FontWeight="Bold" FontSize="17" Margin="0,0,0,2">System Specification:</TextBlock>
@@ -38,14 +38,27 @@
                     <ui:Card Padding="9,5,9,6" Margin="0,9,0,0">
                         <StackPanel>
                             <TextBlock FontWeight="Bold" FontSize="17" Margin="0,0,0,2">System Fan Speed:</TextBlock>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock FontWeight="DemiBold" Margin="0,0,9,0" FontSize="15">CPU Fan:</TextBlock>
-                                <TextBlock FontSize="14" Name="tbxCPUFan">1000 RPM</TextBlock>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock FontWeight="DemiBold" Margin="0,0,9,0" FontSize="15">GPU Fan:</TextBlock>
-                                <TextBlock FontSize="14" Name="tbxdGPUFan">1000 RPM</TextBlock>
-                            </StackPanel>
+
+                            <UniformGrid Columns="2" Margin="0,3,0,0">
+                                <Grid TextBlock.TextAlignment="Center">
+                                    <TextBlock Panel.ZIndex="1" VerticalAlignment="Center" HorizontalAlignment="Center" Name="tbxCPUPer">100%</TextBlock>
+                                    <StackPanel>
+                                        <TextBlock FontWeight="DemiBold" FontSize="15">CPU Fan</TextBlock>
+                                        <ui:ProgressRing Name="prCPUFan" Progress="50" Margin="0,3,0,3" Height="75" Width="75" />
+                                        <TextBlock FontSize="14" Name="tbxCPUFan">1000 RPM</TextBlock>
+                                    </StackPanel>
+                                </Grid>
+
+                                <Grid TextBlock.TextAlignment="Center">
+                                    <TextBlock Panel.ZIndex="1" VerticalAlignment="Center" HorizontalAlignment="Center" Name="tbxdGPUPer">100%</TextBlock>
+                                    <StackPanel>
+                                        <TextBlock FontWeight="DemiBold" FontSize="15">GPU Fan</TextBlock>
+                                        <ui:ProgressRing Name="prdGPUFan" Progress="50" Margin="0,3,0,3" Height="75" Width="75" />
+                                        <TextBlock FontSize="14" Name="tbxdGPUFan">1000 RPM</TextBlock>
+                                    </StackPanel>
+                                </Grid>
+                            </UniformGrid>
+
                         </StackPanel>
                     </ui:Card>
 
@@ -65,12 +78,12 @@
                         </StackPanel>
                     </ui:Card>
 
-                    <ui:Card Padding="9,5,9,6" Margin="0,9,0,0">
-                        <StackPanel>
+                    <ui:Card Padding="9,5,9,6" Margin="0,9,0,9">
+                        <StackPanel Margin="0,0,0,-2" >
                             <TextBlock FontWeight="Bold" FontSize="17">Graphics Performance Mode:</TextBlock>
                             <UniformGrid Columns="4" VerticalAlignment="Center" Height="54" HorizontalAlignment="Center" Margin="0,2,0,0">
                                 <ToggleButton Width="50" Margin="4.5,0" Name="tbUlti" IsEnabled="False" ToolTip="This option allows for the best performance from your dGPU. Using this option comes at the cost of power consumption when using the battery. Toggling this option requires a system restart to work.">
-                                    <StackPanel Orientation="Horizontal">
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
                                         <ui:SymbolIcon Symbol="Rocket16" FontSize="24"/>
 
                                     </StackPanel>
@@ -100,7 +113,7 @@
                         </StackPanel>
                     </ui:Card>
 
-                    <ui:Card Padding="9,5,9,6" Margin="0,9,0,0">
+                    <ui:Card Padding="9,5,9,6">
                         <StackPanel>
 
                             <TextBlock FontWeight="Bold" FontSize="17">Display Control:</TextBlock>

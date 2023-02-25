@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Management;
 using System.Runtime.InteropServices;
@@ -377,54 +378,60 @@ namespace acControl.Scripts
             }
         }
 
-        public static int[] HorizontalResolution = new int[100];
-        public static int[] VerticalResolution = new int[100];
-        public static int[] RefreshRate = new int[100];
-
-        public static int minRefreshRate = 0;
-        public static int maxRefreshRate = 0;
+        public static int minRefreshRate = 60;
+        public static int maxRefreshRate = 60;
         public static int maxVertRes = 0;
         public static int maxHorizRes = 0;
 
+        [StructLayout(LayoutKind.Sequential)]
+        public struct DEVMODE
+        {
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
+            public string dmDeviceName;
+            public short dmSpecVersion;
+            public short dmDriverVersion;
+            public short dmSize;
+            public short dmDriverExtra;
+            public int dmFields;
+            public short dmOrientation;
+            public short dmPaperSize;
+            public short dmPaperLength;
+            public short dmPaperWidth;
+            public short dmScale;
+            public short dmCopies;
+            public short dmDefaultSource;
+            public short dmPrintQuality;
+            public short dmColor;
+            public short dmDuplex;
+            public short dmYResolution;
+            public short dmTTOption;
+            public short dmCollate;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
+            public string dmFormName;
+            public short dmLogPixels;
+            public int dmBitsPerPel;
+            public int dmPelsWidth;
+            public int dmPelsHeight;
+            public int dmDisplayFlags;
+            public int dmDisplayFrequency;
+            public int dmICMMethod;
+            public int dmICMIntent;
+            public int dmMediaType;
+            public int dmDitherType;
+            public int dmReserved1;
+            public int dmReserved2;
+            public int dmPanningWidth;
+            public int dmPanningHeight;
+        }
+
+        [DllImport("user32.dll")]
+        public static extern bool EnumDisplaySettings(string lpszDeviceName, int iModeNum, ref DEVMODE lpDevMode);
+
         public static void getDisplayData()
         {
-            var scope = new ManagementScope();
-
-            var query = new ObjectQuery("SELECT * FROM CIM_VideoControllerResolution");
-
-            using (var searcher = new ManagementObjectSearcher(scope, query))
-            {
-                var results = searcher.Get();
-
-
-                int i = 0;
-                foreach (var result in results)
-                {
-                    i++;
-                }
-
-                HorizontalResolution = new int[i];
-                VerticalResolution = new int[i];
-                RefreshRate = new int[i];
-
-                i = 0;
-                foreach (var result in results)
-                {
-                    HorizontalResolution[i] = Convert.ToInt32(result["HorizontalResolution"]);
-                    VerticalResolution[i] = Convert.ToInt32(result["VerticalResolution"]);
-                    RefreshRate[i] = Convert.ToInt32(result["RefreshRate"]);
-                    i++;
-                }
-            }
-            Array.Sort(HorizontalResolution);
-            Array.Sort(VerticalResolution);
-            Array.Sort(RefreshRate);
-
-            maxHorizRes = HorizontalResolution.Max();
-            maxVertRes = VerticalResolution.Max();
-            maxRefreshRate = RefreshRate.Max();
-            if (RefreshRate.Min() < 60) minRefreshRate = 60;
-            else minRefreshRate = RefreshRate.Min();
+            DEVMODE devMode = new DEVMODE();
+            EnumDisplaySettings("\\\\.\\DISPLAY1", -1, ref devMode);
+            maxRefreshRate = devMode.dmDisplayFrequency;
         }
 
         public static int currentRefreshRate = 0;
@@ -455,6 +462,19 @@ namespace acControl.Scripts
             return fanSpeed.ToString();
         }
 
+        public static string GPUFanSpeedPercent()
+        {
+            string gpuFan = RunCLI.RunCommand("Powershell.exe (Get-WmiObject -Namespace root/WMI -Class AsusAtkWmi_WMNB).DSTS(0x00110014)", true);
+            var result = gpuFan.Split('\n');
+            string output = result[12].Substring(result[12].IndexOf(':') + 2);
+            int gpuSpeed = Convert.ToInt32(output);
+            string hexValue = gpuSpeed.ToString("X");
+
+            uint fanSpeed = Convert.ToUInt32(hexValue, 16);
+            fanSpeed = (fanSpeed - 0x00010000);
+            return fanSpeed.ToString();
+        }
+
         public static string CPUFanSpeed()
         {
             string cpuFan = RunCLI.RunCommand("Powershell.exe (Get-WmiObject -Namespace root/WMI -Class AsusAtkWmi_WMNB).DSTS(0x00110013)", true);
@@ -466,6 +486,35 @@ namespace acControl.Scripts
             uint fanSpeed = Convert.ToUInt32(hexValue, 16);
             fanSpeed = (fanSpeed - 0x00010000) * 0x64;
             return fanSpeed.ToString();
+        }
+
+        public static string CPUFanSpeedPercent()
+        {
+            string cpuFan = RunCLI.RunCommand("Powershell.exe (Get-WmiObject -Namespace root/WMI -Class AsusAtkWmi_WMNB).DSTS(0x00110013)", true);
+            var result = cpuFan.Split('\n');
+            string output = result[12].Substring(result[12].IndexOf(':') + 2);
+            int cpuSpeed = Convert.ToInt32(output);
+            string hexValue = cpuSpeed.ToString("X");
+
+            uint fanSpeed = Convert.ToUInt32(hexValue, 16);
+            fanSpeed = (fanSpeed - 0x00010000);
+            return fanSpeed.ToString();
+        }
+
+        public static float? CpuTemp { get; private set; }
+        public static float? BatteryDischarge { get; private set; }
+
+        public static void ReadSensors()
+        {
+            try
+            {
+                using (var cb = new PerformanceCounter("Power Meter", "Power", "Power Meter (0)", true))
+                    BatteryDischarge = cb.NextValue() / 1000;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Failed reading sensors: {ex.Message}");
+            }
         }
 
         public static string batPercent = "";

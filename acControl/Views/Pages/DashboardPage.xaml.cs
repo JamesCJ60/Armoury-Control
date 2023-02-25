@@ -11,6 +11,7 @@ using System.Windows;
 using acControl.Views.Windows;
 using System.DirectoryServices.ActiveDirectory;
 using System.Threading;
+using System.Drawing;
 
 namespace acControl.Views.Pages
 {
@@ -42,7 +43,7 @@ namespace acControl.Views.Pages
 
             tbxCPUName.Text = GetSystemInfo.GetCPUName().Replace("with Radeon Graphics", null);
             tbxiGPUName.Text = GetSystemInfo.GetiGPUName().Replace("(R)", null);
-            string dGPU =  GetSystemInfo.GetdGPUName().Replace(" GPU", null);
+            string dGPU = GetSystemInfo.GetdGPUName().Replace(" GPU", null);
             if (dGPU == null || dGPU == "") spdGPU.Visibility = System.Windows.Visibility.Collapsed;
             else tbxdGPUName.Text = dGPU;
 
@@ -67,7 +68,7 @@ namespace acControl.Views.Pages
             lblDisplayAuto.Content = " Auto";
             lblDisplayOver.Content = " OD  ";
 
-            
+
             GetSystemInfo.CurrentDisplayRrefresh();
 
             //set up timer for sensor update
@@ -75,7 +76,6 @@ namespace acControl.Views.Pages
             sensor.Interval = TimeSpan.FromSeconds(2);
             sensor.Tick += SensorUpdate_Tick;
             sensor.Start();
-
 
             Global.wasUsingOD = Settings.Default.DisplayOver;
             if (Global.wasUsingOD == true) tbDisplayOver.IsChecked = true;
@@ -122,16 +122,21 @@ namespace acControl.Views.Pages
 
         async void SensorUpdate_Tick(object sender, EventArgs e)
         {
-             update();
+            update();
         }
 
 
         private async void update()
         {
-            
-                GetSystemInfo.getBattery();
-                tbxCPUFan.Text = $"{await Task.Run(() => GetSystemInfo.CPUFanSpeed())} RPM";
-                tbxdGPUFan.Text = $"{await Task.Run(() => GetSystemInfo.GPUFanSpeed())} RPM";
+
+            GetSystemInfo.getBattery();
+            tbxCPUFan.Text = $"{await Task.Run(() => GetSystemInfo.CPUFanSpeed())} RPM";
+            tbxdGPUFan.Text = $"{await Task.Run(() => GetSystemInfo.GPUFanSpeed())} RPM";
+            prdGPUFan.Progress = Math.Round(Convert.ToDouble(await Task.Run(() => GetSystemInfo.GPUFanSpeedPercent())) / 0.688);
+            prCPUFan.Progress = Math.Round(Convert.ToDouble(await Task.Run(() => GetSystemInfo.CPUFanSpeedPercent())) / 0.688);
+
+            tbxCPUPer.Text = $"{Math.Round(Convert.ToDouble(await Task.Run(() => GetSystemInfo.CPUFanSpeedPercent())) / 0.688)}%";
+            tbxdGPUPer.Text = $"{Math.Round(Convert.ToDouble(await Task.Run(() => GetSystemInfo.GPUFanSpeedPercent())) / 0.688)}%";
 
             if (tbAuto.IsChecked == true && setup == true || tbDisplayAuto.IsChecked == true && setup == true)
             {
@@ -140,13 +145,13 @@ namespace acControl.Views.Pages
                     SetSystemSettings.setACDCSettings();
                 });
                 string dGPU = await Task.Run(() => GetSystemInfo.GetdGPUName().Replace(" GPU", null));
-                    if (dGPU == null || dGPU == "") spdGPU.Visibility = System.Windows.Visibility.Collapsed;
-                    else
-                    {
-                        spdGPU.Visibility = System.Windows.Visibility.Visible;
-                        tbxdGPUName.Text = dGPU;
-                    }
+                if (dGPU == null || dGPU == "") spdGPU.Visibility = System.Windows.Visibility.Collapsed;
+                else
+                {
+                    spdGPU.Visibility = System.Windows.Visibility.Visible;
+                    tbxdGPUName.Text = dGPU;
                 }
+            }
         }
         public async void switchProfile(int ACProfile)
         {
