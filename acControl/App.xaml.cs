@@ -1,6 +1,8 @@
 ﻿using acControl.Models;
+using acControl.Properties;
 using acControl.Scripts;
 using acControl.Services;
+using acControl.Views.Pages;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -12,6 +14,7 @@ using System.Reflection;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Threading;
 using Wpf.Ui.Mvvm.Contracts;
 using Wpf.Ui.Mvvm.Services;
@@ -106,6 +109,8 @@ namespace acControl
                     Environment.Exit(0);
                 }
 
+                _ = Tablet.TabletDevices;
+
                 location = AppDomain.CurrentDomain.BaseDirectory;
 
                 GetSystemInfo.start();
@@ -117,6 +122,7 @@ namespace acControl
             } catch(Exception ex)
             {
                 MessageBox.Show(ex.ToString());  
+                Environment.Exit(0);
             }
         }
 
@@ -152,6 +158,13 @@ namespace acControl
                 {
                     case 56:    // Rog button
                     case 174:   // FN+F5
+                        int profile = Settings.Default.ACMode;
+                        profile++;
+                        if (profile > 2) profile = 0;
+
+                        Settings.Default.ACMode = profile;
+                        Settings.Default.Save();
+                        DashboardPage.updateProfile = true;
                         break;
                     case 179:   // FN+F4
                         break;

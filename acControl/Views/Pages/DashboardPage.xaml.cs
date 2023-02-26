@@ -12,6 +12,7 @@ using acControl.Views.Windows;
 using System.DirectoryServices.ActiveDirectory;
 using System.Threading;
 using System.Drawing;
+using System.Windows.Input;
 
 namespace acControl.Views.Pages
 {
@@ -25,13 +26,14 @@ namespace acControl.Views.Pages
             get;
         }
 
+        public static bool updateProfile = false;
 
         public DashboardPage(ViewModels.DashboardViewModel viewModel)
         {
             ViewModel = viewModel;
-
+            _ = Tablet.TabletDevices;
             InitializeComponent();
-
+            _ = Tablet.TabletDevices;
             setupGUI();
         }
         private bool setup = false;
@@ -98,8 +100,6 @@ namespace acControl.Views.Pages
                 Settings.Default.Save();
                 tbDisplayOver.Visibility = Visibility.Collapsed;
             }
-
-            
 
             switchProfile(Settings.Default.ACMode);
 
@@ -179,6 +179,9 @@ namespace acControl.Views.Pages
                     }
                 }
             }
+
+
+            if (updateProfile == true) { switchProfile(Settings.Default.ACMode); updateProfile = false; }
         }
         public async void switchProfile(int ACProfile)
         {
@@ -187,7 +190,7 @@ namespace acControl.Views.Pages
 
             if (Settings.Default.ACMode == 0)
             {
-                if (tbSilent.IsChecked == false && tbPerf.IsChecked == false && tbTurbo.IsChecked == false && tbMan.IsChecked == false) tbSilent.IsChecked = true;
+                tbSilent.IsChecked = true;
                 tbTurbo.IsChecked = false;
                 tbPerf.IsChecked = false;
                 tbMan.IsChecked = false;
@@ -199,7 +202,7 @@ namespace acControl.Views.Pages
             }
             if (Settings.Default.ACMode == 1)
             {
-                if (tbSilent.IsChecked == false && tbPerf.IsChecked == false && tbTurbo.IsChecked == false && tbMan.IsChecked == false) tbPerf.IsChecked = true;
+                tbPerf.IsChecked = true;
                 tbSilent.IsChecked = false;
                 tbTurbo.IsChecked = false;
                 tbMan.IsChecked = false;
@@ -211,7 +214,7 @@ namespace acControl.Views.Pages
             }
             if (Settings.Default.ACMode == 2)
             {
-                if (tbSilent.IsChecked == false && tbPerf.IsChecked == false && tbTurbo.IsChecked == false && tbMan.IsChecked == false) tbTurbo.IsChecked = true;
+                tbTurbo.IsChecked = true;
                 tbSilent.IsChecked = false;
                 tbPerf.IsChecked = false;
                 tbMan.IsChecked = false;

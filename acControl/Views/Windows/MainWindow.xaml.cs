@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Security.Principal;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Threading;
 using Wpf.Ui.Controls.Interfaces;
@@ -32,6 +33,7 @@ namespace acControl.Views.Windows
             
 
             InitializeComponent();
+            _ = Tablet.TabletDevices;
             SetPageService(pageService);
 
             navigationService.SetNavigationControl(RootNavigation);
