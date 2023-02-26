@@ -1,6 +1,10 @@
 ﻿using HidLibrary;
 using System.Drawing;
 
+//
+// This is a optimised/simplified version of Aura.cs from https://github.com/seerge/g-helper
+// I do not take credit for the full functionality of the code.
+//
 public static class Aura
 {
     private static readonly byte[] MESSAGE_SET = { 0x5d, 0xb5 };

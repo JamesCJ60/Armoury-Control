@@ -41,19 +41,19 @@
 
                             <UniformGrid Columns="2" Margin="0,3,0,0">
                                 <Grid TextBlock.TextAlignment="Center">
-                                    <TextBlock Panel.ZIndex="1" VerticalAlignment="Center" HorizontalAlignment="Center" Name="tbxCPUPer">100%</TextBlock>
+                                    <TextBlock Panel.ZIndex="1" VerticalAlignment="Center" HorizontalAlignment="Center" Name="tbxCPUPer" FontSize="12">100%</TextBlock>
                                     <StackPanel>
                                         <TextBlock FontWeight="DemiBold" FontSize="15">CPU Fan</TextBlock>
-                                        <ui:ProgressRing Name="prCPUFan" Progress="50" Margin="0,3,0,3" Height="75" Width="75" />
+                                        <ui:ProgressRing Name="prCPUFan" Progress="50" Margin="0,3,0,3"/>
                                         <TextBlock FontSize="14" Name="tbxCPUFan">1000 RPM</TextBlock>
                                     </StackPanel>
                                 </Grid>
 
                                 <Grid TextBlock.TextAlignment="Center">
-                                    <TextBlock Panel.ZIndex="1" VerticalAlignment="Center" HorizontalAlignment="Center" Name="tbxdGPUPer">100%</TextBlock>
+                                    <TextBlock Panel.ZIndex="1" VerticalAlignment="Center" HorizontalAlignment="Center" Name="tbxdGPUPer" FontSize="12">100%</TextBlock>
                                     <StackPanel>
                                         <TextBlock FontWeight="DemiBold" FontSize="15">GPU Fan</TextBlock>
-                                        <ui:ProgressRing Name="prdGPUFan" Progress="50" Margin="0,3,0,3" Height="75" Width="75" />
+                                        <ui:ProgressRing Name="prdGPUFan" Progress="50" Margin="0,3,0,3" />
                                         <TextBlock FontSize="14" Name="tbxdGPUFan">1000 RPM</TextBlock>
                                     </StackPanel>
                                 </Grid>

@@ -8,8 +8,10 @@
     xmlns:pages="clr-namespace:acControl.Views.Pages"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="{Binding ViewModel.ApplicationTitle, Mode=OneWay}"
-    MinWidth="1150"
-    MinHeight="650"
+    MinWidth="1130"
+    MinHeight="600"
+    Width="1200"
+    Height="670"
     d:DataContext="{d:DesignInstance local:MainWindow,
                                      IsDesignTimeCreatable=True}"
     d:Background="{DynamicResource ApplicationBackgroundBrush}"

@@ -1,4 +1,5 @@
-﻿using LibreHardwareMonitor.Hardware;
+﻿using acControl.Properties;
+using LibreHardwareMonitor.Hardware;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
@@ -431,80 +432,27 @@ namespace acControl.Scripts
         {
             DEVMODE devMode = new DEVMODE();
             EnumDisplaySettings("\\\\.\\DISPLAY1", -1, ref devMode);
+
             maxRefreshRate = devMode.dmDisplayFrequency;
+
+            if (Settings.Default.MaxRefreshRate > maxRefreshRate) maxRefreshRate = Settings.Default.MaxRefreshRate;
+            else if (maxRefreshRate > Settings.Default.MaxRefreshRate) Settings.Default.MaxRefreshRate = maxRefreshRate;
+
+            Settings.Default.Save();
         }
 
         public static int currentRefreshRate = 0;
         public static void CurrentDisplayRrefresh()
         {
-
-                ManagementObjectSearcher searcher =
-            new ManagementObjectSearcher("root\\CIMV2",
-            "SELECT * FROM Win32_VideoController");
-                int i = 0;
-                foreach (ManagementObject queryObj in searcher.Get())
-                {
-                    if (i < 1) currentRefreshRate = Convert.ToInt32(queryObj["CurrentRefreshRate"]);
-                    i++;
-                }
-        }
-
-        public static string GPUFanSpeed()
-        {
-            string gpuFan = RunCLI.RunCommand("Powershell.exe (Get-WmiObject -Namespace root/WMI -Class AsusAtkWmi_WMNB).DSTS(0x00110014)", true);
-            var result = gpuFan.Split('\n');
-            string output = result[12].Substring(result[12].IndexOf(':') + 2);
-            int gpuSpeed = Convert.ToInt32(output);
-            string hexValue = gpuSpeed.ToString("X");
-
-            uint fanSpeed = Convert.ToUInt32(hexValue, 16);
-            fanSpeed = (fanSpeed - 0x00010000) * 0x64;
-            return fanSpeed.ToString();
-        }
-
-        public static string GPUFanSpeedPercent()
-        {
-            string gpuFan = RunCLI.RunCommand("Powershell.exe (Get-WmiObject -Namespace root/WMI -Class AsusAtkWmi_WMNB).DSTS(0x00110014)", true);
-            var result = gpuFan.Split('\n');
-            string output = result[12].Substring(result[12].IndexOf(':') + 2);
-            int gpuSpeed = Convert.ToInt32(output);
-            string hexValue = gpuSpeed.ToString("X");
-
-            uint fanSpeed = Convert.ToUInt32(hexValue, 16);
-            fanSpeed = (fanSpeed - 0x00010000);
-            return fanSpeed.ToString();
-        }
-
-        public static string CPUFanSpeed()
-        {
-            string cpuFan = RunCLI.RunCommand("Powershell.exe (Get-WmiObject -Namespace root/WMI -Class AsusAtkWmi_WMNB).DSTS(0x00110013)", true);
-            var result = cpuFan.Split('\n');
-            string output = result[12].Substring(result[12].IndexOf(':') + 2);
-            int cpuSpeed = Convert.ToInt32(output);
-            string hexValue = cpuSpeed.ToString("X");
-
-            uint fanSpeed = Convert.ToUInt32(hexValue, 16);
-            fanSpeed = (fanSpeed - 0x00010000) * 0x64;
-            return fanSpeed.ToString();
-        }
-
-        public static string CPUFanSpeedPercent()
-        {
-            string cpuFan = RunCLI.RunCommand("Powershell.exe (Get-WmiObject -Namespace root/WMI -Class AsusAtkWmi_WMNB).DSTS(0x00110013)", true);
-            var result = cpuFan.Split('\n');
-            string output = result[12].Substring(result[12].IndexOf(':') + 2);
-            int cpuSpeed = Convert.ToInt32(output);
-            string hexValue = cpuSpeed.ToString("X");
-
-            uint fanSpeed = Convert.ToUInt32(hexValue, 16);
-            fanSpeed = (fanSpeed - 0x00010000);
-            return fanSpeed.ToString();
+            DEVMODE devMode = new DEVMODE();
+            EnumDisplaySettings("\\\\.\\DISPLAY1", -1, ref devMode);
+            currentRefreshRate = devMode.dmDisplayFrequency;
         }
 
         public static float? CpuTemp { get; private set; }
         public static float? BatteryDischarge { get; private set; }
 
-        public static void ReadSensors()
+        public static void ReadBatterySensors()
         {
             try
             {

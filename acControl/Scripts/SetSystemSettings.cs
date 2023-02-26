@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Management;
 using System.Text;
@@ -40,58 +42,37 @@ namespace acControl.Scripts
             });
         }
 
-
-        public static bool hasToggledDisplay = false;
-        public static bool hasToggledGPU = false;
-        private static UInt16 lastStatus = 9999;
-        public static UInt16 statuscode = 0;
-        public static void setACDCSettings()
+        public static async void setACDCSettings()
         {
-            statuscode = GetSystemInfo.statuscode;
-            if (statuscode == 2 || statuscode == 6 || statuscode == 7 || statuscode == 8)
+            await Task.Run(() =>
             {
-                if (Global.toggleDisplay == true && hasToggledDisplay == false)
-                {
-                     setDisplaySettings(1);
-                    hasToggledDisplay = true;
-                }
-                if (Global.toggleGPU == true && hasToggledGPU == false)
-                {
-                    setGPUSettings(0);
-                    hasToggledGPU = true; 
-                }
-            }
-            else
-            {
-                if (Global.toggleDisplay == true && hasToggledDisplay == false)
-                {
+                bool isBattery = false;
+                UInt16 statuscode = GetSystemInfo.statuscode;
+                if (statuscode == 2 || statuscode == 6 || statuscode == 7 || statuscode == 8) isBattery = true;
 
-                     setDisplaySettings(0);
+                int eco = App.wmi.DeviceGet(ASUSWmi.GPUEco);
+                int mux = App.wmi.DeviceGet(ASUSWmi.GPUMux);
 
-                    hasToggledDisplay = true;
-                }
-                if (Global.toggleGPU == true && hasToggledGPU == false)
+                if (mux < 1) return;
+
+                if (isBattery == true && eco == 0)
                 {
-                    setGPUSettings(1);
-                    hasToggledGPU = true;
+                    if (Settings.Default.GPUMode == 3) setGPUSettings(1);
+                    if (Settings.Default.DisplayMode == 2) setDisplaySettings(0);
                 }
-            }
-
-            if (statuscode != lastStatus)
-            {
-                lastStatus = statuscode;
-                hasToggledGPU = false;
-                hasToggledDisplay = false;
-
-            }
+                if (isBattery == false && eco == 1)
+                {
+                    if (Settings.Default.GPUMode == 3) setDisplaySettings(0);
+                    if (Settings.Default.DisplayMode == 2) setGPUSettings(1);
+                }
+            });
         }
 
         public static async void setGPUSettings(int index)
         {
             await Task.Run(() =>
             {
-                if (index == 1) RunCLI.RunCommand("Powershell.exe (Get-WmiObject -Namespace root/WMI -Class AsusAtkWmi_WMNB).DEVS(0x00090020, 1)", false);
-                else RunCLI.RunCommand("Powershell.exe (Get-WmiObject -Namespace root/WMI -Class AsusAtkWmi_WMNB).DEVS(0x00090020, 0)", false);
+                App.wmi.DeviceSet(ASUSWmi.GPUEco, index);
 
                 Thread.Sleep(1000);
 
@@ -102,8 +83,6 @@ namespace acControl.Scripts
 
                 GarbageCollection.Garbage_Collect();
             });
-
-
         }
 
         public static async void setDisplaySettings(int index)
@@ -113,8 +92,16 @@ namespace acControl.Scripts
                 if (index == 1) RunCLI.RunCommand($"{App.location + "\\Assets\\CRS\\CSR.exe"} /f={GetSystemInfo.maxRefreshRate} /force", false);
                 else RunCLI.RunCommand($"{App.location + "\\Assets\\CRS\\CSR.exe"} /f={GetSystemInfo.minRefreshRate} /force", false);
 
-                if (index == 1 && Global.wasUsingOD == true) RunCLI.RunCommand("Powershell.exe (Get-WmiObject -Namespace root/WMI -Class AsusAtkWmi_WMNB).DEVS(0x00050019, 1)", false);
-                else RunCLI.RunCommand("Powershell.exe (Get-WmiObject -Namespace root/WMI -Class AsusAtkWmi_WMNB).DEVS(0x00050019, 0)", false);
+                try
+                {
+                    int overdrive = 0;
+                    if (Settings.Default.DisplayOver == true) overdrive = 1;
+                    if (overdrive > 0) App.wmi.DeviceSet(ASUSWmi.ScreenOverdrive, overdrive);
+                }
+                catch
+                {
+                    Debug.WriteLine("Screen Overdrive not supported");
+                }
 
                 GarbageCollection.Garbage_Collect();
             });

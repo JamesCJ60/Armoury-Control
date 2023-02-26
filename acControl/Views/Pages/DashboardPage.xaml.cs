@@ -47,9 +47,6 @@ namespace acControl.Views.Pages
             if (dGPU == null || dGPU == "") spdGPU.Visibility = System.Windows.Visibility.Collapsed;
             else tbxdGPUName.Text = dGPU;
 
-            tbxCPUFan.Text = $"{GetSystemInfo.CPUFanSpeed()} RPM";
-            tbxdGPUFan.Text = $"{GetSystemInfo.GPUFanSpeed()} RPM";
-
             sdBattery.Value = (int)Settings.Default.BatLimit;
             sdBright.Value = (int)GetSystemInfo.getBrightness();
 
@@ -73,13 +70,36 @@ namespace acControl.Views.Pages
 
             //set up timer for sensor update
             DispatcherTimer sensor = new DispatcherTimer();
-            sensor.Interval = TimeSpan.FromSeconds(2);
+            sensor.Interval = TimeSpan.FromSeconds(1.75);
             sensor.Tick += SensorUpdate_Tick;
             sensor.Start();
 
             Global.wasUsingOD = Settings.Default.DisplayOver;
-            if (Global.wasUsingOD == true) tbDisplayOver.IsChecked = true;
+            if (Global.wasUsingOD == true)
+            {
+                tbDisplayOver.IsChecked = true;
+            }
 
+            int overdrive = 0;
+            try
+            {
+                overdrive = App.wmi.DeviceGet(ASUSWmi.ScreenOverdrive);
+
+                if (Global.wasUsingOD == true && overdrive == 0)
+                {
+                    App.wmi.DeviceSet(ASUSWmi.ScreenOverdrive, 1);
+                }
+            }
+            catch
+            {
+                Debug.WriteLine("Screen Overdrive not supported");
+                Global.wasUsingOD = false;
+                Settings.Default.DisplayOver = false;
+                Settings.Default.Save();
+                tbDisplayOver.Visibility = Visibility.Collapsed;
+            }
+
+            
 
             switchProfile(Settings.Default.ACMode);
 
@@ -128,28 +148,32 @@ namespace acControl.Views.Pages
 
         private async void update()
         {
-
+            
             GetSystemInfo.getBattery();
-            tbxCPUFan.Text = $"{await Task.Run(() => GetSystemInfo.CPUFanSpeed())} RPM";
-            tbxdGPUFan.Text = $"{await Task.Run(() => GetSystemInfo.GPUFanSpeed())} RPM";
-            prdGPUFan.Progress = Math.Round(Convert.ToDouble(await Task.Run(() => GetSystemInfo.GPUFanSpeedPercent())) / 0.688);
-            prCPUFan.Progress = Math.Round(Convert.ToDouble(await Task.Run(() => GetSystemInfo.CPUFanSpeedPercent())) / 0.688);
 
-            tbxCPUPer.Text = $"{Math.Round(Convert.ToDouble(await Task.Run(() => GetSystemInfo.CPUFanSpeedPercent())) / 0.688)}%";
-            tbxdGPUPer.Text = $"{Math.Round(Convert.ToDouble(await Task.Run(() => GetSystemInfo.GPUFanSpeedPercent())) / 0.688)}%";
+            if(Global.isMinimised == false)
+            {
+                tbxCPUFan.Text = $"{App.wmi.DeviceGet(ASUSWmi.CPU_Fan) * 0x64} RPM";
+                tbxdGPUFan.Text = $"{App.wmi.DeviceGet(ASUSWmi.GPU_Fan) * 0x64} RPM";
+                prdGPUFan.Progress = Math.Round(Convert.ToDouble(App.wmi.DeviceGet(ASUSWmi.CPU_Fan)) / 0.69);
+                prCPUFan.Progress = Math.Round(Convert.ToDouble(App.wmi.DeviceGet(ASUSWmi.CPU_Fan)) / 0.69);
+
+                tbxCPUPer.Text = $"{Math.Round(Convert.ToDouble(App.wmi.DeviceGet(ASUSWmi.CPU_Fan)) / 0.69)}%";
+                tbxdGPUPer.Text = $"{Math.Round(Convert.ToDouble(App.wmi.DeviceGet(ASUSWmi.GPU_Fan)) / 0.69)}%";
+            }
+            
 
             if (tbAuto.IsChecked == true && setup == true || tbDisplayAuto.IsChecked == true && setup == true)
             {
-                await Task.Run(() =>
+                if (Global.isMinimised == false)
                 {
-                    SetSystemSettings.setACDCSettings();
-                });
-                string dGPU = await Task.Run(() => GetSystemInfo.GetdGPUName().Replace(" GPU", null));
-                if (dGPU == null || dGPU == "") spdGPU.Visibility = System.Windows.Visibility.Collapsed;
-                else
-                {
-                    spdGPU.Visibility = System.Windows.Visibility.Visible;
-                    tbxdGPUName.Text = dGPU;
+                    string dGPU = await Task.Run(() => GetSystemInfo.GetdGPUName().Replace(" GPU", null));
+                    if (dGPU == null || dGPU == "") spdGPU.Visibility = System.Windows.Visibility.Collapsed;
+                    else
+                    {
+                        spdGPU.Visibility = System.Windows.Visibility.Visible;
+                        tbxdGPUName.Text = dGPU;
+                    }
                 }
             }
         }
@@ -167,7 +191,7 @@ namespace acControl.Views.Pages
                 imgPerformProfile.Source = new BitmapImage(new Uri(App.location + "\\Images\\ACProfiles\\Silent.png"));
                 await Task.Run(() =>
                 {
-                    RunCLI.RunCommand("Powershell.exe (Get-WmiObject -Namespace root/WMI -Class AsusAtkWmi_WMNB).DEVS(0x00120075, 2)", true);
+                    App.wmi.DeviceSet(ASUSWmi.PerformanceMode, ASUSWmi.PerformanceSilent);
                 });
             }
             if (Settings.Default.ACMode == 1)
@@ -179,7 +203,7 @@ namespace acControl.Views.Pages
                 imgPerformProfile.Source = new BitmapImage(new Uri(App.location + "\\Images\\ACProfiles\\Bal.png"));
                 await Task.Run(() =>
                 {
-                    RunCLI.RunCommand("Powershell.exe (Get-WmiObject -Namespace root/WMI -Class AsusAtkWmi_WMNB).DEVS(0x00120075, 0)", true);
+                    App.wmi.DeviceSet(ASUSWmi.PerformanceMode, ASUSWmi.PerformanceBalanced);
                 });
             }
             if (Settings.Default.ACMode == 2)
@@ -191,7 +215,7 @@ namespace acControl.Views.Pages
                 imgPerformProfile.Source = new BitmapImage(new Uri(App.location + "\\Images\\ACProfiles\\Turbo.png"));
                 await Task.Run(() =>
                 {
-                    RunCLI.RunCommand("Powershell.exe (Get-WmiObject -Namespace root/WMI -Class AsusAtkWmi_WMNB).DEVS(0x00120075, 1)", true);
+                    App.wmi.DeviceSet(ASUSWmi.PerformanceMode, ASUSWmi.PerformanceTurbo);
                 });
             }
             if (Settings.Default.ACMode == 3)
@@ -218,7 +242,6 @@ namespace acControl.Views.Pages
             Global.toggleDisplay = false;
             if (Global.wasUsingOD == true) tbDisplayOver.IsChecked = true;
             SetSystemSettings.setDisplaySettings(1);
-            SetSystemSettings.hasToggledDisplay = false;
             Settings.Default.DisplayMode = 0;
             Settings.Default.Save();
         }
@@ -230,7 +253,6 @@ namespace acControl.Views.Pages
             tbDisplayOver.IsChecked = false;
             tbDisplayAuto.IsChecked = false;
             Global.toggleDisplay = false;
-            SetSystemSettings.hasToggledDisplay = false;
             SetSystemSettings.setDisplaySettings(0);
             RunCLI.RunCommand("Powershell.exe (Get-WmiObject -Namespace root/WMI -Class AsusAtkWmi_WMNB).DEVS(0x00050019, 0)", true);
             Settings.Default.DisplayMode = 1;
@@ -243,7 +265,6 @@ namespace acControl.Views.Pages
             tbEco.IsChecked = false;
             tbAuto.IsChecked = false;
             tbUlti.IsChecked = false;
-            SetSystemSettings.hasToggledGPU = false;
             SetSystemSettings.setGPUSettings(0);
             Settings.Default.GPUMode = 1;
             Settings.Default.Save();
@@ -255,7 +276,6 @@ namespace acControl.Views.Pages
             tbStan.IsChecked = false;
             tbAuto.IsChecked = false;
             tbUlti.IsChecked = false;
-            SetSystemSettings.hasToggledGPU = false;
             SetSystemSettings.setGPUSettings(1);
             Settings.Default.GPUMode = 2;
             Settings.Default.Save();
@@ -267,16 +287,12 @@ namespace acControl.Views.Pages
             if (tbDisplayOver.IsChecked == true && GetSystemInfo.currentRefreshRate == GetSystemInfo.maxRefreshRate)
             {
                 Global.wasUsingOD = true;
-                RunCLI.RunCommand("Powershell.exe (Get-WmiObject -Namespace root/WMI -Class AsusAtkWmi_WMNB).DEVS(0x00050019, 1)", true);
+                SetSystemSettings.setDisplaySettings(1);
             }
             else
             {
-                tbDisplayOver.IsChecked = false;
-                Global.wasUsingOD = false;
-                RunCLI.RunCommand("Powershell.exe (Get-WmiObject -Namespace root/WMI -Class AsusAtkWmi_WMNB).DEVS(0x00050019, 0)", true);
+                SetSystemSettings.setDisplaySettings(0);
             }
-
-            Settings.Default.DisplayOver = Global.wasUsingOD;
             Settings.Default.Save();
         }
 

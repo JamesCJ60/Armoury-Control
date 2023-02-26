@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Management;
 using System.Reflection;
 using System.Security.Principal;
 using System.Threading.Tasks;
@@ -87,27 +88,36 @@ namespace acControl
         /// <summary>
         /// Occurs when the application is loading.
         /// </summary>
+        /// 
+        public static ASUSWmi wmi = new ASUSWmi();
         private async void OnStartup(object sender, StartupEventArgs e)
         {
-            if (!App.IsAdministrator())
+            try
             {
-                // Restart and run as admin
-                var exeName = Process.GetCurrentProcess().MainModule.FileName;
-                ProcessStartInfo startInfo = new ProcessStartInfo(exeName);
-                startInfo.Verb = "runas";
-                startInfo.UseShellExecute = true;
-                startInfo.Arguments = "restart";
-                Process.Start(startInfo);
-                Environment.Exit(0);
-            }
+                if (!App.IsAdministrator())
+                {
+                    // Restart and run as admin
+                    var exeName = Process.GetCurrentProcess().MainModule.FileName;
+                    ProcessStartInfo startInfo = new ProcessStartInfo(exeName);
+                    startInfo.Verb = "runas";
+                    startInfo.UseShellExecute = true;
+                    startInfo.Arguments = "restart";
+                    Process.Start(startInfo);
+                    Environment.Exit(0);
+                }
 
-            location = AppDomain.CurrentDomain.BaseDirectory;
+                location = AppDomain.CurrentDomain.BaseDirectory;
 
                 GetSystemInfo.start();
                 GetSystemInfo.getDisplayData();
                 GetSystemInfo.CurrentDisplayRrefresh();
+                wmi.SubscribeToEvents(WatcherEventArrived);
 
-            await _host.StartAsync();
+                await _host.StartAsync();
+            } catch(Exception ex)
+            {
+                MessageBox.Show(ex.ToString());  
+            }
         }
 
         /// <summary>
@@ -126,6 +136,34 @@ namespace acControl
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             // For more info see https://docs.microsoft.com/en-us/dotnet/api/system.windows.application.dispatcherunhandledexception?view=windowsdesktop-6.0
+        }
+
+        static async void WatcherEventArrived(object sender, EventArrivedEventArgs e)
+        {
+            await Task.Run(() =>
+            {
+                var collection = (ManagementEventWatcher)sender;
+
+                if (e.NewEvent is null) return;
+
+                int EventID = int.Parse(e.NewEvent["EventID"].ToString());
+
+                switch (EventID)
+                {
+                    case 56:    // Rog button
+                    case 174:   // FN+F5
+                        break;
+                    case 179:   // FN+F4
+                        break;
+                    case 87:  // Battery
+                        SetSystemSettings.setACDCSettings();
+                        break;
+                    case 88:
+                    case 123:// Plugged
+                        SetSystemSettings.setACDCSettings();
+                        break;
+                }
+            });
         }
     }
 }

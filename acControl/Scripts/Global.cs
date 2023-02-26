@@ -11,5 +11,7 @@ namespace acControl.Scripts
         public static bool toggleGPU = false;
         public static bool toggleDisplay = false;
         public static bool wasUsingOD = false;
+
+        public static bool isMinimised = false;
     }
 }

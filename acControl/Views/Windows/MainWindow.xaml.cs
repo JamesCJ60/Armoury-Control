@@ -108,8 +108,8 @@ namespace acControl.Views.Windows
 
         private void UiWindow_StateChanged(object sender, EventArgs e)
         {
-            if (this.WindowState == WindowState.Minimized) this.ShowInTaskbar = false;
-            else this.ShowInTaskbar = true;
+            if (this.WindowState == WindowState.Minimized) { this.ShowInTaskbar = false; Global.isMinimised = true; }
+            else { this.ShowInTaskbar = true; Global.isMinimised = false; }
         }
     }
 }
