@@ -153,13 +153,16 @@ namespace acControl.Views.Pages
 
             if(Global.isMinimised == false)
             {
-                tbxCPUFan.Text = $"{App.wmi.DeviceGet(ASUSWmi.CPU_Fan) * 0x64} RPM";
-                tbxdGPUFan.Text = $"{App.wmi.DeviceGet(ASUSWmi.GPU_Fan) * 0x64} RPM";
-                prdGPUFan.Progress = Math.Round(Convert.ToDouble(App.wmi.DeviceGet(ASUSWmi.CPU_Fan)) / 0.69);
-                prCPUFan.Progress = Math.Round(Convert.ToDouble(App.wmi.DeviceGet(ASUSWmi.CPU_Fan)) / 0.69);
+                var cpuFan = App.wmi.DeviceGet(ASUSWmi.CPU_Fan);
+                var gpuFan = App.wmi.DeviceGet(ASUSWmi.GPU_Fan);
 
-                tbxCPUPer.Text = $"{Math.Round(Convert.ToDouble(App.wmi.DeviceGet(ASUSWmi.CPU_Fan)) / 0.69)}%";
-                tbxdGPUPer.Text = $"{Math.Round(Convert.ToDouble(App.wmi.DeviceGet(ASUSWmi.GPU_Fan)) / 0.69)}%";
+                tbxCPUFan.Text = $"{cpuFan * 0x64} RPM";
+                tbxdGPUFan.Text = $"{gpuFan * 0x64} RPM";
+                prdGPUFan.Progress = Math.Round(gpuFan / 0.69);
+                prCPUFan.Progress = Math.Round(cpuFan / 0.69);
+
+                tbxCPUPer.Text = $"{Math.Round(cpuFan / 0.69)}%";
+                tbxdGPUPer.Text = $"{Math.Round(gpuFan / 0.69)}%";
             }
             
 
