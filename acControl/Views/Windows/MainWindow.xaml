@@ -11,7 +11,7 @@
     MinWidth="1130"
     MinHeight="600"
     Width="1200"
-    Height="670"
+    Height="709"
     d:DataContext="{d:DesignInstance local:MainWindow,
                                      IsDesignTimeCreatable=True}"
     d:Background="{DynamicResource ApplicationBackgroundBrush}"

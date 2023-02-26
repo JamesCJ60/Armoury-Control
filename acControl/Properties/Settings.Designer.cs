@@ -94,5 +94,29 @@ namespace acControl.Properties {
                 this["MaxRefreshRate"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool StartOnBoot {
+            get {
+                return ((bool)(this["StartOnBoot"]));
+            }
+            set {
+                this["StartOnBoot"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool StartMini {
+            get {
+                return ((bool)(this["StartMini"]));
+            }
+            set {
+                this["StartMini"] = value;
+            }
+        }
     }
 }

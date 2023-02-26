@@ -1,4 +1,5 @@
-﻿using acControl.Scripts;
+﻿using acControl.Properties;
+using acControl.Scripts;
 using System;
 using System.Diagnostics;
 using System.Security.Principal;
@@ -25,21 +26,19 @@ namespace acControl.Views.Windows
         }
 
         INavigationService _navigationService;
+        DispatcherTimer GC = new DispatcherTimer();
         public MainWindow(ViewModels.MainWindowViewModel viewModel, IPageService pageService, INavigationService navigationService)
         {
             ViewModel = viewModel;
             DataContext = this;
-
-            
-
             InitializeComponent();
             _ = Tablet.TabletDevices;
             SetPageService(pageService);
-
+            if (Settings.Default.StartMini == true) { this.WindowState = WindowState.Minimized;}
             navigationService.SetNavigationControl(RootNavigation);
             _navigationService = navigationService;
-            DispatcherTimer GC = new DispatcherTimer();
-            GC.Interval = TimeSpan.FromSeconds(22);
+            
+            GC.Interval = TimeSpan.FromSeconds(1);
             GC.Tick += GC_Tick;
             GC.Start();
 
@@ -57,10 +56,19 @@ namespace acControl.Views.Windows
             if (hwndSource != null)
                 hwndSource.CompositionTarget.RenderMode = RenderMode.SoftwareOnly;
         }
-
+        int i = 0;
         async void GC_Tick(object sender, EventArgs e)
         {
             GarbageCollection.Garbage_Collect();
+
+            if (Settings.Default.StartMini == true && i < 1) { 
+                this.ShowInTaskbar = false; 
+                i++;
+                GC.Stop();
+                GC.Interval = TimeSpan.FromSeconds(18);
+                GC.Tick += GC_Tick;
+                GC.Start();
+            }
         }
 
         #region INavigationWindow methods

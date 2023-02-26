@@ -63,5 +63,16 @@ namespace acControl.ViewModels
                     break;
             }
         }
+        [RelayCommand]
+        private void OnStart(bool parameter)
+        {
+            
+        }
+
+        [RelayCommand]
+        private void StartMini(bool parameter)
+        {
+
+        }
     }
 }
