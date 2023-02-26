@@ -115,6 +115,7 @@ namespace acControl
 
                 GetSystemInfo.start();
                 GetSystemInfo.getDisplayData();
+                GetSystemInfo.getBattery();
                 GetSystemInfo.CurrentDisplayRrefresh();
                 wmi.SubscribeToEvents(WatcherEventArrived);
 
@@ -167,12 +168,6 @@ namespace acControl
                         DashboardPage.updateProfile = true;
                         break;
                     case 179:   // FN+F4
-                        break;
-                    case 87:  // Battery
-                        SetSystemSettings.setACDCSettings();
-                        break;
-                    case 88:// Plugged
-                        SetSystemSettings.setACDCSettings();
                         break;
                 }
             });

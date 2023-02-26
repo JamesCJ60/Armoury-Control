@@ -51,45 +51,47 @@ namespace acControl.Scripts
 
         public static async void setACDCSettings()
         {
-            if (App.wmi.DeviceGet(ASUSWmi.GPUMux) < 1) return;
-
-            GetSystemInfo.getBattery();
-            GetSystemInfo.getBattery();
-            statuscode = GetSystemInfo.statuscode;
-            if (statuscode == 2 || statuscode == 6 || statuscode == 7 || statuscode == 8)
+            await Task.Run(() =>
             {
-                if (Global.toggleDisplay == true && hasToggledDisplay == false)
-                {
-                    setDisplaySettings(1);
-                    hasToggledDisplay = true;
-                }
-                if (Global.toggleGPU == true && hasToggledGPU == false)
-                {
-                    setGPUSettings(0);
-                    hasToggledGPU = true;
-                }
-            }
-            else
-            {
-                if (Global.toggleDisplay == true && hasToggledDisplay == false)
-                {
-                    setDisplaySettings(0);
-                    hasToggledDisplay = true;
-                }
-                if (Global.toggleGPU == true && hasToggledGPU == false)
-                {
-                    setGPUSettings(1);
-                    hasToggledGPU = true;
-                }
-            }
+                if (App.wmi.DeviceGet(ASUSWmi.GPUMux) < 1) return;
 
-            if (statuscode != lastStatus)
-            {
-                lastStatus = statuscode;
-                hasToggledGPU = false;
-                hasToggledDisplay = false;
+                GetSystemInfo.getBattery();
+                statuscode = GetSystemInfo.statuscode;
+                if (statuscode == 2 || statuscode == 6 || statuscode == 7 || statuscode == 8)
+                {
+                    if (Global.toggleDisplay == true && hasToggledDisplay == false)
+                    {
+                        setDisplaySettings(1);
+                        hasToggledDisplay = true;
+                    }
+                    if (Global.toggleGPU == true && hasToggledGPU == false)
+                    {
+                        setGPUSettings(0);
+                        hasToggledGPU = true;
+                    }
+                }
+                else
+                {
+                    if (Global.toggleDisplay == true && hasToggledDisplay == false)
+                    {
+                        setDisplaySettings(0);
+                        hasToggledDisplay = true;
+                    }
+                    if (Global.toggleGPU == true && hasToggledGPU == false)
+                    {
+                        setGPUSettings(1);
+                        hasToggledGPU = true;
+                    }
+                }
 
-            }
+                if (statuscode != lastStatus)
+                {
+                    lastStatus = statuscode;
+                    hasToggledGPU = false;
+                    hasToggledDisplay = false;
+
+                }
+            });
         }
 
         public static async void setGPUSettings(int index)
@@ -99,15 +101,17 @@ namespace acControl.Scripts
                 if (App.wmi.DeviceGet(ASUSWmi.GPUEco) != index)
                 {
                     App.wmi.DeviceSet(ASUSWmi.GPUEco, index);
+                    if (index == 1)
+                    {
+                        Thread.Sleep(1000);
 
-                    Thread.Sleep(1000);
+                        GetSystemInfo.stop();
 
-                    GetSystemInfo.stop();
+                        Thread.Sleep(1000);
+                        GetSystemInfo.start();
 
-                    Thread.Sleep(1000);
-                    GetSystemInfo.start();
-
-                    GarbageCollection.Garbage_Collect();
+                        GarbageCollection.Garbage_Collect();
+                    }
                 }
             });
         }

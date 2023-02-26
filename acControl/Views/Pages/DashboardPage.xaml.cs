@@ -141,8 +141,6 @@ namespace acControl.Views.Pages
 
         private async void update()
         {
-            if(tbxDeviceName.Text.Contains("Flow Z13")) SetSystemSettings.setACDCSettings();
-
             if (Global.isMinimised == false)
             {
                 var cpuFan = App.wmi.DeviceGet(ASUSWmi.CPU_Fan);
@@ -159,6 +157,8 @@ namespace acControl.Views.Pages
 
             if (tbAuto.IsChecked == true && setup == true || tbDisplayAuto.IsChecked == true && setup == true)
             {
+                SetSystemSettings.setACDCSettings();
+
                 if (Global.isMinimised == false)
                 {
                     string dGPU = await Task.Run(() => GetSystemInfo.GetdGPUName().Replace(" GPU", null));
