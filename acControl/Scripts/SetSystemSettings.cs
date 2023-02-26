@@ -7,8 +7,10 @@ using System.Management;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using acControl;
 using acControl.Properties;
+using acControl.Views.Pages;
 
 namespace acControl.Scripts
 {
@@ -42,46 +44,71 @@ namespace acControl.Scripts
             });
         }
 
+        public static bool hasToggledDisplay = false;
+        public static bool hasToggledGPU = false;
+        public static UInt16 lastStatus = 0;
+        public static UInt16 statuscode = 0;
+
         public static async void setACDCSettings()
         {
-            await Task.Run(() =>
+            if (App.wmi.DeviceGet(ASUSWmi.GPUMux) < 1) return;
+
+            GetSystemInfo.getBattery();
+            GetSystemInfo.getBattery();
+            statuscode = GetSystemInfo.statuscode;
+            if (statuscode == 2 || statuscode == 6 || statuscode == 7 || statuscode == 8)
             {
-                bool isBattery = false;
-                UInt16 statuscode = GetSystemInfo.statuscode;
-                if (statuscode == 2 || statuscode == 6 || statuscode == 7 || statuscode == 8) isBattery = true;
-
-                int eco = App.wmi.DeviceGet(ASUSWmi.GPUEco);
-                int mux = App.wmi.DeviceGet(ASUSWmi.GPUMux);
-
-                if (mux < 1) return;
-
-                if (isBattery == true && eco == 0)
+                if (Global.toggleDisplay == true && hasToggledDisplay == false)
                 {
-                    if (Settings.Default.GPUMode == 3) setGPUSettings(1);
-                    if (Settings.Default.DisplayMode == 2) setDisplaySettings(0);
+                    setDisplaySettings(1);
+                    hasToggledDisplay = true;
                 }
-                if (isBattery == false && eco == 1)
+                if (Global.toggleGPU == true && hasToggledGPU == false)
                 {
-                    if (Settings.Default.GPUMode == 3) setDisplaySettings(0);
-                    if (Settings.Default.DisplayMode == 2) setGPUSettings(1);
+                    setGPUSettings(0);
+                    hasToggledGPU = true;
                 }
-            });
+            }
+            else
+            {
+                if (Global.toggleDisplay == true && hasToggledDisplay == false)
+                {
+                    setDisplaySettings(0);
+                    hasToggledDisplay = true;
+                }
+                if (Global.toggleGPU == true && hasToggledGPU == false)
+                {
+                    setGPUSettings(1);
+                    hasToggledGPU = true;
+                }
+            }
+
+            if (statuscode != lastStatus)
+            {
+                lastStatus = statuscode;
+                hasToggledGPU = false;
+                hasToggledDisplay = false;
+
+            }
         }
 
         public static async void setGPUSettings(int index)
         {
             await Task.Run(() =>
             {
-                App.wmi.DeviceSet(ASUSWmi.GPUEco, index);
+                if (App.wmi.DeviceGet(ASUSWmi.GPUEco) != index)
+                {
+                    App.wmi.DeviceSet(ASUSWmi.GPUEco, index);
 
-                Thread.Sleep(1000);
+                    Thread.Sleep(1000);
 
-                GetSystemInfo.stop();
+                    GetSystemInfo.stop();
 
-                Thread.Sleep(1000);
-                GetSystemInfo.start();
+                    Thread.Sleep(1000);
+                    GetSystemInfo.start();
 
-                GarbageCollection.Garbage_Collect();
+                    GarbageCollection.Garbage_Collect();
+                }
             });
         }
 

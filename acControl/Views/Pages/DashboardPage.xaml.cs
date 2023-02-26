@@ -21,6 +21,7 @@ namespace acControl.Views.Pages
     /// </summary>
     public partial class DashboardPage : INavigableView<ViewModels.DashboardViewModel>
     {
+        public static int mux = App.wmi.DeviceGet(ASUSWmi.GPUMux);
         public ViewModels.DashboardViewModel ViewModel
         {
             get;
@@ -35,6 +36,7 @@ namespace acControl.Views.Pages
             InitializeComponent();
             _ = Tablet.TabletDevices;
             setupGUI();
+            mux = App.wmi.DeviceGet(ASUSWmi.GPUMux);
         }
         private bool setup = false;
         private void setupGUI()
@@ -52,15 +54,6 @@ namespace acControl.Views.Pages
             sdBattery.Value = (int)Settings.Default.BatLimit;
             sdBright.Value = (int)GetSystemInfo.getBrightness();
 
-            //var messageBox = new Wpf.Ui.Controls.MessageBox();
-
-            //messageBox.ButtonLeftName = "Hello World";
-            //messageBox.ButtonRightName = "Just close me";
-
-            //messageBox.ButtonLeftClick += MessageBox_LeftButtonClick;
-            //messageBox.ButtonRightClick += MessageBox_RightButtonClick;
-
-            //messageBox.Show("Something weird", "May happen");
 
             lblMinDisplay.Content = $" {GetSystemInfo.minRefreshRate}Hz";
             lblMaxDisplay.Content = $" {GetSystemInfo.maxRefreshRate}Hz";
@@ -148,10 +141,9 @@ namespace acControl.Views.Pages
 
         private async void update()
         {
-            
-            GetSystemInfo.getBattery();
+            if(tbxDeviceName.Text.Contains("Flow Z13")) SetSystemSettings.setACDCSettings();
 
-            if(Global.isMinimised == false)
+            if (Global.isMinimised == false)
             {
                 var cpuFan = App.wmi.DeviceGet(ASUSWmi.CPU_Fan);
                 var gpuFan = App.wmi.DeviceGet(ASUSWmi.GPU_Fan);
@@ -164,7 +156,6 @@ namespace acControl.Views.Pages
                 tbxCPUPer.Text = $"{Math.Round(cpuFan / 0.69)}%";
                 tbxdGPUPer.Text = $"{Math.Round(gpuFan / 0.69)}%";
             }
-            
 
             if (tbAuto.IsChecked == true && setup == true || tbDisplayAuto.IsChecked == true && setup == true)
             {
@@ -254,7 +245,7 @@ namespace acControl.Views.Pages
 
         private async void tbMin_Click(object sender, RoutedEventArgs e)
         {
-            if (tbMin.IsChecked == false && tbMax.IsChecked == false && tbDisplayAuto.IsChecked == false) tbMin.IsChecked = true;
+            tbMin.IsChecked = true;
             tbMax.IsChecked = false;
             tbDisplayOver.IsChecked = false;
             tbDisplayAuto.IsChecked = false;
@@ -267,24 +258,42 @@ namespace acControl.Views.Pages
 
         private async void tbStan_Click(object sender, RoutedEventArgs e)
         {
-            if (tbUlti.IsChecked == false && tbStan.IsChecked == false && tbEco.IsChecked == false && tbAuto.IsChecked == false) tbStan.IsChecked = true;
-            tbEco.IsChecked = false;
-            tbAuto.IsChecked = false;
-            tbUlti.IsChecked = false;
-            SetSystemSettings.setGPUSettings(0);
-            Settings.Default.GPUMode = 1;
-            Settings.Default.Save();
+            tbStan.IsChecked = false;
+            if (mux > 0)
+            {
+                tbStan.IsChecked = true;
+                tbEco.IsChecked = false;
+                tbAuto.IsChecked = false;
+                tbUlti.IsChecked = false;
+                SetSystemSettings.setGPUSettings(0);
+                Settings.Default.GPUMode = 1;
+                Settings.Default.Save();
+            }
+            else
+            {
+                changeMode = 1;
+                disbaleUltiMode();
+            }
         }
 
         private async void tbEco_Click(object sender, RoutedEventArgs e)
         {
-            if (tbUlti.IsChecked == false && tbStan.IsChecked == false && tbEco.IsChecked == false && tbAuto.IsChecked == false) tbEco.IsChecked = true;
-            tbStan.IsChecked = false;
-            tbAuto.IsChecked = false;
-            tbUlti.IsChecked = false;
-            SetSystemSettings.setGPUSettings(1);
-            Settings.Default.GPUMode = 2;
-            Settings.Default.Save();
+            tbEco.IsChecked = false;
+            if (mux > 0)
+            {
+                tbEco.IsChecked = true;
+                tbStan.IsChecked = false;
+                tbAuto.IsChecked = false;
+                tbUlti.IsChecked = false;
+                SetSystemSettings.setGPUSettings(1);
+                Settings.Default.GPUMode = 2;
+                Settings.Default.Save();
+            }
+            else
+            {
+                changeMode = 2;
+                disbaleUltiMode();
+            }
         }
 
         private void tbDisplayOver_Click(object sender, RoutedEventArgs e)
@@ -330,13 +339,111 @@ namespace acControl.Views.Pages
 
         private void tbAuto_Click(object sender, RoutedEventArgs e)
         {
-            if (tbUlti.IsChecked == false && tbStan.IsChecked == false && tbEco.IsChecked == false && tbAuto.IsChecked == false) tbAuto.IsChecked = true;
+            tbAuto.IsChecked = false;
+            
+            if (mux > 0)
+            {
+                if (tbUlti.IsChecked == false && tbStan.IsChecked == false && tbEco.IsChecked == false && tbAuto.IsChecked == false) tbAuto.IsChecked = true;
+                tbUlti.IsChecked = false;
+                tbStan.IsChecked = false;
+                tbEco.IsChecked = false;
+                Global.toggleGPU = true;
+                Settings.Default.GPUMode = 3;
+                Settings.Default.Save();
+            }
+            else
+            {
+                changeMode = 3;
+                disbaleUltiMode();
+            }
+        }
+
+        private void tbUlti_Click(object sender, RoutedEventArgs e)
+        {
+            int mux = App.wmi.DeviceGet(ASUSWmi.GPUMux);
             tbUlti.IsChecked = false;
+            if (mux > 0)
+            {
+
+                var messageBox = new Wpf.Ui.Controls.MessageBox();
+
+                messageBox.ButtonLeftName = "Restart";
+                messageBox.ButtonRightName = "Cancel";
+
+                messageBox.ButtonLeftClick += MessageBox_Enable;
+                messageBox.ButtonRightClick += MessageBox_Close;
+
+                messageBox.Show("GPU Ultimate Mode", "Switching the GPU to Ultimate Mode requires a restart to take\naffect!");
+            }
+            else if (mux == 0)
+            {
+                if (tbUlti.IsChecked == false && tbStan.IsChecked == false && tbEco.IsChecked == false && tbAuto.IsChecked == false) tbUlti.IsChecked = true;
+                tbAuto.IsChecked = false;
+                tbStan.IsChecked = false;
+                tbEco.IsChecked = false;
+                Settings.Default.GPUMode = 0;
+                Settings.Default.Save();
+            }
+        }
+
+        int changeMode = 1;
+        private void disbaleUltiMode()
+        {
+            int mux = App.wmi.DeviceGet(ASUSWmi.GPUMux);
+            tbUlti.IsChecked = false;
+            if (mux < 1)
+            {
+                var messageBox = new Wpf.Ui.Controls.MessageBox();
+
+                messageBox.ButtonLeftName = "Restart";
+                messageBox.ButtonRightName = "Cancel";
+
+                messageBox.ButtonLeftClick += MessageBox_Disable;
+                messageBox.ButtonRightClick += MessageBox_Close;
+
+                messageBox.Show("GPU Ultimate Mode", "Disbaling the GPU Ultimate Mode requires a restart to take\naffect!");
+            }
+        }
+
+        private void MessageBox_Enable(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (tbUlti.IsChecked == false && tbStan.IsChecked == false && tbEco.IsChecked == false && tbAuto.IsChecked == false) tbUlti.IsChecked = true;
+            tbAuto.IsChecked = false;
             tbStan.IsChecked = false;
             tbEco.IsChecked = false;
-            Global.toggleGPU = true;
-            Settings.Default.GPUMode = 3;
+            Settings.Default.GPUMode = 0;
             Settings.Default.Save();
+            App.wmi.DeviceSet(ASUSWmi.GPUMux, 0);
+            Thread.Sleep(250);
+            Process.Start("shutdown", "/r /t 1");
+
+            (sender as Wpf.Ui.Controls.MessageBox)?.Close();
+        }
+
+        private void MessageBox_Disable(object sender, System.Windows.RoutedEventArgs e)
+        {
+            tbAuto.IsChecked = false;
+            tbStan.IsChecked = false;
+            tbEco.IsChecked = false;
+            tbUlti.IsChecked = false;
+
+            if(changeMode == 1) tbStan.IsChecked = true;
+            if (changeMode == 2) tbEco.IsChecked = true;
+            if (changeMode == 3) tbAuto.IsChecked = true;
+
+            Settings.Default.GPUMode = changeMode;
+            Settings.Default.Save();
+
+            App.wmi.DeviceSet(ASUSWmi.GPUMux, 1);
+            Thread.Sleep(250);
+            Process.Start("shutdown", "/r /t 1");
+
+            (sender as Wpf.Ui.Controls.MessageBox)?.Close();
+        }
+
+        private void MessageBox_Close(object sender, System.Windows.RoutedEventArgs e)
+        {
+            (sender as Wpf.Ui.Controls.MessageBox)?.Close();
         }
     }
 }

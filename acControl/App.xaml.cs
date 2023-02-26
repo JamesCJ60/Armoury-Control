@@ -171,8 +171,7 @@ namespace acControl
                     case 87:  // Battery
                         SetSystemSettings.setACDCSettings();
                         break;
-                    case 88:
-                    case 123:// Plugged
+                    case 88:// Plugged
                         SetSystemSettings.setACDCSettings();
                         break;
                 }

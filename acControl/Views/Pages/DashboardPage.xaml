@@ -82,7 +82,7 @@
                         <StackPanel Margin="0,0,0,-2" >
                             <TextBlock FontWeight="Bold" FontSize="17">Graphics Performance Mode:</TextBlock>
                             <UniformGrid Columns="4" VerticalAlignment="Center" Height="54" HorizontalAlignment="Center" Margin="0,2,0,0">
-                                <ToggleButton Width="50" Margin="4.5,0" Name="tbUlti" IsEnabled="False" ToolTip="This option allows for the best performance from your dGPU. Using this option comes at the cost of power consumption when using the battery. Toggling this option requires a system restart to work.">
+                                <ToggleButton Width="50" Margin="4.5,0" Name="tbUlti" ToolTip="This option allows for the best performance from your dGPU. Using this option comes at the cost of power consumption when using the battery. Toggling this option requires a system restart to work." Click="tbUlti_Click">
                                     <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
                                         <ui:SymbolIcon Symbol="Rocket16" FontSize="24"/>
 
