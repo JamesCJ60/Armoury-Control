@@ -53,7 +53,7 @@ namespace acControl.Views.Pages
 
             sdBattery.Value = (int)Settings.Default.BatLimit;
             sdBright.Value = (int)GetSystemInfo.getBrightness();
-
+            SetSystemSettings.setBatteryLimit((int)sdBattery.Value);
 
             lblMinDisplay.Content = $" {GetSystemInfo.minRefreshRate}Hz";
             lblMaxDisplay.Content = $" {GetSystemInfo.maxRefreshRate}Hz";
@@ -251,7 +251,6 @@ namespace acControl.Views.Pages
             tbDisplayAuto.IsChecked = false;
             Global.toggleDisplay = false;
             SetSystemSettings.setDisplaySettings(0);
-            RunCLI.RunCommand("Powershell.exe (Get-WmiObject -Namespace root/WMI -Class AsusAtkWmi_WMNB).DEVS(0x00050019, 0)", true);
             Settings.Default.DisplayMode = 1;
             Settings.Default.Save();
         }
