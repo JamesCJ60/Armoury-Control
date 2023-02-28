@@ -69,6 +69,9 @@ namespace acControl.Views.Pages
             sensor.Tick += SensorUpdate_Tick;
             sensor.Start();
 
+            //XG_Mobile_Prompt xg = new XG_Mobile_Prompt();
+            //xg.Show();
+
             Global.wasUsingOD = Settings.Default.DisplayOver;
             if (Global.wasUsingOD == true)
             {
@@ -146,6 +149,7 @@ namespace acControl.Views.Pages
                 var cpuFan = App.wmi.DeviceGet(ASUSWmi.CPU_Fan);
                 var gpuFan = App.wmi.DeviceGet(ASUSWmi.GPU_Fan);
 
+
                 tbxCPUFan.Text = $"{cpuFan * 0x64} RPM";
                 tbxdGPUFan.Text = $"{gpuFan * 0x64} RPM";
                 prdGPUFan.Progress = Math.Round(gpuFan / 0.69);
@@ -153,6 +157,21 @@ namespace acControl.Views.Pages
 
                 tbxCPUPer.Text = $"{Math.Round(cpuFan / 0.69)}%";
                 tbxdGPUPer.Text = $"{Math.Round(gpuFan / 0.69)}%";
+
+                if (tbxCPUFan.Text.Contains("-") || tbxdGPUFan.Text.Contains("-"))
+                {
+                    cpuFan = App.wmi.DeviceGet2(ASUSWmi.CPU_Fan);
+                    gpuFan = App.wmi.DeviceGet2(ASUSWmi.GPU_Fan);
+
+                    tbxCPUFan.Text = $"{cpuFan * 0x64} RPM";
+                    tbxdGPUFan.Text = $"{gpuFan * 0x64} RPM";
+                    prdGPUFan.Progress = Math.Round(gpuFan / 0.69);
+                    prCPUFan.Progress = Math.Round(cpuFan / 0.69);
+
+                    tbxCPUPer.Text = $"{Math.Round(cpuFan / 0.69)}%";
+                    tbxdGPUPer.Text = $"{Math.Round(gpuFan / 0.69)}%";
+                }
+                
             }
 
             if (tbAuto.IsChecked == true && setup == true || tbDisplayAuto.IsChecked == true && setup == true)
@@ -298,14 +317,15 @@ namespace acControl.Views.Pages
         private void tbDisplayOver_Click(object sender, RoutedEventArgs e)
         {
             GetSystemInfo.CurrentDisplayRrefresh();
-            if (tbDisplayOver.IsChecked == true && GetSystemInfo.currentRefreshRate == GetSystemInfo.maxRefreshRate)
+            if (tbDisplayOver.IsChecked == true)
             {
                 Global.wasUsingOD = true;
-                SetSystemSettings.setDisplaySettings(1);
+                SetSystemSettings.setDisplayOver(1);
             }
             else
             {
-                SetSystemSettings.setDisplaySettings(0);
+                Global.wasUsingOD = false;
+                SetSystemSettings.setDisplayOver(0);
             }
             Settings.Default.Save();
         }

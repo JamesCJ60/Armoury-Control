@@ -137,5 +137,17 @@ namespace acControl.Scripts
                 GarbageCollection.Garbage_Collect();
             });
         }
+
+        public static void setDisplayOver(int overdrive = 0)
+        {
+            try
+            {
+                App.wmi.DeviceSet(ASUSWmi.ScreenOverdrive, overdrive);
+            }
+            catch
+            {
+                Debug.WriteLine("Screen Overdrive not supported");
+            }
+        }
     }
 }

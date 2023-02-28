@@ -185,7 +185,7 @@
                 </UniformGrid>
             </ui:Card>
 
-            <Image Name="imgPerformProfile" Stretch="Uniform"  Source="pack://application:,,,/Images/ACProfiles/Bal.png" Margin="18"></Image>
+            <Image Name="imgPerformProfile" Stretch="Uniform"  Source="pack://application:,,,/Images/ACProfiles/Bal.png" Margin="18" RenderOptions.BitmapScalingMode="HighQuality"></Image>
 
         </DockPanel>
     </Grid>
