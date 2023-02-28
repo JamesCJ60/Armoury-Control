@@ -8,7 +8,7 @@ PLEASE READ THIS: THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY 
 If you come across any issues or errors with this project, please open an issue or ping `@JamesCJ#2022` in the [discord community server](https://discord.gg/M3hVqnT4pQ). 
 
 ## Disclaimers
-"ROG", "TUF", and "Armoury Crate" are trademarked by and belong to AsusTek Computer, Inc. I make no claims to these or any assets and uses them for informational purposes only.
+"ROG", "TUF", and "Armoury Crate" are trademarked by and belong to AsusTek Computer, Inc. I make no claims to these or any assets belonging to AsusTek Computer and use them purely for informational purposes only.
 
 ## Projects Used:
 - [G-Helper (github)](https://github.com/seerge/g-helper)  
