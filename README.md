@@ -12,6 +12,8 @@ If you come across any issues or errors with this project, please open an issue 
 
 ## Projects Used:
 - [G-Helper (github)](https://github.com/seerge/g-helper)  
+- [RyzenAdj (github)](https://github.com/FlyGoat/RyzenAdj)  
+- [NVIDIA Overclock 2.0 (github)](https://github.com/JamesCJ60/nvidia-overclock)  
 - [WPF UI (github)](https://github.com/lepoco/wpfui)
 - [reverse_engineering (github)](https://github.com/zllovesuki/reverse_engineering)  
 - [Laptops (github)](https://github.com/ahahahahahMtnf/Laptops/tree/main/Asus/WMI)  
