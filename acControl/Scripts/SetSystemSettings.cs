@@ -10,7 +10,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using acControl;
 using acControl.Properties;
+using acControl.Scripts.Intel;
 using acControl.Views.Pages;
+using HidSharp;
 
 namespace acControl.Scripts
 {
@@ -53,8 +55,6 @@ namespace acControl.Scripts
         {
             await Task.Run(() =>
             {
-                if (App.wmi.DeviceGet(ASUSWmi.GPUMux) < 1) return;
-
                 GetSystemInfo.getBattery();
                 statuscode = GetSystemInfo.statuscode;
                 if (statuscode == 2 || statuscode == 6 || statuscode == 7 || statuscode == 8)
@@ -66,6 +66,8 @@ namespace acControl.Scripts
                     }
                     if (Global.toggleGPU == true && hasToggledGPU == false)
                     {
+                        try { if (App.wmi.DeviceGet(ASUSWmi.GPUMux) < 1) return; }
+                        catch { }
                         setGPUSettings(0);
                         hasToggledGPU = true;
                     }
@@ -79,6 +81,8 @@ namespace acControl.Scripts
                     }
                     if (Global.toggleGPU == true && hasToggledGPU == false)
                     {
+                        try { if (App.wmi.DeviceGet(ASUSWmi.GPUMux) < 1) return; }
+                        catch { }
                         setGPUSettings(1);
                         hasToggledGPU = true;
                     }
@@ -148,6 +152,89 @@ namespace acControl.Scripts
             {
                 Debug.WriteLine("Screen Overdrive not supported");
             }
+        }
+
+        public static async void ApplyPresetSettings(string preset = "\\presets\\Manual.txt")
+        {
+            CustomPresetHandler.LoadPreset(preset);
+
+            await Task.Run(() =>
+            {
+                Thread.Sleep(500);
+                if (Settings.Default.ACMode == 3)
+                {
+
+
+
+                    if (GetSystemInfo.GetCPUName().Contains("Intel"))
+                    {
+                        if (CustomPresetHandler.isCPUPower == true) ChangeTDP.changeTDP(CustomPresetHandler.cpuPower1, CustomPresetHandler.cpuPower2);
+                    }
+                    else
+                    {
+                        string RyzenAdj = null;
+                        if (CustomPresetHandler.isCPUTemp == true) RyzenAdj = RyzenAdj + $"--tctl-temp={CustomPresetHandler.cpuTemp} --apu-skin-temp={CustomPresetHandler.skinCPUTemp} ";
+                        if (CustomPresetHandler.isCPUPower == true) RyzenAdj = RyzenAdj + $"--stapm-limit={CustomPresetHandler.cpuPower1 * 1000} --fast-limit={CustomPresetHandler.cpuPower2 * 1000} --slow-limit={CustomPresetHandler.cpuPower2 * 1000}  --apu-slow-limit={CustomPresetHandler.apuSlowPPT * 1000} --vrm-current={(CustomPresetHandler.cpuPower2 * 1.33) * 1000} --vrmmax-current={(CustomPresetHandler.cpuPower2 * 1.33) * 1000}  --set-coall={Convert.ToUInt32(0x100000 - (uint)(-1 * (int)CustomPresetHandler.cpuCurveOpti))}";
+                        if (RyzenAdj != null || RyzenAdj != "") RunCLI.RunCommand($"{App.location + "\\Assets\\AMD\\ryzenadj.exe"} {RyzenAdj}", false);
+                    }
+
+                    if (CustomPresetHandler.isCPUFan == true)
+                    {
+                        byte[] curve = new byte[16];
+                        curve[0] = (byte)30;
+                        curve[1] = (byte)40;
+                        curve[2] = (byte)50;
+                        curve[3] = (byte)60;
+                        curve[4] = (byte)70;
+                        curve[5] = (byte)80;
+                        curve[6] = (byte)90;
+                        curve[7] = (byte)100;
+                        curve[8] = (byte)CustomPresetHandler.cpuFan1;
+                        curve[9] = (byte)CustomPresetHandler.cpuFan2;
+                        curve[10] = (byte)CustomPresetHandler.cpuFan3;
+                        curve[11] = (byte)CustomPresetHandler.cpuFan4;
+                        curve[12] = (byte)CustomPresetHandler.cpuFan5;
+                        curve[13] = (byte)CustomPresetHandler.cpuFan6;
+                        curve[14] = (byte)CustomPresetHandler.cpuFan7;
+                        curve[15] = (byte)CustomPresetHandler.cpuFan8;
+                        string bitCurve = BitConverter.ToString(curve);
+                        Debug.WriteLine(bitCurve);
+
+                        App.wmi.SetFanCurve(0, curve);
+                    }
+
+                    if (CustomPresetHandler.isGPUFan == true)
+                    {
+                        byte[] curve = new byte[16];
+                        curve[0] = (byte)30;
+                        curve[1] = (byte)40;
+                        curve[2] = (byte)50;
+                        curve[3] = (byte)60;
+                        curve[4] = (byte)70;
+                        curve[5] = (byte)80;
+                        curve[6] = (byte)90;
+                        curve[7] = (byte)100;
+                        curve[8] = (byte)CustomPresetHandler.gpuFan1;
+                        curve[9] = (byte)CustomPresetHandler.gpuFan2;
+                        curve[10] = (byte)CustomPresetHandler.gpuFan3;
+                        curve[11] = (byte)CustomPresetHandler.gpuFan4;
+                        curve[12] = (byte)CustomPresetHandler.gpuFan5;
+                        curve[13] = (byte)CustomPresetHandler.gpuFan6;
+                        curve[14] = (byte)CustomPresetHandler.gpuFan7;
+                        curve[15] = (byte)CustomPresetHandler.gpuFan8;
+                        string bitCurve = BitConverter.ToString(curve);
+                        Debug.WriteLine(bitCurve);
+
+                        App.wmi.SetFanCurve(1, curve);
+                    }
+
+                    if (CustomPresetHandler.isGPUOffset == true)
+                    {
+                        RunCLI.RunCommand($"{App.location + "\\Assets\\NVIDIA\\oc.exe"} 0 {CustomPresetHandler.gpuCoreOffset} {CustomPresetHandler.gpuVRAMOffset}", false);
+                        RunCLI.RunCommand($"{App.location + "\\Assets\\NVIDIA\\oc.exe"} 1 {CustomPresetHandler.gpuCoreOffset} {CustomPresetHandler.gpuVRAMOffset}", false);
+                    }
+                }
+            });
         }
     }
 }

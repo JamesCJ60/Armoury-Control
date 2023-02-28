@@ -44,6 +44,20 @@ namespace acControl.ViewModels
                     Icon = SymbolRegular.Home24,
                     PageType = typeof(Views.Pages.DashboardPage)
                 },
+                new NavigationItem()
+                {
+                    Content = "Custom",
+                    PageTag = "presets",
+                    Icon = SymbolRegular.Book20,
+                    PageType = typeof(Views.Pages.CustomPresets)
+                },
+                //new NavigationItem()
+                //{
+                //    Content = "Aura RGB",
+                //    PageTag = "aura",
+                //    Icon = SymbolRegular.Lightbulb20,
+                //    PageType = typeof(Views.Pages.AuraRGB)
+                //},
                 //new NavigationItem()
                 //{
                 //    Content = "Data",

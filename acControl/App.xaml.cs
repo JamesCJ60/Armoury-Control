@@ -65,6 +65,8 @@ namespace acControl
 
                 // Views and ViewModels
                 services.AddScoped<Views.Pages.DashboardPage>();
+                services.AddScoped<Views.Pages.CustomPresets>();
+                services.AddScoped<Views.Pages.AuraRGB>();
                 services.AddScoped<ViewModels.DashboardViewModel>();
                 services.AddScoped<Views.Pages.DataPage>();
                 services.AddScoped<ViewModels.DataViewModel>();

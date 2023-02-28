@@ -39,6 +39,9 @@ public class ASUSWmi
     public const int GPUModeStandard = 1;
     public const int GPUModeUltimate = 2;
 
+    public const int PPT_Total = 0x001200A0;
+    public const int PPT_CPU = 0x001200B0;
+
     [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
     private static extern IntPtr CreateFile(string lpFileName, uint dwDesiredAccess, uint dwShareMode, IntPtr lpSecurityAttributes, uint dwCreationDisposition, uint dwFlagsAndAttributes, IntPtr hTemplateFile);
 

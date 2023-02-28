@@ -69,9 +69,6 @@ namespace acControl.Views.Pages
             sensor.Tick += SensorUpdate_Tick;
             sensor.Start();
 
-            XG_Mobile_Prompt xg = new XG_Mobile_Prompt();
-            xg.Show();
-
             Global.wasUsingOD = Settings.Default.DisplayOver;
             if (Global.wasUsingOD == true)
             {
@@ -141,11 +138,32 @@ namespace acControl.Views.Pages
             update();
         }
 
-
+        int eGPU = 1;
         private async void update()
         {
             if (Global.isMinimised == false)
             {
+                if (tbxDeviceName.Text.Contains("Flow"))
+                {
+                    if (cdXGMobile.Visibility == Visibility.Collapsed) { cdXGMobile.Visibility = Visibility.Visible; }
+
+                    try
+                    {
+                        eGPU = App.wmi.DeviceGet(ASUSWmi.eGPU);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex);
+                    }
+
+                    if (eGPU == 0)
+                    { lblXGMobile.Content = "Activate ROG XG Mobile"; cdGPU.Visibility = Visibility.Visible; }
+                    else { lblXGMobile.Content = "Deactivate ROG XG Mobile"; cdGPU.Visibility = Visibility.Collapsed; }
+
+                    if(mux < 1 && tbXG.IsEnabled == true) { tbXG.IsEnabled = false; }
+                    else { tbXG.IsEnabled = true; }
+                }
+
                 var cpuFan = App.wmi.DeviceGet(ASUSWmi.CPU_Fan);
                 var gpuFan = App.wmi.DeviceGet(ASUSWmi.GPU_Fan);
 
@@ -236,7 +254,13 @@ namespace acControl.Views.Pages
             }
             if (Settings.Default.ACMode == 3)
             {
+                tbTurbo.IsChecked = false;
+                tbSilent.IsChecked = false;
+                tbPerf.IsChecked = false;
+                tbMan.IsChecked = true;
                 imgPerformProfile.Source = new BitmapImage(new Uri(App.location + "\\Images\\ACProfiles\\Windows.png"));
+                App.wmi.DeviceSet(ASUSWmi.PerformanceMode, ASUSWmi.PerformanceBalanced);
+                SetSystemSettings.ApplyPresetSettings();
             }
         }
 
@@ -329,7 +353,10 @@ namespace acControl.Views.Pages
             }
             Settings.Default.Save();
         }
-
+        private void tbMan_Click(object sender, RoutedEventArgs e)
+        {
+            switchProfile(3);
+        }
         private void tbTurbo_Click(object sender, RoutedEventArgs e)
         {
             switchProfile(2);
@@ -463,6 +490,28 @@ namespace acControl.Views.Pages
         private void MessageBox_Close(object sender, System.Windows.RoutedEventArgs e)
         {
             (sender as Wpf.Ui.Controls.MessageBox)?.Close();
+        }
+
+        private void tbXG_Click(object sender, RoutedEventArgs e)
+        {
+            tbXG.IsChecked = false;
+            if (mux > 0)
+            {
+                if(eGPU < 1)
+                {
+                    tbStan.IsChecked = false;
+                    tbStan.IsChecked = true;
+                    tbEco.IsChecked = false;
+                    tbAuto.IsChecked = false;
+                    tbUlti.IsChecked = false;
+                    SetSystemSettings.setGPUSettings(0);
+                    Settings.Default.GPUMode = 1;
+                    Settings.Default.Save();
+                }
+
+                XG_Mobile_Prompt xg = new XG_Mobile_Prompt();
+                xg.Show();
+            }
         }
     }
 }

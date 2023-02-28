@@ -1,0 +1,46 @@
+CPU:
+false
+15
+25
+35
+50
+75
+90
+95
+100
+
+GPU:
+false
+15
+25
+35
+50
+75
+90
+95
+100
+
+GPU Clock Offsets:
+false
+150
+200
+
+Curve Optimiser Undervolt Offsets:
+0
+
+Power Limit:
+false
+
+Power Limit 1:
+35
+
+Power Limit 2:
+35
+
+APU PPT:
+45
+
+Temp Limits:
+false
+95
+45

@@ -78,7 +78,7 @@
                         </StackPanel>
                     </ui:Card>
 
-                    <ui:Card Padding="9,5,9,6" Margin="0,9,0,9">
+                    <ui:Card Padding="9,5,9,6" Margin="0,9,0,0" Name="cdGPU">
                         <StackPanel Margin="0,0,0,-2" >
                             <TextBlock FontWeight="Bold" FontSize="17">Graphics Performance Mode:</TextBlock>
                             <UniformGrid Columns="4" VerticalAlignment="Center" Height="54" HorizontalAlignment="Center" Margin="0,2,0,0">
@@ -113,7 +113,7 @@
                         </StackPanel>
                     </ui:Card>
 
-                    <ui:Card Padding="9,5,9,6">
+                    <ui:Card Padding="9,5,9,6" Margin="0,9,0,0">
                         <StackPanel>
 
                             <TextBlock FontWeight="Bold" FontSize="17">Display Control:</TextBlock>
@@ -148,6 +148,20 @@
                             </UniformGrid>
                         </StackPanel>
                     </ui:Card>
+                    <ui:Card Padding="9,5,9,6" Margin="0,9,0,0" Name="cdXGMobile">
+                        <StackPanel>
+
+                            <TextBlock FontWeight="Bold" FontSize="17">ROG XG Mobile Control:</TextBlock>
+                            <UniformGrid Columns="1" VerticalAlignment="Center" Height="54" HorizontalAlignment="Center" Margin="0,2,0,0">
+                                <ToggleButton Width="234" Margin="4.5,0" Name="tbXG" ToolTip="" Click="tbXG_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <ui:SymbolIcon Symbol="DeveloperBoardLightning20" FontSize="24" Margin="0,0,9,0"/>
+                                        <Label Name="lblXGMobile" Height="23" FontSize="16" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Manual</Label>
+                                    </StackPanel>
+                                </ToggleButton>
+                            </UniformGrid>
+                        </StackPanel>
+                    </ui:Card>
                 </StackPanel>
             </ScrollViewer>
             <StackPanel DockPanel.Dock="Top">
@@ -176,7 +190,7 @@
                         </StackPanel>
                     </ToggleButton>
 
-                    <ToggleButton Width="155" Margin="4.5,0,4.5,0" Name="tbMan" IsEnabled="False">
+                    <ToggleButton Width="155" Margin="4.5,0,4.5,0" Name="tbMan" Click="tbMan_Click">
                         <StackPanel Orientation="Horizontal">
                             <ui:SymbolIcon Symbol="Book20" Margin="0,0,9,0" FontSize="24"/>
                             <Label Height="23" FontSize="16" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Manual</Label>
