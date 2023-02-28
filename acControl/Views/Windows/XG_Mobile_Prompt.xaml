@@ -23,15 +23,15 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <DockPanel Margin="12,0,0,6" Grid.Row="1">
+        <DockPanel Margin="12,0,12,6" Grid.Row="1">
             <TextBlock FontSize="24" FontWeight="Medium" DockPanel.Dock="Top">Activate Your ROG XG Mobile</TextBlock>
-            <UniformGrid Columns="2" DockPanel.Dock="Bottom" Height="50" HorizontalAlignment="Center">
-                <Button Name="btn1" Margin="0,0,32,0" Width="190" Height="38">Start Activation Process</Button>
-                <Button Name="btn2" Width="190" Height="38">Exit Activation Menu</Button>
-            </UniformGrid>
+            <StackPanel Name="spButtons" Orientation="Horizontal" DockPanel.Dock="Bottom" Height="45" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,9,0,0">
+                <Button Name="btn1" Margin="0,0,32,0" Width="190" Height="38" Click="btn1_Click">Start Activation Process</Button>
+                <Button Name="btn2" Width="190" Height="38" Click="btn2_Click">Exit Activation Menu</Button>
+            </StackPanel>
 
             <DockPanel>
-                <ProgressBar DockPanel.Dock="Bottom" Value="10" Margin="0,12,0,0" Visibility="Collapsed"></ProgressBar>
+                <ProgressBar Name="pbStatus" DockPanel.Dock="Bottom" Value="0" Margin="0,12,3,0" Visibility="Collapsed"></ProgressBar>
                 <Image Name="imgDiagram" Width="288" Height="288" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" Margin="0,0,18,0" DockPanel.Dock="Left"/>
                 <TextBlock Name="tbxInfo" VerticalAlignment="Center" FontSize="18" TextWrapping="WrapWithOverflow" FontWeight="Medium"></TextBlock>
             </DockPanel>
@@ -40,7 +40,7 @@
         <ui:TitleBar
             Title="Armoury Control - XG Mobile"
             Icon="pack://application:,,,/Assets/applicationIcon-256.png"
-            UseSnapLayout="True" CanMaximize="False" ShowMaximize="False" >
+            UseSnapLayout="True" CanMaximize="False" ShowMaximize="False" ShowClose="False" ShowMinimize="False" >
         </ui:TitleBar>
     </Grid>
 </ui:UiWindow>

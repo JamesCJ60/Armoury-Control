@@ -69,8 +69,8 @@ namespace acControl.Views.Pages
             sensor.Tick += SensorUpdate_Tick;
             sensor.Start();
 
-            //XG_Mobile_Prompt xg = new XG_Mobile_Prompt();
-            //xg.Show();
+            XG_Mobile_Prompt xg = new XG_Mobile_Prompt();
+            xg.Show();
 
             Global.wasUsingOD = Settings.Default.DisplayOver;
             if (Global.wasUsingOD == true)
