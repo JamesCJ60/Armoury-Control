@@ -32,13 +32,13 @@ Power Limit:
 false
 
 Power Limit 1:
-35
+0
 
 Power Limit 2:
-35
+0
 
 APU PPT:
-45
+0
 
 Temp Limits:
 false

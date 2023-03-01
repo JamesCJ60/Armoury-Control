@@ -57,6 +57,40 @@ namespace acControl.Views.Pages
             nudAPUPow.Value = CustomPresetHandler.apuSlowPPT;
             nudAPUCO.Value = CustomPresetHandler.cpuCurveOpti;
 
+            if(CustomPresetHandler.cpuPower1 == 0)
+            {
+                if (GetSystemInfo.GetCPUName().Contains("Ryzen"))
+                {
+                    if (App.wmi.DeviceGet(ASUSWmi.PPT_Total) > 0) nudCPUPow1.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_Total);
+                    else if (App.wmi.DeviceGet(ASUSWmi.PPT_Total1) > 0) nudCPUPow1.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_Total1);
+                    else nudCPUPow1.Value = 45;
+                }
+            }
+            else nudCPUPow1.Value = 65;
+
+            if (CustomPresetHandler.cpuPower2 == 0)
+            {
+                if (GetSystemInfo.GetCPUName().Contains("Ryzen"))
+                {
+                    if (App.wmi.DeviceGet(ASUSWmi.PPT_Total) > 0) nudCPUPow2.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_Total);
+                    else if (App.wmi.DeviceGet(ASUSWmi.PPT_Total1) > 0) nudCPUPow2.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_Total1);
+                    else if (App.wmi.DeviceGet(ASUSWmi.PPT_Total2) > 0) nudCPUPow2.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_Total2);
+                    else nudCPUPow2.Value = 45;
+                }
+            }
+            else nudCPUPow2.Value = 65;
+
+            if (CustomPresetHandler.apuSlowPPT == 0)
+            {
+                if (GetSystemInfo.GetCPUName().Contains("Ryzen"))
+                {
+                    if (App.wmi.DeviceGet(ASUSWmi.PPT_CPU) > 0) nudAPUPow.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_CPU1);
+                    else if (App.wmi.DeviceGet(ASUSWmi.PPT_CPU1) > 0) nudAPUPow.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_CPU1);
+                    else nudCPUPow2.Value = 45;
+                }
+            }
+            else nudCPUPow2.Value = 65;
+
             sdCPUFan1.Value = CustomPresetHandler.cpuFan1;
             sdCPUFan2.Value = CustomPresetHandler.cpuFan2;
             sdCPUFan3.Value = CustomPresetHandler.cpuFan3;
