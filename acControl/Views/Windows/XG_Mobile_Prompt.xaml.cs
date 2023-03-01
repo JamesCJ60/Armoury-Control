@@ -182,7 +182,11 @@ namespace acControl.Views.Windows
                 Thread.Sleep(1000);
                 GetSystemInfo.start();
 
-                GarbageCollection.Garbage_Collect();
+                try
+                {
+                    GarbageCollection.Garbage_Collect();
+                }
+                catch { }
             });
         }
     }

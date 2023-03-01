@@ -42,7 +42,7 @@ namespace acControl.Views.Pages
         private void setupGUI()
         {
             string deviceName = MotherboardInfo.Product;
-            deviceName = deviceName.Substring(0, deviceName.LastIndexOf('_'));
+            if(deviceName.Contains("_")) deviceName = deviceName.Substring(0, deviceName.LastIndexOf('_'));
             tbxDeviceName.Text = deviceName;
 
             tbxCPUName.Text = GetSystemInfo.GetCPUName().Replace("with Radeon Graphics", null);
@@ -129,7 +129,7 @@ namespace acControl.Views.Pages
             }
 
             update();
-
+            SetSystemSettings.setBatteryLimit((int)sdBattery.Value);
             setup = true;
         }
 
@@ -159,8 +159,9 @@ namespace acControl.Views.Pages
                     if (eGPU == 0)
                     { lblXGMobile.Content = "Activate ROG XG Mobile"; cdGPU.Visibility = Visibility.Visible; }
                     else { lblXGMobile.Content = "Deactivate ROG XG Mobile"; cdGPU.Visibility = Visibility.Collapsed; }
-
+                    
                     if(mux < 1 && tbXG.IsEnabled == true) { tbXG.IsEnabled = false; }
+                    else if (GetSystemInfo.GetCPUName().Contains("Ryzen 9 5900HS") || GetSystemInfo.GetCPUName().Contains("Ryzen 9 5980HS")) { tbXG.IsEnabled = true; }
                     else { tbXG.IsEnabled = true; }
                 }
 
@@ -495,7 +496,7 @@ namespace acControl.Views.Pages
         private void tbXG_Click(object sender, RoutedEventArgs e)
         {
             tbXG.IsChecked = false;
-            if (mux > 0)
+            if (mux > 0 || GetSystemInfo.GetCPUName().Contains("Ryzen 9 5900HS") || GetSystemInfo.GetCPUName().Contains("Ryzen 9 5980HS"))
             {
                 if(eGPU < 1)
                 {

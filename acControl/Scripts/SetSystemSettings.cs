@@ -163,9 +163,6 @@ namespace acControl.Scripts
                 Thread.Sleep(500);
                 if (Settings.Default.ACMode == 3)
                 {
-
-
-
                     if (GetSystemInfo.GetCPUName().Contains("Intel"))
                     {
                         if (CustomPresetHandler.isCPUPower == true) ChangeTDP.changeTDP(CustomPresetHandler.cpuPower1, CustomPresetHandler.cpuPower2);
