@@ -1,20 +1,10 @@
 ﻿using acControl.Scripts;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using Wpf.Ui.Controls;
 
@@ -25,31 +15,41 @@ namespace acControl.Views.Windows
     /// </summary>
     public partial class XG_Mobile_Prompt : UiWindow
     {
+        private volatile bool eGPUConnected = false;
+        
+        private DispatcherTimer progressBarTimer = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromMilliseconds(100)
+        };
+
         public XG_Mobile_Prompt()
         {
             InitializeComponent();
 
-            try
-            {
-                eGPU = App.wmi.DeviceGet(ASUSWmi.eGPU);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-
+            eGPUConnected = IsEGPUConnected();
+            
             UpdateImg(App.location + "\\Images\\XGMobile\\XGMobile-1.png");
 
-            if(eGPU == 0)
+            if(!eGPUConnected)
             {
-                btn1.Content = "Start Activation Process";
+                ToggleButton.Content = "Start Activation Process";
                 tbxInfo.Text = "Press \"Start Activation Process\" to begin the activation process of your ROG XG Mobile. \n\n\nWARNING: Do not attempt without an ROG XG Mobile!";
             }
             else
             {
-                btn1.Content = "Start Deactivation Process";
+                ToggleButton.Content = "Start Deactivation Process";
                 tbxInfo.Text = "Press \"Start Deactivation Process\" to begin the deactivation process of your ROG XG Mobile. \n\n\nWARNING: Do not attempt without an ROG XG Mobile!";
             }
+        }
+
+        private bool IsEGPUConnected()
+        {
+            int deviceStatus = App.wmi.DeviceGet(ASUSWmi.eGPU);
+            if (deviceStatus != 0 && deviceStatus != 1)
+            {
+                throw new InvalidOperationException($"Unknown device status: {deviceStatus}");
+            }
+            return App.wmi.DeviceGet(ASUSWmi.eGPU) == 1;
         }
 
         private void UpdateImg(string path)
@@ -62,112 +62,60 @@ namespace acControl.Views.Windows
             this.Close();
         }
 
-        int eGPU = 1;
 
-        DispatcherTimer eGPUStatus = new DispatcherTimer();
         private void btn1_Click(object sender, RoutedEventArgs e)
         {
-            btn2.IsEnabled = false;
-            btn1.Visibility = Visibility.Collapsed;
-            if (eGPU == 0)
-            {
-                pbStatus.Visibility = Visibility.Visible;
-                tbxInfo.Text = "Please wait patiently while we try to activate your ROG XG Mobile! \n\n\nThe ROG XG Mobile's connector status indicator LED will display red once finished.";
-                eGPUStatus.Interval = TimeSpan.FromSeconds(0.09);
-                eGPUStatus.Tick += eGPUStatus_Tick;
-                eGPUStatus.Start();
-                started = 1;
-
-                App.wmi.DeviceSet(ASUSWmi.eGPU, 1);
-            }
-            else
-            {
-                pbStatus.Visibility = Visibility.Visible;
-                tbxInfo.Text = "Please wait patiently while we try to deactivate your ROG XG Mobile! \n\n\nThe ROG XG Mobile's connector status indicator LED will display white once finished.";
-                
-                eGPUStatus.Interval = TimeSpan.FromSeconds(0.09);
-                eGPUStatus.Tick += eGPUStatus_Tick;
-                eGPUStatus.Start();
-                started = 0;
-
-                App.wmi.DeviceSet(ASUSWmi.eGPU, 0);
-            }
+            ToggleXgMobile();
         }
-        int i = 0;
-        int step = 0;
-        int started = 0;
-        void eGPUStatus_Tick(object sender, EventArgs e)
+       
+        private void UpdateProgress(bool statusToWait)
         {
-            try
+            if (eGPUConnected != statusToWait)
             {
-                eGPU = App.wmi.DeviceGet(ASUSWmi.eGPU);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-
-            if (started == 1)
-            {
-                pbStatus.Value = i;
-                i++;
-                step++;
-                if (step < 505)
-                {
-                   if(i >= 88) i = 88;
-                }
-                else if (step >= 505)
-                {
-                    if(eGPU == 1)
-                    {
-                        if (i >= 100) i = 100;
-                        pbStatus.Value = i;
-                        btn2.IsEnabled = true;
-                        tbxInfo.Text = "Your ROG XG Mobile is now activated! \n\n\nWARNING: Do not remove ROG XG Mobile from device until it has been deactivated!";
-                        if (i >= 100) eGPUStatus.Stop();
-                    }
-                    else
-                    {
-                        if (i >= 100) i = 100;
-                        pbStatus.Value = i;
-                        btn2.IsEnabled = true;
-                        tbxInfo.Text = "Your ROG XG Mobile activation failed!";
-                        eGPUStatus.Stop();
-                    }
-                }
+                pbStatus.Value = pbStatus.Value != 88 ? pbStatus.Value + 1 : 88;
             }
             else
             {
-                pbStatus.Value = i;
-                i++;
-                step++;
-                if (step < 505)
+                pbStatus.Value += 5;
+                if (pbStatus.Value >= 100)
                 {
-                    if (i >= 88) i = 88;
+                    FinishProgress();
                 }
-                else if (step >= 505)
-                {
-                    if (eGPU == 0)
-                    {
-                        if (i >= 100) i = 100;
-                        pbStatus.Value = i;
-                        btn2.IsEnabled = true;
-                        tbxInfo.Text = "Your ROG XG Mobile is now deactivated. You can now safly detach it!";
-                        if (i >= 100) eGPUStatus.Stop();
-                        updateLHM();
-                    }
-                    else
-                    {
-                        if (i >= 100) i = 100;
-                        pbStatus.Value = i;
-                        btn2.IsEnabled = true;
-                        tbxInfo.Text = "Your ROG XG Mobile deactivation failed!";
-                        eGPUStatus.Stop();
-                        updateLHM();
-                    }
-                }
+            }            
+        }
+
+        private void FinishProgress()
+        {
+            progressBarTimer.Stop();
+            if (eGPUConnected)
+            {
+                tbxInfo.Text = "Your ROG XG Mobile is now activated! \n\n\nWARNING: Do not remove ROG XG Mobile from device until it has been deactivated!";
             }
-            
+            else
+            {
+                tbxInfo.Text = "Your ROG XG Mobile is now deactivated. You can now safely detach it!";
+                updateLHM();
+            }
+            CloseButton.IsEnabled = true;
+        }
+       
+        private void ToggleXgMobile()
+        {
+            bool statusToSwitchTo = !eGPUConnected;
+            ToggleButton.Visibility = Visibility.Collapsed;
+            pbStatus.Visibility = Visibility.Visible;
+            CloseButton.IsEnabled = false;
+            Task.Run(() => {
+                SetXgMobileStatus(statusToSwitchTo); // changing status is blocking operation
+                eGPUConnected = IsEGPUConnected();
+            });
+            progressBarTimer.Tick += (_, _) => { UpdateProgress(statusToSwitchTo); };
+            progressBarTimer.Start();
+        }
+
+        private void SetXgMobileStatus(bool connected)
+        {
+            App.wmi.DeviceSet(ASUSWmi.eGPU, connected ? 1 : 0);
         }
 
         async void updateLHM()
