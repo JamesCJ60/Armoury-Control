@@ -61,13 +61,14 @@ namespace acControl.Views.Windows
         async void GC_Tick(object sender, EventArgs e)
         {
             GarbageCollection.Garbage_Collect();
-            i++;
-            if (Settings.Default.StartMini == true && i < 1) { 
-                this.ShowInTaskbar = false; 
+            
+            if (i < 1) { 
+                if (Settings.Default.StartMini == true) this.ShowInTaskbar = false; 
                 GC.Stop();
                 GC.Interval = TimeSpan.FromSeconds(20);
                 GC.Tick += GC_Tick;
                 GC.Start();
+                i++;
             }
         }
 
