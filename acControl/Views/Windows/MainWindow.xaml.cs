@@ -1,5 +1,6 @@
 ﻿using acControl.Properties;
 using acControl.Scripts;
+using acControl.Views.Pages;
 using System;
 using System.Diagnostics;
 using System.Security.Principal;
@@ -119,6 +120,41 @@ namespace acControl.Views.Windows
         {
             if (this.WindowState == WindowState.Minimized) { this.ShowInTaskbar = false; Global.isMinimised = true; }
             else { this.ShowInTaskbar = true; Global.isMinimised = false; }
+        }
+
+        private void Silent_Click(object sender, RoutedEventArgs e)
+        {
+            Settings.Default.ACMode = 0;
+            Settings.Default.Save();
+            DashboardPage.updateProfile = true;
+        }
+        private void Perf_Click(object sender, RoutedEventArgs e)
+        {
+            Settings.Default.ACMode = 1;
+            Settings.Default.Save();
+            DashboardPage.updateProfile = true;
+        }
+        private void Turbo_Click(object sender, RoutedEventArgs e)
+        {
+            Settings.Default.ACMode = 2;
+            Settings.Default.Save();
+            DashboardPage.updateProfile = true;
+        }
+        private void Man_Click(object sender, RoutedEventArgs e)
+        {
+            Settings.Default.ACMode = 3;
+            Settings.Default.Save();
+            DashboardPage.updateProfile = true;
+        }
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Application.Current.Shutdown();
+        }
+
+        private void CustomiseMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.WindowState == WindowState.Minimized) this.WindowState = WindowState.Normal;
+            _navigationService.Navigate(typeof(Views.Pages.CustomPresets));
         }
     }
 }
