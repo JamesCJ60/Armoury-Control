@@ -452,10 +452,16 @@ namespace acControl.Scripts
         public static float? CpuTemp { get; private set; }
         public static float? BatteryDischarge { get; private set; }
 
-        public static void ReadBatterySensors()
+        public static float? BatteryChargeRate { get; private set; }
+        public static void ReadSensors()
         {
             try
             {
+                using (var ct = new PerformanceCounter("Thermal Zone Information", "Temperature", @"\_TZ.THRM", true))
+                {
+                    CpuTemp = ct.NextValue() - 273.15f;
+                }
+
                 using (var cb = new PerformanceCounter("Power Meter", "Power", "Power Meter (0)", true))
                     BatteryDischarge = cb.NextValue() / 1000;
             }
@@ -500,6 +506,28 @@ namespace acControl.Scripts
 
                 }
             });
+        }
+
+        public static double getCPUFanSpeed()
+        {
+            double maxFanCPU = 0.6;
+            if (MotherboardInfo.Product.Contains("Flow Z13"))
+            {
+                maxFanCPU = 0.69;
+            }
+
+            return maxFanCPU;
+        }
+
+        public static double getGPUFanSpeed()
+        {
+            double maxFanGPU = 0.6;
+            if (MotherboardInfo.Product.Contains("Flow Z13"))
+            {
+                maxFanGPU = 0.69;
+            }
+
+            return maxFanGPU;
         }
     }
 

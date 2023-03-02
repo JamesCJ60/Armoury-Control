@@ -15,12 +15,19 @@ namespace acControl.Scripts
         static extern int EmptyWorkingSet(IntPtr hwProc);
         public static async Task Garbage_Collect()
         {
-            await Task.Run(() =>
+            try
             {
-                EmptyWorkingSet(Process.GetCurrentProcess().Handle);
+                await Task.Run(() =>
+                {
+                    EmptyWorkingSet(Process.GetCurrentProcess().Handle);
 
-                long usedMemory = GC.GetTotalMemory(true);
-            });
+                    long usedMemory = GC.GetTotalMemory(true);
+                });
+            }
+            catch
+            {
+
+            }
         }
     }
 }

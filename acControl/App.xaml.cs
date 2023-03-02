@@ -6,6 +6,7 @@ using acControl.Views.Pages;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -18,6 +19,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using Wpf.Ui.Mvvm.Contracts;
 using Wpf.Ui.Mvvm.Services;
+using static acControl.Scripts.SystemDeviceControl;
 
 namespace acControl
 {
@@ -111,6 +113,8 @@ namespace acControl
                     Environment.Exit(0);
                 }
 
+                
+
                 _ = Tablet.TabletDevices;
 
                 location = AppDomain.CurrentDomain.BaseDirectory;
@@ -129,10 +133,12 @@ namespace acControl
             }
         }
 
-        /// <summary>
-        /// Occurs when the application is closing.
-        /// </summary>
-        private async void OnExit(object sender, ExitEventArgs e)
+        
+
+            /// <summary>
+            /// Occurs when the application is closing.
+            /// </summary>
+            private async void OnExit(object sender, ExitEventArgs e)
         {
             await _host.StopAsync();
 
@@ -172,6 +178,46 @@ namespace acControl
                     case 179:   // FN+F4
                         break;
                 }
+            });
+        }
+
+        public static Guid DLAHI_GUID = new Guid("{5c4c3332-344d-483c-8739-259e934c9cc8}");
+        public static string DLAHI_Instance = @"SWD\DRIVERENUM\OEM_DAL_COMPONENT&4&293F28F0&0";
+
+        public static Guid DTTDE_GUID = new Guid("{5c4c3332-344d-483c-8739-259e934c9cc8}");
+        public static string DTTDE_Instance = @"SWD\DRIVERENUM\{BC7814A1-A80E-44B3-87C6-652EAC676387}#DTTEXTCOMPONENT&4&DE2304&3";
+
+        private async void Application_SessionEnding(object sender, SessionEndingCancelEventArgs e)
+        {
+            await Task.Run(() =>
+            {
+                try
+                {
+                    if (MotherboardInfo.Product.Contains("Flow Z13") && Settings.Default.StartOnBoot == true)
+                    {
+                        DeviceHelper.SetDeviceEnabled(DLAHI_GUID, DLAHI_Instance, false);
+                        DeviceHelper.SetDeviceEnabled(DTTDE_GUID, DTTDE_Instance, false);
+                    }
+                }
+                catch { }
+            });
+        }
+
+        public static async void ApplyFix()
+        {
+            await Task.Run(() =>
+            {
+                System.Threading.Thread.Sleep(25000);
+
+                try
+                {
+                    if (MotherboardInfo.Product.Contains("Flow Z13") && Settings.Default.StartOnBoot == true)
+                    {
+                        DeviceHelper.SetDeviceEnabled(DLAHI_GUID, DLAHI_Instance, true);
+                        DeviceHelper.SetDeviceEnabled(DTTDE_GUID, DTTDE_Instance, true);
+                    }
+                }
+                catch { }
             });
         }
     }

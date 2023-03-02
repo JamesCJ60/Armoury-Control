@@ -13,6 +13,7 @@ using System.DirectoryServices.ActiveDirectory;
 using System.Threading;
 using System.Drawing;
 using System.Windows.Input;
+using Microsoft.Win32;
 
 namespace acControl.Views.Pages
 {
@@ -65,7 +66,7 @@ namespace acControl.Views.Pages
 
             //set up timer for sensor update
             DispatcherTimer sensor = new DispatcherTimer();
-            sensor.Interval = TimeSpan.FromSeconds(1.75);
+            sensor.Interval = TimeSpan.FromSeconds(1.7);
             sensor.Tick += SensorUpdate_Tick;
             sensor.Start();
 
@@ -95,7 +96,7 @@ namespace acControl.Views.Pages
             }
 
             switchProfile(Settings.Default.ACMode);
-
+            App.ApplyFix();
             if (Settings.Default.DisplayMode == 0)
             {
                 tbMax.IsChecked = true;
@@ -128,12 +129,15 @@ namespace acControl.Views.Pages
                 Global.toggleGPU = true;
             }
 
+            SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
+
             update();
+            updateFan();
             SetSystemSettings.setBatteryLimit((int)sdBattery.Value);
             setup = true;
         }
 
-        async void SensorUpdate_Tick(object sender, EventArgs e)
+        void SensorUpdate_Tick(object sender, EventArgs e)
         {
             update();
         }
@@ -149,69 +153,51 @@ namespace acControl.Views.Pages
 
                     try
                     {
-                        eGPU = App.wmi.DeviceGet(ASUSWmi.eGPU);
+                        eGPU = await Task.Run(() => App.wmi.DeviceGet(ASUSWmi.eGPU));
                     }
                     catch (Exception ex)
                     {
                         Debug.WriteLine(ex);
                     }
 
-                    if (eGPU == 0)
+                    if (eGPU == 0 && lblXGMobile.Content != "Activate ROG XG Mobile")
                     { lblXGMobile.Content = "Activate ROG XG Mobile"; cdGPU.Visibility = Visibility.Visible; }
-                    else { lblXGMobile.Content = "Deactivate ROG XG Mobile"; cdGPU.Visibility = Visibility.Collapsed; }
+                    if (eGPU == 1 && lblXGMobile.Content != "Deactivate ROG XG Mobile") { lblXGMobile.Content = "Deactivate ROG XG Mobile"; cdGPU.Visibility = Visibility.Collapsed;}
                     
                     if(mux < 1 && tbXG.IsEnabled == true) { tbXG.IsEnabled = false; }
-                    else if (GetSystemInfo.GetCPUName().Contains("Ryzen 9 5900HS") || GetSystemInfo.GetCPUName().Contains("Ryzen 9 5980HS")) { tbXG.IsEnabled = true; }
+                    else if (await Task.Run(() => GetSystemInfo.GetCPUName().Contains("Ryzen 9 5900HS")) || await Task.Run(() => GetSystemInfo.GetCPUName().Contains("Ryzen 9 5980HS"))) { tbXG.IsEnabled = true; }
                     else { tbXG.IsEnabled = true; }
                 }
 
-                var cpuFan = App.wmi.DeviceGet(ASUSWmi.CPU_Fan);
-                var gpuFan = App.wmi.DeviceGet(ASUSWmi.GPU_Fan);
-
-
-                tbxCPUFan.Text = $"{cpuFan * 0x64} RPM";
-                tbxdGPUFan.Text = $"{gpuFan * 0x64} RPM";
-                prdGPUFan.Progress = Math.Round(gpuFan / 0.69);
-                prCPUFan.Progress = Math.Round(cpuFan / 0.69);
-
-                tbxCPUPer.Text = $"{Math.Round(cpuFan / 0.69)}%";
-                tbxdGPUPer.Text = $"{Math.Round(gpuFan / 0.69)}%";
-
-                if (tbxCPUFan.Text.Contains("-") || tbxdGPUFan.Text.Contains("-"))
+                if (tbAuto.IsChecked == true && setup == true || tbDisplayAuto.IsChecked == true && setup == true)
                 {
-                    cpuFan = App.wmi.DeviceGet2(ASUSWmi.CPU_Fan);
-                    gpuFan = App.wmi.DeviceGet2(ASUSWmi.GPU_Fan);
-
-                    tbxCPUFan.Text = $"{cpuFan * 0x64} RPM";
-                    tbxdGPUFan.Text = $"{gpuFan * 0x64} RPM";
-                    prdGPUFan.Progress = Math.Round(gpuFan / 0.69);
-                    prCPUFan.Progress = Math.Round(cpuFan / 0.69);
-
-                    tbxCPUPer.Text = $"{Math.Round(cpuFan / 0.69)}%";
-                    tbxdGPUPer.Text = $"{Math.Round(gpuFan / 0.69)}%";
-                }
-                
-            }
-
-            if (tbAuto.IsChecked == true && setup == true || tbDisplayAuto.IsChecked == true && setup == true)
-            {
-                SetSystemSettings.setACDCSettings();
-
-                if (Global.isMinimised == false)
-                {
-                    string dGPU = await Task.Run(() => GetSystemInfo.GetdGPUName().Replace(" GPU", null));
-                    if (dGPU == null || dGPU == "") spdGPU.Visibility = System.Windows.Visibility.Collapsed;
-                    else
+                    if (Global.isMinimised == false)
                     {
-                        spdGPU.Visibility = System.Windows.Visibility.Visible;
-                        tbxdGPUName.Text = dGPU;
+                        updateFan();
+                        string dGPU = await Task.Run(() => GetSystemInfo.GetdGPUName().Replace(" GPU", null));
+                        if (dGPU == "" && spdGPU.Visibility != System.Windows.Visibility.Collapsed) spdGPU.Visibility = System.Windows.Visibility.Collapsed;
+                        else if (dGPU != "" && spdGPU.Visibility == System.Windows.Visibility.Collapsed)
+                        {
+                            spdGPU.Visibility = System.Windows.Visibility.Visible;
+                            tbxdGPUName.Text = dGPU;
+                        }
                     }
                 }
             }
 
-
             if (updateProfile == true) { switchProfile(Settings.Default.ACMode); updateProfile = false; }
         }
+
+        private async void SystemEvents_PowerModeChanged(object sender, PowerModeChangedEventArgs e)
+        {
+            if (tbAuto.IsChecked == true && setup == true || tbDisplayAuto.IsChecked == true && setup == true)
+            {
+                await Task.Run(() => GetSystemInfo.getBattery());
+                await Task.Run(() => SetSystemSettings.setACDCSettings());
+            }
+            SetSystemSettings.setBatteryLimit((int)sdBattery.Value);
+        }
+
         public async void switchProfile(int ACProfile)
         {
             Settings.Default.ACMode = ACProfile;
@@ -228,6 +214,7 @@ namespace acControl.Views.Pages
                 {
                     App.wmi.DeviceSet(ASUSWmi.PerformanceMode, ASUSWmi.PerformanceSilent);
                 });
+                SetSystemSettings.ApplyPresetSettings("presets\\Silent.txt");
             }
             if (Settings.Default.ACMode == 1)
             {
@@ -240,6 +227,7 @@ namespace acControl.Views.Pages
                 {
                     App.wmi.DeviceSet(ASUSWmi.PerformanceMode, ASUSWmi.PerformanceBalanced);
                 });
+                SetSystemSettings.ApplyPresetSettings("presets\\Perf.txt");
             }
             if (Settings.Default.ACMode == 2)
             {
@@ -252,6 +240,7 @@ namespace acControl.Views.Pages
                 {
                     App.wmi.DeviceSet(ASUSWmi.PerformanceMode, ASUSWmi.PerformanceTurbo);
                 });
+                SetSystemSettings.ApplyPresetSettings("presets\\Turbo.txt");
             }
             if (Settings.Default.ACMode == 3)
             {
@@ -260,8 +249,11 @@ namespace acControl.Views.Pages
                 tbPerf.IsChecked = false;
                 tbMan.IsChecked = true;
                 imgPerformProfile.Source = new BitmapImage(new Uri(App.location + "\\Images\\ACProfiles\\Windows.png"));
-                App.wmi.DeviceSet(ASUSWmi.PerformanceMode, ASUSWmi.PerformanceBalanced);
-                SetSystemSettings.ApplyPresetSettings();
+                await Task.Run(() =>
+                {
+                    App.wmi.DeviceSet(ASUSWmi.PerformanceMode, ASUSWmi.PerformanceBalanced);
+                });
+                SetSystemSettings.ApplyPresetSettings("presets\\Manual.txt");
             }
         }
 
@@ -375,7 +367,7 @@ namespace acControl.Views.Pages
 
         private void tbDisplayAuto_Click(object sender, RoutedEventArgs e)
         {
-            if (tbMin.IsChecked == false && tbMax.IsChecked == false && tbDisplayAuto.IsChecked == false) tbDisplayAuto.IsChecked = true;
+            tbDisplayAuto.IsChecked = true;
             tbMin.IsChecked = false;
             tbMax.IsChecked = false;
             Global.toggleDisplay = true;
@@ -390,7 +382,7 @@ namespace acControl.Views.Pages
             
             if (mux > 0)
             {
-                if (tbUlti.IsChecked == false && tbStan.IsChecked == false && tbEco.IsChecked == false && tbAuto.IsChecked == false) tbAuto.IsChecked = true;
+                tbAuto.IsChecked = true;
                 tbUlti.IsChecked = false;
                 tbStan.IsChecked = false;
                 tbEco.IsChecked = false;
@@ -512,6 +504,38 @@ namespace acControl.Views.Pages
 
                 XG_Mobile_Prompt xg = new XG_Mobile_Prompt();
                 xg.Show();
+            }
+        }
+
+        private async void updateFan()
+        {
+            var cpuFan = await Task.Run(() => App.wmi.DeviceGet(ASUSWmi.CPU_Fan));
+            var gpuFan = await Task.Run(() => App.wmi.DeviceGet(ASUSWmi.GPU_Fan));
+
+            double maxFanCPU = await Task.Run(() => GetSystemInfo.getCPUFanSpeed());
+            double maxFanGPU = await Task.Run(() => GetSystemInfo.getGPUFanSpeed());
+
+            await Task.Run(() => GetSystemInfo.ReadSensors());
+            await Task.Run(() => GetSystemInfo.GetdGPUStats());
+
+            tbxCPUFan.Text = $"{cpuFan * 0x64} RPM";
+            tbxdGPUFan.Text = $"{gpuFan * 0x64} RPM";
+            prdGPUFan.Progress = Math.Round(gpuFan / maxFanGPU);
+            prCPUFan.Progress = Math.Round(cpuFan / maxFanCPU);
+
+            tbxCPUPer.Text = $"{(int)GetSystemInfo.CpuTemp}°C";
+            tbxdGPUPer.Text = $"{(int)GetSystemInfo.dGPUTemp}°C";
+            if (tbxCPUFan.Text.Contains("-") || tbxdGPUFan.Text.Contains("-"))
+            {
+                cpuFan = await Task.Run(() => App.wmi.DeviceGet2(ASUSWmi.CPU_Fan));
+                gpuFan = await Task.Run(() => App.wmi.DeviceGet2(ASUSWmi.GPU_Fan));
+
+                tbxdGPUFan.Text = $"{gpuFan * 0x64} RPM";
+                prdGPUFan.Progress = Math.Round(gpuFan / 0.69);
+                prCPUFan.Progress = Math.Round(cpuFan / 0.69);
+
+                tbxCPUPer.Text = $"{Math.Round(cpuFan / 0.69)}%";
+                tbxdGPUPer.Text = $"{Math.Round(gpuFan / 0.69)}%";
             }
         }
     }

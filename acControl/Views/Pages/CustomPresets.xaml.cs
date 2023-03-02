@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace acControl.Views.Pages
 {
@@ -27,7 +28,18 @@ namespace acControl.Views.Pages
             InitializeComponent();
             _ = Tablet.TabletDevices;
 
-            loadSettings();
+            string preset = "presets\\Manual.txt";
+
+            cbxPowerPreset.SelectedIndex = Settings.Default.ACMode;
+
+            try
+            {
+                if (cbxPowerPreset.SelectedIndex == 0) preset = "presets\\Silent.txt";
+                if (cbxPowerPreset.SelectedIndex == 1) preset = "presets\\Perf.txt";
+                if (cbxPowerPreset.SelectedIndex == 2) preset = "presets\\Turbo.txt";
+                CustomPresetHandler.LoadPreset(preset);
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
 
             if (GetSystemInfo.GetCPUName().Contains("Intel"))
             {
@@ -37,83 +49,85 @@ namespace acControl.Views.Pages
                 tbSmart.Visibility = Visibility.Collapsed;
             }
         }
-        void loadSettings()
+
+        async void loadSettings(string preset)
         {
-            CustomPresetHandler.LoadPreset();
-
-            tsCPUFan.IsChecked = CustomPresetHandler.isCPUFan;
-            tsCPUPower.IsChecked = CustomPresetHandler.isCPUPower;
-            tsCPUTemp.IsChecked = CustomPresetHandler.isCPUTemp;
-
-            tsGPUFan.IsChecked = CustomPresetHandler.isGPUFan;
-            tsGPUOffset.IsChecked = CustomPresetHandler.isGPUOffset;
-
-
-            nudCPUTemp1.Value = CustomPresetHandler.cpuTemp;
-            nudCPUTemp2.Value = CustomPresetHandler.skinCPUTemp;
-
-            nudCPUPow1.Value = CustomPresetHandler.cpuPower1;
-            nudCPUPow2.Value = CustomPresetHandler.cpuPower2;
-            nudAPUPow.Value = CustomPresetHandler.apuSlowPPT;
-            nudAPUCO.Value = CustomPresetHandler.cpuCurveOpti;
-
-            if(CustomPresetHandler.cpuPower1 == 0)
+            try
             {
-                if (GetSystemInfo.GetCPUName().Contains("Ryzen"))
+                await Task.Run(() => CustomPresetHandler.LoadPreset(preset));
+
+                tsCPUFan.IsChecked = CustomPresetHandler.isCPUFan;
+                tsCPUPower.IsChecked = CustomPresetHandler.isCPUPower;
+                tsCPUTemp.IsChecked = CustomPresetHandler.isCPUTemp;
+
+                tsGPUFan.IsChecked = CustomPresetHandler.isGPUFan;
+                tsGPUOffset.IsChecked = CustomPresetHandler.isGPUOffset;
+
+
+                nudCPUTemp1.Value = CustomPresetHandler.cpuTemp;
+                nudCPUTemp2.Value = CustomPresetHandler.skinCPUTemp;
+
+                nudAPUCO.Value = CustomPresetHandler.cpuCurveOpti;
+
+                if (CustomPresetHandler.cpuPower1 == 0)
                 {
-                    if (App.wmi.DeviceGet(ASUSWmi.PPT_Total) > 0) nudCPUPow1.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_Total);
-                    else if (App.wmi.DeviceGet(ASUSWmi.PPT_Total1) > 0) nudCPUPow1.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_Total1);
-                    else nudCPUPow1.Value = 45;
+                    if (GetSystemInfo.GetCPUName().Contains("Ryzen"))
+                    {
+                        if (App.wmi.DeviceGet(ASUSWmi.PPT_Total) > 0) nudCPUPow1.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_Total);
+                        else if (App.wmi.DeviceGet(ASUSWmi.PPT_Total1) > 0) nudCPUPow1.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_Total1);
+                        else nudCPUPow1.Value = 65;
+                    }
+                    else nudCPUPow1.Value = 65;
                 }
-            }
-            else nudCPUPow1.Value = 65;
 
-            if (CustomPresetHandler.cpuPower2 == 0)
-            {
-                if (GetSystemInfo.GetCPUName().Contains("Ryzen"))
+                if (CustomPresetHandler.cpuPower2 == 0)
                 {
-                    if (App.wmi.DeviceGet(ASUSWmi.PPT_Total) > 0) nudCPUPow2.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_Total);
-                    else if (App.wmi.DeviceGet(ASUSWmi.PPT_Total1) > 0) nudCPUPow2.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_Total1);
-                    else if (App.wmi.DeviceGet(ASUSWmi.PPT_Total2) > 0) nudCPUPow2.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_Total2);
+                    if (GetSystemInfo.GetCPUName().Contains("Ryzen"))
+                    {
+                        if (App.wmi.DeviceGet(ASUSWmi.PPT_Total) > 0) nudCPUPow2.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_Total);
+                        else if (App.wmi.DeviceGet(ASUSWmi.PPT_Total1) > 0) nudCPUPow2.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_Total1);
+                        else if (App.wmi.DeviceGet(ASUSWmi.PPT_Total2) > 0) nudCPUPow2.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_Total2);
+                        else nudCPUPow2.Value = 65;
+                    }
+                    else nudCPUPow2.Value = 65;
+                }
+
+                if (CustomPresetHandler.apuSlowPPT == 0)
+                {
+                    if (GetSystemInfo.GetCPUName().Contains("Ryzen"))
+                    {
+                        if (App.wmi.DeviceGet(ASUSWmi.PPT_CPU) > 0) nudAPUPow.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_CPU1);
+                        else if (App.wmi.DeviceGet(ASUSWmi.PPT_CPU1) > 0) nudAPUPow.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_CPU1);
+                        else nudCPUPow2.Value = 45;
+                    }
                     else nudCPUPow2.Value = 45;
                 }
-            }
-            else nudCPUPow2.Value = 65;
 
-            if (CustomPresetHandler.apuSlowPPT == 0)
-            {
-                if (GetSystemInfo.GetCPUName().Contains("Ryzen"))
-                {
-                    if (App.wmi.DeviceGet(ASUSWmi.PPT_CPU) > 0) nudAPUPow.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_CPU1);
-                    else if (App.wmi.DeviceGet(ASUSWmi.PPT_CPU1) > 0) nudAPUPow.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_CPU1);
-                    else nudCPUPow2.Value = 45;
-                }
-            }
-            else nudCPUPow2.Value = 65;
+                sdCPUFan1.Value = CustomPresetHandler.cpuFan1;
+                sdCPUFan2.Value = CustomPresetHandler.cpuFan2;
+                sdCPUFan3.Value = CustomPresetHandler.cpuFan3;
+                sdCPUFan4.Value = CustomPresetHandler.cpuFan4;
+                sdCPUFan5.Value = CustomPresetHandler.cpuFan5;
+                sdCPUFan6.Value = CustomPresetHandler.cpuFan6;
+                sdCPUFan7.Value = CustomPresetHandler.cpuFan7;
+                sdCPUFan8.Value = CustomPresetHandler.cpuFan8;
 
-            sdCPUFan1.Value = CustomPresetHandler.cpuFan1;
-            sdCPUFan2.Value = CustomPresetHandler.cpuFan2;
-            sdCPUFan3.Value = CustomPresetHandler.cpuFan3;
-            sdCPUFan4.Value = CustomPresetHandler.cpuFan4;
-            sdCPUFan5.Value = CustomPresetHandler.cpuFan5;
-            sdCPUFan6.Value = CustomPresetHandler.cpuFan6;
-            sdCPUFan7.Value = CustomPresetHandler.cpuFan7;
-            sdCPUFan8.Value = CustomPresetHandler.cpuFan8;
+                nudGPUCore.Value = CustomPresetHandler.gpuCoreOffset;
+                nudGPUVRAM.Value = CustomPresetHandler.gpuVRAMOffset;
 
-            nudGPUCore.Value = CustomPresetHandler.gpuCoreOffset;
-            nudGPUVRAM.Value = CustomPresetHandler.gpuVRAMOffset;
+                sdGPUFan1.Value = CustomPresetHandler.gpuFan1;
+                sdGPUFan2.Value = CustomPresetHandler.gpuFan2;
+                sdGPUFan3.Value = CustomPresetHandler.gpuFan3;
+                sdGPUFan4.Value = CustomPresetHandler.gpuFan4;
+                sdGPUFan5.Value = CustomPresetHandler.gpuFan5;
+                sdGPUFan6.Value = CustomPresetHandler.gpuFan6;
+                sdGPUFan7.Value = CustomPresetHandler.gpuFan7;
+                sdGPUFan8.Value = CustomPresetHandler.gpuFan8;
 
-            sdGPUFan1.Value = CustomPresetHandler.gpuFan1;
-            sdGPUFan2.Value = CustomPresetHandler.gpuFan2;
-            sdGPUFan3.Value = CustomPresetHandler.gpuFan3;
-            sdGPUFan4.Value = CustomPresetHandler.gpuFan4;
-            sdGPUFan5.Value = CustomPresetHandler.gpuFan5;
-            sdGPUFan6.Value = CustomPresetHandler.gpuFan6;
-            sdGPUFan7.Value = CustomPresetHandler.gpuFan7;
-            sdGPUFan8.Value = CustomPresetHandler.gpuFan8;
+            } catch (Exception ex) { }
         }
 
-        private void save()
+        private void save(string preset = "presets\\Silent.txt")
         {
             CustomPresetHandler.isCPUFan = tsCPUFan.IsChecked.Value;
             CustomPresetHandler.isCPUPower = tsCPUPower.IsChecked.Value;
@@ -161,7 +175,7 @@ namespace acControl.Views.Pages
             if ((int)sdGPUFan7.Value < 30) CustomPresetHandler.gpuFan7 = 30;
             if ((int)sdGPUFan8.Value < 30) CustomPresetHandler.gpuFan8 = 30;
 
-            CustomPresetHandler.SavePreset();
+            CustomPresetHandler.SavePreset(preset);
         }
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
@@ -170,15 +184,33 @@ namespace acControl.Views.Pages
 
         private void btnLoad_Click(object sender, RoutedEventArgs e)
         {
-            loadSettings();
+            string preset = "presets\\Manual.txt";
+            if (cbxPowerPreset.SelectedIndex == 0) preset = "presets\\Silent.txt";
+            if (cbxPowerPreset.SelectedIndex == 1) preset = "presets\\Perf.txt";
+            if (cbxPowerPreset.SelectedIndex == 2) preset = "presets\\Turbo.txt";
+            loadSettings(preset);
         }
 
         private void btnApply_Click(object sender, RoutedEventArgs e)
         {
-            save();
-            Settings.Default.ACMode = 3;
+            string preset = "\\presets\\Manual.txt";
+            if (cbxPowerPreset.SelectedIndex == 0) preset = "presets\\Silent.txt";
+            if (cbxPowerPreset.SelectedIndex == 1) preset = "presets\\Perf.txt";
+            if (cbxPowerPreset.SelectedIndex == 2) preset = "presets\\Turbo.txt";
+
+            save(preset);
+            Settings.Default.ACMode = cbxPowerPreset.SelectedIndex;
             Settings.Default.Save();
             DashboardPage.updateProfile = true;
+        }
+
+        private void cbxPowerPreset_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string preset = "presets\\Manual.txt";
+            if (cbxPowerPreset.SelectedIndex == 0) preset = "presets\\Silent.txt";
+            if (cbxPowerPreset.SelectedIndex == 1) preset = "presets\\Perf.txt";
+            if (cbxPowerPreset.SelectedIndex == 2) preset = "presets\\Turbo.txt";
+            loadSettings(preset);
         }
     }
 }

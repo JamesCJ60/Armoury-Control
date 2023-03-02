@@ -38,7 +38,7 @@ namespace acControl.Views.Windows
             navigationService.SetNavigationControl(RootNavigation);
             _navigationService = navigationService;
             
-            GC.Interval = TimeSpan.FromSeconds(1);
+            GC.Interval = TimeSpan.FromSeconds(5);
             GC.Tick += GC_Tick;
             GC.Start();
 
@@ -60,12 +60,11 @@ namespace acControl.Views.Windows
         async void GC_Tick(object sender, EventArgs e)
         {
             GarbageCollection.Garbage_Collect();
-
+            i++;
             if (Settings.Default.StartMini == true && i < 1) { 
                 this.ShowInTaskbar = false; 
-                i++;
                 GC.Stop();
-                GC.Interval = TimeSpan.FromSeconds(18);
+                GC.Interval = TimeSpan.FromSeconds(20);
                 GC.Tick += GC_Tick;
                 GC.Start();
             }

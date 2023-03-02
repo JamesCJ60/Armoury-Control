@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Management;
 using System.Text;
@@ -13,6 +14,7 @@ using acControl.Properties;
 using acControl.Scripts.Intel;
 using acControl.Views.Pages;
 using HidSharp;
+
 
 namespace acControl.Scripts
 {
@@ -55,8 +57,19 @@ namespace acControl.Scripts
         {
             await Task.Run(() =>
             {
+                Thread.Sleep(256);
                 GetSystemInfo.getBattery();
                 statuscode = GetSystemInfo.statuscode;
+
+
+                if (statuscode != lastStatus)
+                {
+                    lastStatus = statuscode;
+                    hasToggledGPU = false;
+                    hasToggledDisplay = false;
+
+                }
+
                 if (statuscode == 2 || statuscode == 6 || statuscode == 7 || statuscode == 8)
                 {
                     if (Global.toggleDisplay == true && hasToggledDisplay == false)
@@ -87,14 +100,6 @@ namespace acControl.Scripts
                         hasToggledGPU = true;
                     }
                 }
-
-                if (statuscode != lastStatus)
-                {
-                    lastStatus = statuscode;
-                    hasToggledGPU = false;
-                    hasToggledDisplay = false;
-
-                }
             });
         }
 
@@ -105,17 +110,14 @@ namespace acControl.Scripts
                 if (App.wmi.DeviceGet(ASUSWmi.GPUEco) != index)
                 {
                     App.wmi.DeviceSet(ASUSWmi.GPUEco, index);
-                    if (index == 1)
-                    {
-                        Thread.Sleep(1000);
 
-                        GetSystemInfo.stop();
+                    Thread.Sleep(1000);
 
-                        Thread.Sleep(1000);
-                        GetSystemInfo.start();
+                    GetSystemInfo.stop();
 
-                        GarbageCollection.Garbage_Collect();
-                    }
+                    Thread.Sleep(1000);
+                    GetSystemInfo.start();
+
                 }
             });
         }
@@ -124,8 +126,11 @@ namespace acControl.Scripts
         {
             await Task.Run(() =>
             {
-                if (index == 1) RunCLI.RunCommand($"{App.location + "\\Assets\\CRS\\CSR.exe"} /f={GetSystemInfo.maxRefreshRate} /force", false);
-                else RunCLI.RunCommand($"{App.location + "\\Assets\\CRS\\CSR.exe"} /f={GetSystemInfo.minRefreshRate} /force", false);
+                //if (index == 1) RunCLI.RunCommand($"{App.location + "\\Assets\\CRS\\CSR.exe"} /f={GetSystemInfo.maxRefreshRate} /force", false);
+                //else RunCLI.RunCommand($"{App.location + "\\Assets\\CRS\\CSR.exe"} /f={GetSystemInfo.minRefreshRate} /force", false);
+
+                if (index == 1) NativeMethods.SetRefreshRate(GetSystemInfo.maxRefreshRate);
+                else NativeMethods.SetRefreshRate(GetSystemInfo.minRefreshRate);
 
                 try
                 {
@@ -137,8 +142,6 @@ namespace acControl.Scripts
                 {
                     Debug.WriteLine("Screen Overdrive not supported");
                 }
-
-                GarbageCollection.Garbage_Collect();
             });
         }
 
@@ -154,13 +157,13 @@ namespace acControl.Scripts
             }
         }
 
-        public static async void ApplyPresetSettings(string preset = "\\presets\\Manual.txt")
+        public static async void ApplyPresetSettings(string preset)
         {
             CustomPresetHandler.LoadPreset(preset);
 
             await Task.Run(() =>
             {
-                Thread.Sleep(500);
+                Thread.Sleep(250);
                 if (Settings.Default.ACMode == 3)
                 {
                     if (GetSystemInfo.GetCPUName().Contains("Intel"))

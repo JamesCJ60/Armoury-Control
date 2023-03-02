@@ -45,7 +45,7 @@ namespace acControl.Scripts
         public static int gpuFan6 = 30;
         public static int gpuFan7 = 30;
         public static int gpuFan8 = 30;
-        public static void LoadPreset(string preset = "\\presets\\Manual.txt")
+        public static void LoadPreset(string preset)
         {
             var presetData = File.ReadAllLines(App.location + preset);
 
@@ -83,7 +83,7 @@ namespace acControl.Scripts
             skinCPUTemp = Convert.ToInt32(presetData[45]);
         }
 
-        public static void SavePreset(string preset = "\\presets\\Manual.txt")
+        public static void SavePreset(string preset)
         {
             string presetData = "CPU:\n";
             presetData = presetData + $"{isCPUFan}\n";

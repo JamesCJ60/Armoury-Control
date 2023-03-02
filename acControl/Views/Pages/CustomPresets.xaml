@@ -16,7 +16,17 @@
             <TextBlock
             FontSize="20"
             FontWeight="Medium"
-            Text="Manual Power Preset Customisation" DockPanel.Dock="Top"/>
+            Text="Power Preset Customisation" DockPanel.Dock="Top"/>
+
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="0,12,0,0">
+                <TextBlock FontSize="17" FontWeight="Medium" Margin="0,0,12,0" VerticalAlignment="Center">Selected Power Preset: </TextBlock>
+                <ComboBox Width="150" SelectedIndex="0" Name="cbxPowerPreset" SelectionChanged="cbxPowerPreset_SelectionChanged">
+                    <ComboBoxItem>Silent</ComboBoxItem>
+                    <ComboBoxItem>Performance</ComboBoxItem>
+                    <ComboBoxItem>Turbo</ComboBoxItem>
+                    <ComboBoxItem>Manual</ComboBoxItem>
+                </ComboBox>
+            </StackPanel>
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right">
                 <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="120" Name="btnLoad" Click="btnLoad_Click">Load Settings</ui:Button>
             <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="120" Name="btnSave" Click="btnSave_Click">Save Settings</ui:Button>
