@@ -130,7 +130,7 @@ namespace acControl.Scripts
                 //else RunCLI.RunCommand($"{App.location + "\\Assets\\CRS\\CSR.exe"} /f={GetSystemInfo.minRefreshRate} /force", false);
 
                 if (index == 1) NativeMethods.SetRefreshRate(GetSystemInfo.maxRefreshRate);
-                else NativeMethods.SetRefreshRate(GetSystemInfo.minRefreshRate);
+                if (index == 0) NativeMethods.SetRefreshRate(60);
 
                 try
                 {
@@ -232,6 +232,31 @@ namespace acControl.Scripts
                     {
                         RunCLI.RunCommand($"{App.location + "\\Assets\\NVIDIA\\oc.exe"} 0 {CustomPresetHandler.gpuCoreOffset} {CustomPresetHandler.gpuVRAMOffset}", false);
                         RunCLI.RunCommand($"{App.location + "\\Assets\\NVIDIA\\oc.exe"} 1 {CustomPresetHandler.gpuCoreOffset} {CustomPresetHandler.gpuVRAMOffset}", false);
+                    }
+
+                    if (CustomPresetHandler.isSYSFan == true)
+                    {
+                        byte[] curve = new byte[16];
+                        curve[0] = (byte)30;
+                        curve[1] = (byte)40;
+                        curve[2] = (byte)50;
+                        curve[3] = (byte)60;
+                        curve[4] = (byte)70;
+                        curve[5] = (byte)80;
+                        curve[6] = (byte)90;
+                        curve[7] = (byte)100;
+                        curve[8] = (byte)CustomPresetHandler.sysFan1;
+                        curve[9] = (byte)CustomPresetHandler.sysFan2;
+                        curve[10] = (byte)CustomPresetHandler.sysFan3;
+                        curve[11] = (byte)CustomPresetHandler.sysFan4;
+                        curve[12] = (byte)CustomPresetHandler.sysFan5;
+                        curve[13] = (byte)CustomPresetHandler.sysFan6;
+                        curve[14] = (byte)CustomPresetHandler.sysFan7;
+                        curve[15] = (byte)CustomPresetHandler.sysFan8;
+                        string bitCurve = BitConverter.ToString(curve);
+                        Debug.WriteLine(bitCurve);
+
+                        App.wmi.SetFanCurve(1, curve);
                     }
                 }
             });

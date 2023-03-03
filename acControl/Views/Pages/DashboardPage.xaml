@@ -39,7 +39,7 @@
                         <StackPanel>
                             <TextBlock FontWeight="Bold" FontSize="17" Margin="0,0,0,2">System Fan Speed:</TextBlock>
 
-                            <UniformGrid Columns="2" Margin="0,3,0,0">
+                            <UniformGrid Columns="2" Margin="0,3,0,0" Name="ugFans">
                                 <Grid TextBlock.TextAlignment="Center">
                                     <TextBlock Panel.ZIndex="1" VerticalAlignment="Center" HorizontalAlignment="Center" Name="tbxCPUPer" FontSize="12">100%</TextBlock>
                                     <StackPanel>
@@ -48,7 +48,14 @@
                                         <TextBlock FontSize="14" Name="tbxCPUFan">1000 RPM</TextBlock>
                                     </StackPanel>
                                 </Grid>
-
+                                <Grid TextBlock.TextAlignment="Center" Name="gSysFan" Visibility="Collapsed">
+                                    <TextBlock Panel.ZIndex="1" VerticalAlignment="Center" HorizontalAlignment="Center" Name="tbxSysPer" FontSize="12">100%</TextBlock>
+                                    <StackPanel>
+                                        <TextBlock FontWeight="DemiBold" FontSize="15">System Fan</TextBlock>
+                                        <ui:ProgressRing Name="prdSysFan" Progress="50" Margin="0,3,0,3" />
+                                        <TextBlock FontSize="14" Name="tbxSysFan">1000 RPM</TextBlock>
+                                    </StackPanel>
+                                </Grid>
                                 <Grid TextBlock.TextAlignment="Center">
                                     <TextBlock Panel.ZIndex="1" VerticalAlignment="Center" HorizontalAlignment="Center" Name="tbxdGPUPer" FontSize="12">100%</TextBlock>
                                     <StackPanel>
@@ -76,7 +83,7 @@
                             </StackPanel>
                             <Slider Minimum="50" Maximum="100" Value="100" Name="sdBattery" SmallChange="1" LargeChange="2" IsSnapToTickEnabled="True" ValueChanged="sdBattery_ValueChanged"/>
 
-                            <StackPanel Orientation="Horizontal" Name="spDischarge">
+                            <StackPanel Orientation="Horizontal" Name="spDischarge" Visibility="Collapsed">
                                 <TextBlock FontWeight="DemiBold" Margin="0,0,9,0" FontSize="15">Discharge Rate:</TextBlock>
                                 <TextBlock Name="tbxDischarge" Margin="0,0,9,0" FontSize="15" Text="0"/>
                             </StackPanel>

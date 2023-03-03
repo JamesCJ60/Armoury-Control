@@ -524,6 +524,13 @@ namespace acControl.Scripts
             return maxFanCPU;
         }
 
+        public static double getSYSFanSpeed()
+        {
+            double maxFanCPU = 0.6;
+
+            return maxFanCPU;
+        }
+
         public static double getGPUFanSpeed()
         {
             double maxFanGPU = 0.6;

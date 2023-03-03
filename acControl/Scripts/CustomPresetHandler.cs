@@ -17,6 +17,8 @@ namespace acControl.Scripts
         public static bool isGPUOffset = false;
         public static bool isGPUFan = false;
 
+        public static bool isSYSFan = false;
+
         public static int cpuTemp = 95;
         public static int skinCPUTemp = 45;
 
@@ -45,7 +47,16 @@ namespace acControl.Scripts
         public static int gpuFan6 = 30;
         public static int gpuFan7 = 30;
         public static int gpuFan8 = 30;
-        public async static void LoadPreset(string preset)
+
+        public static int sysFan1 = 30;
+        public static int sysFan2 = 30;
+        public static int sysFan3 = 30;
+        public static int sysFan4 = 30;
+        public static int sysFan5 = 30;
+        public static int sysFan6 = 30;
+        public static int sysFan7 = 30;
+        public static int sysFan8 = 30;
+        public static async void LoadPreset(string preset)
         {
             await Task.Run(() =>
             {
@@ -83,48 +94,66 @@ namespace acControl.Scripts
                 isCPUTemp = Convert.ToBoolean(presetData[43]);
                 cpuTemp = Convert.ToInt32(presetData[44]);
                 skinCPUTemp = Convert.ToInt32(presetData[45]);
+
+                isGPUFan = Convert.ToBoolean(presetData[48]);
+                gpuFan1 = Convert.ToInt32(presetData[49]);
+                gpuFan2 = Convert.ToInt32(presetData[50]);
+                gpuFan3 = Convert.ToInt32(presetData[51]);
+                gpuFan4 = Convert.ToInt32(presetData[52]);
+                gpuFan5 = Convert.ToInt32(presetData[53]);
+                gpuFan6 = Convert.ToInt32(presetData[54]);
+                gpuFan7 = Convert.ToInt32(presetData[55]);
+                gpuFan8 = Convert.ToInt32(presetData[56]);
             });
         }
 
-        public static void SavePreset(string preset)
+        public static async void SavePreset(string preset)
         {
-            string presetData = "CPU:\n";
-            presetData = presetData + $"{isCPUFan}\n";
-            presetData = presetData + $"{cpuFan1}\n{cpuFan2}\n{cpuFan3}\n{cpuFan4}\n{cpuFan5}\n{cpuFan6}\n{cpuFan7}\n{cpuFan8}\n\n";
-
-            presetData = presetData + "GPU:\n";
-            presetData = presetData + $"{isGPUFan}\n";
-            presetData = presetData + $"{gpuFan1}\n{gpuFan2}\n{gpuFan3}\n{gpuFan4}\n{gpuFan5}\n{gpuFan6}\n{gpuFan7}\n{gpuFan8}\n\n";
-
-            presetData = presetData + "GPU Clock Offsets:\n";
-            presetData = presetData + $"{isGPUOffset}\n";
-            presetData = presetData + $"{gpuCoreOffset}\n";
-            presetData = presetData + $"{gpuVRAMOffset}\n\n";
-
-            presetData = presetData + "Curve Optimiser Offsets:\n";
-            presetData = presetData + $"{cpuCurveOpti}\n\n";
-
-            presetData = presetData + "Power Limit:\n";
-            presetData = presetData + $"{isCPUPower}\n\n";
-
-            presetData = presetData + "Power Limit 1:\n";
-            presetData = presetData + $"{cpuPower1}\n\n";
-
-            presetData = presetData + "Power Limit 2:\n";
-            presetData = presetData + $"{cpuPower2}\n\n";
-
-            presetData = presetData + "APU PPT:\n";
-            presetData = presetData + $"{apuSlowPPT}\n\n";
-
-            presetData = presetData + "Temp Limits:\n";
-            presetData = presetData + $"{isCPUTemp}\n";
-            presetData = presetData + $"{cpuTemp}\n";
-            presetData = presetData + $"{skinCPUTemp}";
-
-            try
+            await Task.Run(() =>
             {
-                File.WriteAllText(App.location + preset, presetData);
-            } catch(Exception e) { MessageBox.Show(e.Message); }
+                string presetData = "CPU:\n";
+                presetData = presetData + $"{isCPUFan}\n";
+                presetData = presetData + $"{cpuFan1}\n{cpuFan2}\n{cpuFan3}\n{cpuFan4}\n{cpuFan5}\n{cpuFan6}\n{cpuFan7}\n{cpuFan8}\n\n";
+
+                presetData = presetData + "GPU:\n";
+                presetData = presetData + $"{isGPUFan}\n";
+                presetData = presetData + $"{gpuFan1}\n{gpuFan2}\n{gpuFan3}\n{gpuFan4}\n{gpuFan5}\n{gpuFan6}\n{gpuFan7}\n{gpuFan8}\n\n";
+
+                presetData = presetData + "GPU Clock Offsets:\n";
+                presetData = presetData + $"{isGPUOffset}\n";
+                presetData = presetData + $"{gpuCoreOffset}\n";
+                presetData = presetData + $"{gpuVRAMOffset}\n\n";
+
+                presetData = presetData + "Curve Optimiser Offsets:\n";
+                presetData = presetData + $"{cpuCurveOpti}\n\n";
+
+                presetData = presetData + "Power Limit:\n";
+                presetData = presetData + $"{isCPUPower}\n\n";
+
+                presetData = presetData + "Power Limit 1:\n";
+                presetData = presetData + $"{cpuPower1}\n\n";
+
+                presetData = presetData + "Power Limit 2:\n";
+                presetData = presetData + $"{cpuPower2}\n\n";
+
+                presetData = presetData + "APU PPT:\n";
+                presetData = presetData + $"{apuSlowPPT}\n\n";
+
+                presetData = presetData + "Temp Limits:\n";
+                presetData = presetData + $"{isCPUTemp}\n";
+                presetData = presetData + $"{cpuTemp}\n";
+                presetData = presetData + $"{skinCPUTemp}\n\n";
+
+                presetData = presetData + "SYS:\n";
+                presetData = presetData + $"{isSYSFan}\n";
+                presetData = presetData + $"{sysFan1}\n{sysFan2}\n{sysFan3}\n{sysFan4}\n{sysFan5}\n{sysFan6}\n{sysFan7}\n{sysFan8}";
+
+                try
+                {
+                    File.WriteAllText(App.location + preset, presetData);
+                }
+                catch (Exception e) { MessageBox.Show(e.Message); }
+            });
         }
     }
 }

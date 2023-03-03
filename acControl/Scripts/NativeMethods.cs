@@ -69,22 +69,15 @@ namespace acControl.Scripts
         {
             var devMode = new DEVMODE();
             devMode.dmSize = (short)Marshal.SizeOf(devMode);
-            EnumDisplaySettings("\\\\.\\DISPLAY1", ENUM_CURRENT_SETTINGS, ref devMode);
+            EnumDisplaySettings(null, ENUM_CURRENT_SETTINGS, ref devMode);
 
             devMode.dmDisplayFrequency = (uint)refreshRate;
 
-            var result = ChangeDisplaySettingsEx("\\\\.\\DISPLAY1", ref devMode, IntPtr.Zero, CDS_UPDATEREGISTRY, IntPtr.Zero);
-            if (result == DISP_CHANGE_SUCCESSFUL)
+            var result = ChangeDisplaySettingsEx(null, ref devMode, IntPtr.Zero, CDS_UPDATEREGISTRY, IntPtr.Zero);
+
+            if (result != DISP_CHANGE_SUCCESSFUL)
             {
-                Debug.WriteLine($"Refresh rate set to {refreshRate} Hz.");
-            }
-            else if (result == DISP_CHANGE_RESTART)
-            {
-                Debug.WriteLine("Please restart your computer to apply the changes.");
-            }
-            else
-            {
-                Debug.WriteLine("Failed to change the refresh rate.");
+                throw new Exception("Failed to set refresh rate.");
             }
         }
     }

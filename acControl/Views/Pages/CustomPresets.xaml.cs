@@ -32,6 +32,8 @@ namespace acControl.Views.Pages
 
             cbxPowerPreset.SelectedIndex = Settings.Default.ACMode;
 
+            if(MotherboardInfo.Product.Contains("Flow X16")) cSYSFan.Visibility = Visibility.Visible;
+
             try
             {
                 if (cbxPowerPreset.SelectedIndex == 0) preset = "presets\\Silent.txt";
@@ -63,6 +65,7 @@ namespace acControl.Views.Pages
                 tsGPUFan.IsChecked = CustomPresetHandler.isGPUFan;
                 tsGPUOffset.IsChecked = CustomPresetHandler.isGPUOffset;
 
+                tsSYSFan.IsChecked = CustomPresetHandler.isSYSFan;
 
                 nudCPUTemp1.Value = CustomPresetHandler.cpuTemp;
                 nudCPUTemp2.Value = CustomPresetHandler.skinCPUTemp;
@@ -124,6 +127,15 @@ namespace acControl.Views.Pages
                 sdGPUFan7.Value = CustomPresetHandler.gpuFan7;
                 sdGPUFan8.Value = CustomPresetHandler.gpuFan8;
 
+                sdSYSFan1.Value = CustomPresetHandler.sysFan1;
+                sdSYSFan2.Value = CustomPresetHandler.sysFan2;
+                sdSYSFan3.Value = CustomPresetHandler.sysFan3;
+                sdSYSFan4.Value = CustomPresetHandler.sysFan4;
+                sdSYSFan5.Value = CustomPresetHandler.sysFan5;
+                sdSYSFan6.Value = CustomPresetHandler.sysFan6;
+                sdSYSFan7.Value = CustomPresetHandler.sysFan7;
+                sdSYSFan8.Value = CustomPresetHandler.sysFan8;
+
             } catch (Exception ex) { }
         }
 
@@ -135,6 +147,8 @@ namespace acControl.Views.Pages
 
             CustomPresetHandler.isGPUFan = tsGPUFan.IsChecked.Value;
             CustomPresetHandler.isGPUOffset = tsGPUOffset.IsChecked.Value;
+
+            CustomPresetHandler.isSYSFan = tsSYSFan.IsChecked.Value;
 
             CustomPresetHandler.cpuTemp = (int)nudCPUTemp1.Value;
             CustomPresetHandler.skinCPUTemp = (int)nudCPUTemp2.Value;
@@ -175,11 +189,29 @@ namespace acControl.Views.Pages
             if ((int)sdGPUFan7.Value < 30) CustomPresetHandler.gpuFan7 = 30;
             if ((int)sdGPUFan8.Value < 30) CustomPresetHandler.gpuFan8 = 30;
 
+            CustomPresetHandler.sysFan1 = (int)sdSYSFan1.Value;
+            CustomPresetHandler.sysFan2 = (int)sdSYSFan2.Value;
+            CustomPresetHandler.sysFan3 = (int)sdSYSFan3.Value;
+            CustomPresetHandler.sysFan4 = (int)sdSYSFan4.Value;
+            CustomPresetHandler.sysFan5 = (int)sdSYSFan5.Value;
+            CustomPresetHandler.sysFan6 = (int)sdSYSFan6.Value;
+            CustomPresetHandler.sysFan7 = (int)sdSYSFan7.Value;
+            CustomPresetHandler.sysFan8 = (int)sdSYSFan8.Value;
+
+            if ((int)sdSYSFan5.Value < 30) CustomPresetHandler.sysFan5 = 30;
+            if ((int)sdSYSFan6.Value < 30) CustomPresetHandler.sysFan6 = 30;
+            if ((int)sdSYSFan7.Value < 30) CustomPresetHandler.sysFan7 = 30;
+            if ((int)sdSYSFan8.Value < 30) CustomPresetHandler.sysFan8 = 30;
+
             CustomPresetHandler.SavePreset(preset);
         }
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            save();
+            string preset = "presets\\Manual.txt";
+            if (cbxPowerPreset.SelectedIndex == 0) preset = "presets\\Silent.txt";
+            if (cbxPowerPreset.SelectedIndex == 1) preset = "presets\\Perf.txt";
+            if (cbxPowerPreset.SelectedIndex == 2) preset = "presets\\Turbo.txt";
+            save(preset);
         }
 
         private void btnLoad_Click(object sender, RoutedEventArgs e)

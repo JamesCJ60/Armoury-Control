@@ -44,3 +44,14 @@ Temp Limits:
 false
 95
 45
+
+SYS:
+false
+10
+10
+20
+30
+50
+50
+65
+75

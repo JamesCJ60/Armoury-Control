@@ -18,6 +18,7 @@ public class ASUSWmi
 
     public const uint CPU_Fan = 0x00110013;
     public const uint GPU_Fan = 0x00110014;
+    public const uint SYS_Fan = 0x00110031;
 
     public const uint PerformanceMode = 0x00120075;
 
@@ -30,6 +31,7 @@ public class ASUSWmi
 
     public const uint DevsCPUFanCurve = 0x00110024;
     public const uint DevsGPUFanCurve = 0x00110025;
+    public const uint DevsSYSFanCurve = 0x00110032;
 
     public const int PerformanceBalanced = 0;
     public const int PerformanceTurbo = 1;
@@ -118,10 +120,12 @@ public class ASUSWmi
 
     public void SetFanCurve(int device, byte[] curve)
     {
+        if (device == 0)
+            DeviceSet(DevsCPUFanCurve, curve);
         if (device == 1)
             DeviceSet(DevsGPUFanCurve, curve);
         else
-            DeviceSet(DevsCPUFanCurve, curve);
+            DeviceSet(DevsSYSFanCurve, curve);
     }
 
     public byte[] GetFanCurve(int device, int mode = 0)

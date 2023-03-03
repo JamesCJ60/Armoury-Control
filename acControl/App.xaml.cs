@@ -127,8 +127,7 @@ namespace acControl
 
                 await _host.StartAsync();
             } catch(Exception ex)
-            {
-                MessageBox.Show(ex.ToString());  
+            { 
                 Environment.Exit(0);
             }
         }

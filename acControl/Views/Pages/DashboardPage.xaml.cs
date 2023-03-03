@@ -41,6 +41,7 @@ namespace acControl.Views.Pages
             mux = App.wmi.DeviceGet(ASUSWmi.GPUMux);
         }
         private bool setup = false;
+        private bool hasSysFan = false;
         private void setupGUI()
         {
             string deviceName = MotherboardInfo.Product;
@@ -62,6 +63,12 @@ namespace acControl.Views.Pages
             lblDisplayAuto.Content = " Auto";
             lblDisplayOver.Content = " OD  ";
 
+            if(MotherboardInfo.Product.Contains("Flow X16"))
+            {
+                ugFans.Columns = 3;
+                hasSysFan = true;
+                gSysFan.Visibility = Visibility.Visible;
+            }
 
             GetSystemInfo.CurrentDisplayRrefresh();
 
@@ -504,6 +511,16 @@ namespace acControl.Views.Pages
             if((int)GetSystemInfo.dGPUTemp != 0) tbxdGPUPer.Text = $"{(int)GetSystemInfo.dGPUTemp}°C";
             else tbxdGPUPer.Text = $"{Math.Round(gpuFan / maxFanGPU)}%";
 
+
+            if(hasSysFan)
+            {
+                var sysFan = App.wmi.DeviceGet(ASUSWmi.SYS_Fan);
+                double maxFanSYS = GetSystemInfo.getSYSFanSpeed();
+                tbxSysFan.Text = $"{sysFan * 0x64} RPM";
+                double sysFanPercentage = Math.Round(cpuFan / maxFanCPU);
+                tbxSysPer.Text = $"{Math.Round(sysFan / maxFanSYS)}%";
+            }
+
             if (tbxCPUFan.Text.Contains("-") || tbxdGPUFan.Text.Contains("-"))
             {
                 cpuFan = App.wmi.DeviceGet2(ASUSWmi.CPU_Fan);
@@ -520,6 +537,7 @@ namespace acControl.Views.Pages
                 prdGPUFan.Progress = gpuFanPercentage;
             }
 
+            await Task.Run(() => GetSystemInfo.ReadSensors());
             float dischargeRate = await Task.Run(() => (float)GetSystemInfo.BatteryDischarge);
 
             if (dischargeRate != 0)
