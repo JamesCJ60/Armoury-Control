@@ -517,7 +517,7 @@ namespace acControl.Views.Pages
                 var sysFan = App.wmi.DeviceGet(ASUSWmi.SYS_Fan);
                 double maxFanSYS = GetSystemInfo.getSYSFanSpeed();
                 tbxSysFan.Text = $"{sysFan * 0x64} RPM";
-                double sysFanPercentage = Math.Round(cpuFan / maxFanCPU);
+                double sysFanPercentage = Math.Round(sysFan / maxFanCPU);
                 tbxSysPer.Text = $"{Math.Round(sysFan / maxFanSYS)}%";
             }
 
