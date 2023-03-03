@@ -148,6 +148,8 @@ namespace acControl.Views.Pages
         {
             if (Global.isMinimised == false)
             {
+                updateFan();
+
                 if (tbxDeviceName.Text.Contains("Flow"))
                 {
                     if (cdXGMobile.Visibility == Visibility.Collapsed) { cdXGMobile.Visibility = Visibility.Visible; }
@@ -160,6 +162,7 @@ namespace acControl.Views.Pages
                     {
                         Debug.WriteLine(ex);
                     }
+
 
                     if (eGPU == 0 && lblXGMobile.Content != "Activate ROG XG Mobile")
                     { lblXGMobile.Content = "Activate ROG XG Mobile"; cdGPU.Visibility = Visibility.Visible; }
@@ -174,7 +177,6 @@ namespace acControl.Views.Pages
                 {
                     if (Global.isMinimised == false)
                     {
-                        updateFan();
                         string dGPU = await Task.Run(() => GetSystemInfo.GetdGPUName().Replace(" GPU", null));
                         if (dGPU == "" && spdGPU.Visibility != System.Windows.Visibility.Collapsed) spdGPU.Visibility = System.Windows.Visibility.Collapsed;
                         else if (dGPU != "" && spdGPU.Visibility == System.Windows.Visibility.Collapsed)
@@ -499,7 +501,8 @@ namespace acControl.Views.Pages
             prdGPUFan.Progress = gpuFanPercentage;
 
             tbxCPUPer.Text = $"{(int)GetSystemInfo.CpuTemp}°C";
-            tbxdGPUPer.Text = $"{(int)GetSystemInfo.dGPUTemp}°C";
+            if((int)GetSystemInfo.dGPUTemp != 0) tbxdGPUPer.Text = $"{(int)GetSystemInfo.dGPUTemp}°C";
+            else tbxdGPUPer.Text = $"{Math.Round(gpuFan / maxFanGPU)}%";
 
             if (tbxCPUFan.Text.Contains("-") || tbxdGPUFan.Text.Contains("-"))
             {
@@ -508,12 +511,23 @@ namespace acControl.Views.Pages
 
                 tbxdGPUFan.Text = $"{gpuFan * 0x64} RPM";
 
+                if ((int)GetSystemInfo.dGPUTemp == 0) tbxdGPUPer.Text = $"{Math.Round(gpuFan / maxFanGPU)}%";
+
                 cpuFanPercentage = Math.Round(cpuFan / 0.69);
                 gpuFanPercentage = Math.Round(gpuFan / 0.69);
 
                 prCPUFan.Progress = cpuFanPercentage;
                 prdGPUFan.Progress = gpuFanPercentage;
             }
+
+            float dischargeRate = await Task.Run(() => (float)GetSystemInfo.BatteryDischarge);
+
+            if (dischargeRate != 0)
+            {
+                spDischarge.Visibility = Visibility.Visible;
+                tbxDischarge.Text = $"-{dischargeRate.ToString("0.00")} W";
+            }
+            else spDischarge.Visibility = Visibility.Collapsed;
         }
 
     }

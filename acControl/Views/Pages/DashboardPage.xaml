@@ -75,6 +75,11 @@
                                 <TextBlock Margin="0,0,9,0" FontSize="15" Text="{Binding ElementName=sdBattery, Path=Value, StringFormat={}{0}%}"/>
                             </StackPanel>
                             <Slider Minimum="50" Maximum="100" Value="100" Name="sdBattery" SmallChange="1" LargeChange="2" IsSnapToTickEnabled="True" ValueChanged="sdBattery_ValueChanged"/>
+
+                            <StackPanel Orientation="Horizontal" Name="spDischarge">
+                                <TextBlock FontWeight="DemiBold" Margin="0,0,9,0" FontSize="15">Discharge Rate:</TextBlock>
+                                <TextBlock Name="tbxDischarge" Margin="0,0,9,0" FontSize="15" Text="0"/>
+                            </StackPanel>
                         </StackPanel>
                     </ui:Card>
 

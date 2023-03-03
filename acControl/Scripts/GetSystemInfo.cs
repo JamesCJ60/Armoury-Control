@@ -217,6 +217,13 @@ namespace acControl.Scripts
         {
             try
             {
+                dGPUClock = 0;
+                dGPUMemClock = 0;
+                dGPUPower = 0;
+                dGPUTemp = 0;
+                dGPULoad = 0;
+                dGPUVolt = 0;
+
                 foreach (var hardware in thisPC.Hardware)
                 {
                     hardware.Update();
@@ -451,8 +458,6 @@ namespace acControl.Scripts
 
         public static float? CpuTemp { get; private set; }
         public static float? BatteryDischarge { get; private set; }
-
-        public static float? BatteryChargeRate { get; private set; }
         public static void ReadSensors()
         {
             try
