@@ -227,7 +227,7 @@ namespace acControl.Views.Pages
                     ACProfile == 1 ? ASUSWmi.PerformanceBalanced :
                     ACProfile == 2 ? ASUSWmi.PerformanceTurbo : ASUSWmi.PerformanceBalanced));
 
-                SetSystemSettings.ApplyPresetSettings(profile.Item6);
+                SetSystemSettings.ApplyPresetSettings(profile.Item6, ACProfile);
             }
         }
 

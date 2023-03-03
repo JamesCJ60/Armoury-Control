@@ -157,14 +157,14 @@ namespace acControl.Scripts
             }
         }
 
-        public static async void ApplyPresetSettings(string preset)
+        public static async void ApplyPresetSettings(string preset, int mode)
         {
             CustomPresetHandler.LoadPreset(preset);
 
             await Task.Run(() =>
             {
                 Thread.Sleep(250);
-                if (Settings.Default.ACMode == 3)
+                if (Settings.Default.ACMode == mode)
                 {
                     if (GetSystemInfo.GetCPUName().Contains("Intel"))
                     {
