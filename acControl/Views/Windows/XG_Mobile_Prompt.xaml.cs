@@ -90,6 +90,7 @@ namespace acControl.Views.Windows
             if (eGPUConnected)
             {
                 tbxInfo.Text = "Your ROG XG Mobile is now activated! \n\n\nWARNING: Do not remove ROG XG Mobile from device until it has been deactivated!";
+                updateLHM();
             }
             else
             {
@@ -133,6 +134,18 @@ namespace acControl.Views.Windows
                 try
                 {
                     GarbageCollection.Garbage_Collect();
+
+                    if (eGPUConnected)
+                    {
+                        GetSystemInfo.GetdGPUStats();
+                        string name = GetSystemInfo.GetdGPUName();
+                        name.Replace("GPU", null);
+
+                        if (name.Contains("4090")) ToastNotification.ShowToastNotification(true, "ROG XG Mobile Detected", $"Armoury Control has detected ROG XG Mobile GC33Y ({name}) has been activated!");
+                        if (name.Contains("6850M")) ToastNotification.ShowToastNotification(true, "ROG XG Mobile Detected", $"Armoury Control has detected ROG XG Mobile GC32L ({name}) has been activated!");
+                        if (name.Contains("3080")) ToastNotification.ShowToastNotification(true, "ROG XG Mobile Detected", $"Armoury Control has detected ROG XG Mobile GC31S ({name}) has been activated!");
+                        if (name.Contains("3070")) ToastNotification.ShowToastNotification(true, "ROG XG Mobile Detected", $"Armoury Control has detected ROG XG Mobile GC31R ({name}) has been activated!");
+                    }
                 }
                 catch { }
             });

@@ -9,15 +9,30 @@ namespace acControl.Scripts
 {
     class ToastNotification
     {
-        public static void ShowToastNotification(string title, string body)
+        public static void ShowToastNotification(bool isXg = false, string title = "", string body ="")
         {
-            var iconUri = "file:///" + App.location +"Assets\\applicationIcon.png";
+            string iconUri = "";
+            string icon2Uri = "";
+            iconUri = "file:///" + App.location +"Assets\\applicationIcon.png";
+            icon2Uri = "file:///" + App.location + "Images\\XGMobile\\XGMobile-1.png";
 
-            new ToastContentBuilder()
-                .AddText(title)
-                .AddText(body)
-                .AddAppLogoOverride(new Uri(iconUri))
-                .Show();
+            if (isXg)
+            {
+                new ToastContentBuilder()
+                    .AddText(title)
+                    .AddText(body)
+                    .AddAppLogoOverride(new Uri(iconUri))
+                    .AddInlineImage(new Uri(icon2Uri))
+                    .Show();
+            }
+            else
+            {
+                new ToastContentBuilder()
+                    .AddText(title)
+                    .AddText(body)
+                    .AddAppLogoOverride(new Uri(iconUri))
+                    .Show();
+            }
         }
     }
 }

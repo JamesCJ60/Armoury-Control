@@ -171,10 +171,10 @@ namespace acControl
                         profile++;
                         if (profile > 3) profile = 0;
 
-                        if (profile == 0) ToastNotification.ShowToastNotification("Switched to Silent", "Armoury Control has switched to the Silent power mode");
-                        if (profile == 1) ToastNotification.ShowToastNotification("Switched to Performance", "Armoury Control has switched to the Performance power mode");
-                        if (profile == 2) ToastNotification.ShowToastNotification("Switched to Turbo", "Armoury Control has switched to the Turbo power mode");
-                        if (profile == 3) ToastNotification.ShowToastNotification("Switched to Manual", "Armoury Control has switched to the Manual power mode");
+                        if (profile == 0) ToastNotification.ShowToastNotification(false, "Switched to Silent", "Armoury Control has switched to the Silent power mode");
+                        if (profile == 1) ToastNotification.ShowToastNotification(false, "Switched to Performance", "Armoury Control has switched to the Performance power mode");
+                        if (profile == 2) ToastNotification.ShowToastNotification(false, "Switched to Turbo", "Armoury Control has switched to the Turbo power mode");
+                        if (profile == 3) ToastNotification.ShowToastNotification(false, "Switched to Manual", "Armoury Control has switched to the Manual power mode");
 
                         Settings.Default.ACMode = profile;
                         Settings.Default.Save();
