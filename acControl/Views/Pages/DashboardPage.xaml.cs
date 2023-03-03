@@ -14,6 +14,7 @@ using System.Threading;
 using System.Drawing;
 using System.Windows.Input;
 using Microsoft.Win32;
+using System.Collections.Generic;
 
 namespace acControl.Views.Pages
 {
@@ -203,57 +204,28 @@ namespace acControl.Views.Pages
             Settings.Default.ACMode = ACProfile;
             Settings.Default.Save();
 
-            if (Settings.Default.ACMode == 0)
+            var profileData = new Dictionary<int, (bool, bool, bool, bool, string, string)>()
+    {
+        { 0, (true, false, false, false, "\\Images\\ACProfiles\\Silent.png", "presets\\Silent.txt") },
+        { 1, (false, false, true, false, "\\Images\\ACProfiles\\Bal.png", "presets\\Perf.txt") },
+        { 2, (false, true, false, false, "\\Images\\ACProfiles\\Turbo.png", "presets\\Turbo.txt") },
+        { 3, (false, false, false, true, "\\Images\\ACProfiles\\Windows.png", "presets\\Manual.txt") }
+    };
+
+            if (profileData.TryGetValue(ACProfile, out var profile))
             {
-                tbSilent.IsChecked = true;
-                tbTurbo.IsChecked = false;
-                tbPerf.IsChecked = false;
-                tbMan.IsChecked = false;
-                imgPerformProfile.Source = new BitmapImage(new Uri(App.location + "\\Images\\ACProfiles\\Silent.png"));
-                await Task.Run(() =>
-                {
-                    App.wmi.DeviceSet(ASUSWmi.PerformanceMode, ASUSWmi.PerformanceSilent);
-                });
-                SetSystemSettings.ApplyPresetSettings("presets\\Silent.txt");
-            }
-            if (Settings.Default.ACMode == 1)
-            {
-                tbPerf.IsChecked = true;
-                tbSilent.IsChecked = false;
-                tbTurbo.IsChecked = false;
-                tbMan.IsChecked = false;
-                imgPerformProfile.Source = new BitmapImage(new Uri(App.location + "\\Images\\ACProfiles\\Bal.png"));
-                await Task.Run(() =>
-                {
-                    App.wmi.DeviceSet(ASUSWmi.PerformanceMode, ASUSWmi.PerformanceBalanced);
-                });
-                SetSystemSettings.ApplyPresetSettings("presets\\Perf.txt");
-            }
-            if (Settings.Default.ACMode == 2)
-            {
-                tbTurbo.IsChecked = true;
-                tbSilent.IsChecked = false;
-                tbPerf.IsChecked = false;
-                tbMan.IsChecked = false;
-                imgPerformProfile.Source = new BitmapImage(new Uri(App.location + "\\Images\\ACProfiles\\Turbo.png"));
-                await Task.Run(() =>
-                {
-                    App.wmi.DeviceSet(ASUSWmi.PerformanceMode, ASUSWmi.PerformanceTurbo);
-                });
-                SetSystemSettings.ApplyPresetSettings("presets\\Turbo.txt");
-            }
-            if (Settings.Default.ACMode == 3)
-            {
-                tbTurbo.IsChecked = false;
-                tbSilent.IsChecked = false;
-                tbPerf.IsChecked = false;
-                tbMan.IsChecked = true;
-                imgPerformProfile.Source = new BitmapImage(new Uri(App.location + "\\Images\\ACProfiles\\Windows.png"));
-                await Task.Run(() =>
-                {
-                    App.wmi.DeviceSet(ASUSWmi.PerformanceMode, ASUSWmi.PerformanceBalanced);
-                });
-                SetSystemSettings.ApplyPresetSettings("presets\\Manual.txt");
+                tbSilent.IsChecked = profile.Item1;
+                tbTurbo.IsChecked = profile.Item2;
+                tbPerf.IsChecked = profile.Item3;
+                tbMan.IsChecked = profile.Item4;
+                imgPerformProfile.Source = new BitmapImage(new Uri(App.location + profile.Item5));
+
+                await Task.Run(() => App.wmi.DeviceSet(ASUSWmi.PerformanceMode,
+                    ACProfile == 0 ? ASUSWmi.PerformanceSilent :
+                    ACProfile == 1 ? ASUSWmi.PerformanceBalanced :
+                    ACProfile == 2 ? ASUSWmi.PerformanceTurbo : ASUSWmi.PerformanceBalanced));
+
+                SetSystemSettings.ApplyPresetSettings(profile.Item6);
             }
         }
 
@@ -333,15 +305,14 @@ namespace acControl.Views.Pages
 
         private void tbDisplayOver_Click(object sender, RoutedEventArgs e)
         {
-            GetSystemInfo.CurrentDisplayRrefresh();
             if (tbDisplayOver.IsChecked == true)
             {
-                Global.wasUsingOD = true;
+                Settings.Default.DisplayOver = true;
                 SetSystemSettings.setDisplayOver(1);
             }
             else
             {
-                Global.wasUsingOD = false;
+                Settings.Default.DisplayOver = false;
                 SetSystemSettings.setDisplayOver(0);
             }
             Settings.Default.Save();
@@ -509,34 +480,41 @@ namespace acControl.Views.Pages
 
         private async void updateFan()
         {
-            var cpuFan = await Task.Run(() => App.wmi.DeviceGet(ASUSWmi.CPU_Fan));
-            var gpuFan = await Task.Run(() => App.wmi.DeviceGet(ASUSWmi.GPU_Fan));
+            var cpuFan = App.wmi.DeviceGet(ASUSWmi.CPU_Fan);
+            var gpuFan = App.wmi.DeviceGet(ASUSWmi.GPU_Fan);
 
-            double maxFanCPU = await Task.Run(() => GetSystemInfo.getCPUFanSpeed());
-            double maxFanGPU = await Task.Run(() => GetSystemInfo.getGPUFanSpeed());
+            double maxFanCPU = GetSystemInfo.getCPUFanSpeed();
+            double maxFanGPU = GetSystemInfo.getGPUFanSpeed();
 
             await Task.Run(() => GetSystemInfo.ReadSensors());
             await Task.Run(() => GetSystemInfo.GetdGPUStats());
 
             tbxCPUFan.Text = $"{cpuFan * 0x64} RPM";
             tbxdGPUFan.Text = $"{gpuFan * 0x64} RPM";
-            prdGPUFan.Progress = Math.Round(gpuFan / maxFanGPU);
-            prCPUFan.Progress = Math.Round(cpuFan / maxFanCPU);
+
+            double cpuFanPercentage = Math.Round(cpuFan / maxFanCPU);
+            double gpuFanPercentage = Math.Round(gpuFan / maxFanGPU);
+
+            prCPUFan.Progress = cpuFanPercentage;
+            prdGPUFan.Progress = gpuFanPercentage;
 
             tbxCPUPer.Text = $"{(int)GetSystemInfo.CpuTemp}°C";
             tbxdGPUPer.Text = $"{(int)GetSystemInfo.dGPUTemp}°C";
+
             if (tbxCPUFan.Text.Contains("-") || tbxdGPUFan.Text.Contains("-"))
             {
-                cpuFan = await Task.Run(() => App.wmi.DeviceGet2(ASUSWmi.CPU_Fan));
-                gpuFan = await Task.Run(() => App.wmi.DeviceGet2(ASUSWmi.GPU_Fan));
+                cpuFan = App.wmi.DeviceGet2(ASUSWmi.CPU_Fan);
+                gpuFan = App.wmi.DeviceGet2(ASUSWmi.GPU_Fan);
 
                 tbxdGPUFan.Text = $"{gpuFan * 0x64} RPM";
-                prdGPUFan.Progress = Math.Round(gpuFan / 0.69);
-                prCPUFan.Progress = Math.Round(cpuFan / 0.69);
 
-                tbxCPUPer.Text = $"{Math.Round(cpuFan / 0.69)}%";
-                tbxdGPUPer.Text = $"{Math.Round(gpuFan / 0.69)}%";
+                cpuFanPercentage = Math.Round(cpuFan / 0.69);
+                gpuFanPercentage = Math.Round(gpuFan / 0.69);
+
+                prCPUFan.Progress = cpuFanPercentage;
+                prdGPUFan.Progress = gpuFanPercentage;
             }
         }
+
     }
 }

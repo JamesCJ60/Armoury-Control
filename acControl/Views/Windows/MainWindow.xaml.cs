@@ -62,10 +62,10 @@ namespace acControl.Views.Windows
         {
             GarbageCollection.Garbage_Collect();
             
-            if (i < 1) { 
-                if (Settings.Default.StartMini == true) this.ShowInTaskbar = false; 
+            if (i < 5) { 
+                if (Settings.Default.StartMini == true && this.WindowState == WindowState.Minimized && i < 2) this.ShowInTaskbar = false; 
                 GC.Stop();
-                GC.Interval = TimeSpan.FromSeconds(20);
+                GC.Interval = TimeSpan.FromSeconds(16);
                 GC.Tick += GC_Tick;
                 GC.Start();
                 i++;

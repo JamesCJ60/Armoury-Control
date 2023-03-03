@@ -83,11 +83,11 @@
                     TooltipText="acControl">
                     <ui:NotifyIcon.Menu>
                         <ContextMenu>
-                            <!--<MenuItem Header="Menus:" Tag="settings" IsCheckable="False" IsEnabled="False"/>
-                            <MenuItem Header="Home" Tag="home" Click="HomeMenuItem_Click"/>
-                            <MenuItem Header="Customise" Tag="customise" Click="CustomiseMenuItem_Click"/>
+                            <!--<MenuItem Header="Menus:" IsCheckable="False" IsEnabled="False"/>-->
+                            <!--<MenuItem Header="Home" Tag="home" Click="HomeMenuItem_Click"/>-->
+                            <!--<MenuItem Header="Customise" Tag="customise" Click="CustomiseMenuItem_Click"/>
                             <MenuItem Header="Settings" Tag="settings" Click="SettingsMenuItem_Click"/>-->
-                            <MenuItem Header="Power Modes:" Tag="settings" IsCheckable="False" IsEnabled="False"/>
+                            <MenuItem Header="Power Modes:" IsCheckable="False" IsEnabled="False"/>
                             <MenuItem Header="Silent" Tag="settings" Click="Silent_Click"/>
                             <MenuItem Header="Performance" Tag="settings" Click="Perf_Click"/>
                             <MenuItem Header="Turbo" Tag="settings" Click="Turbo_Click"/>
