@@ -47,6 +47,7 @@ namespace acControl.Scripts
                 {
                     if (count == i)
                     {
+                        GarbageCollection.Garbage_Collect();
                         return obj["Name"].ToString();
                     }
                     count++;
@@ -54,6 +55,7 @@ namespace acControl.Scripts
             }
             catch (Exception ex) { MessageBox.Show(ex.ToString()); }
 
+            GarbageCollection.Garbage_Collect();
             return "";
         }
 

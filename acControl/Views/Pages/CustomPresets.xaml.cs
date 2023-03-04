@@ -43,7 +43,7 @@ namespace acControl.Views.Pages
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
 
-            if (GetSystemInfo.GetCPUName().Contains("Intel"))
+            if (Global.cpuName.Contains("Intel"))
             {
                 spAPUCO.Visibility = Visibility.Collapsed;
                 spAPUSlow.Visibility = Visibility.Collapsed;
@@ -69,6 +69,8 @@ namespace acControl.Views.Pages
             {
                 await Task.Run(() => CustomPresetHandler.LoadPreset(preset));
 
+                GarbageCollection.Garbage_Collect();
+
                 tsCPUFan.IsChecked = CustomPresetHandler.isCPUFan;
                 tsCPUPower.IsChecked = CustomPresetHandler.isCPUPower;
                 tsCPUTemp.IsChecked = CustomPresetHandler.isCPUTemp;
@@ -85,7 +87,7 @@ namespace acControl.Views.Pages
 
                 if (CustomPresetHandler.cpuPower1 == 0)
                 {
-                    if (GetSystemInfo.GetCPUName().Contains("Ryzen"))
+                    if (Global.cpuName.Contains("Ryzen"))
                     {
                         if (App.wmi.DeviceGet(ASUSWmi.PPT_Total) > 0) nudCPUPow1.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_Total);
                         else if (App.wmi.DeviceGet(ASUSWmi.PPT_Total1) > 0) nudCPUPow1.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_Total1);
@@ -96,7 +98,7 @@ namespace acControl.Views.Pages
 
                 if (CustomPresetHandler.cpuPower2 == 0)
                 {
-                    if (GetSystemInfo.GetCPUName().Contains("Ryzen"))
+                    if (Global.cpuName.Contains("Ryzen"))
                     {
                         if (App.wmi.DeviceGet(ASUSWmi.PPT_Total) > 0) nudCPUPow2.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_Total);
                         else if (App.wmi.DeviceGet(ASUSWmi.PPT_Total1) > 0) nudCPUPow2.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_Total1);
@@ -108,7 +110,7 @@ namespace acControl.Views.Pages
 
                 if (CustomPresetHandler.apuSlowPPT == 0)
                 {
-                    if (GetSystemInfo.GetCPUName().Contains("Ryzen"))
+                    if (Global.cpuName.Contains("Ryzen"))
                     {
                         if (App.wmi.DeviceGet(ASUSWmi.PPT_CPU) > 0) nudAPUPow.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_CPU1);
                         else if (App.wmi.DeviceGet(ASUSWmi.PPT_CPU1) > 0) nudAPUPow.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_CPU1);

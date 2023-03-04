@@ -111,7 +111,7 @@ namespace acControl.Views.Windows
             {
                 if (Settings.Default.StartMini == true && this.WindowState == WindowState.Minimized) this.ShowInTaskbar = false;
                 GC.Stop();
-                GC.Interval = TimeSpan.FromSeconds(12);
+                GC.Interval = TimeSpan.FromSeconds(20);
                 GC.Tick += GC_Tick;
                 GC.Start();
                 

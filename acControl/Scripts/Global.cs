@@ -17,5 +17,7 @@ namespace acControl.Scripts
         public static bool isMinimalGUI = true;
 
         public static bool updateGPU = false;
+
+        public static string cpuName = "";
     }
 }

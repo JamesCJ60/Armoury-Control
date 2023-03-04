@@ -70,8 +70,8 @@ namespace acControl.Views.Pages
             }
 
             
-
-            tbxCPUName.Text = GetSystemInfo.GetCPUName().Replace("with Radeon Graphics", null);
+            Global.cpuName = GetSystemInfo.GetCPUName().Replace("with Radeon Graphics", null);
+            tbxCPUName.Text = Global.cpuName;
             tbxiGPUName.Text = GetSystemInfo.GetGPUName(0).Replace("(R)", null);
             string dGPU = GetSystemInfo.GetGPUName(1).Replace(" GPU", null);
             if (dGPU == null || dGPU == "") spdGPU.Visibility = System.Windows.Visibility.Collapsed;
@@ -192,8 +192,6 @@ namespace acControl.Views.Pages
                         spdGPU.Visibility = System.Windows.Visibility.Visible;
                         tbxdGPUName.Text = dGPU;
                     }
-
-                    GarbageCollection.Garbage_Collect();
 
                     Global.updateGPU = false;
                 }
@@ -525,7 +523,6 @@ namespace acControl.Views.Pages
                 double maxFanGPU = GetSystemInfo.getGPUFanSpeed();
 
                 await Task.Run(() => GetSystemInfo.ReadSensors());
-                //await Task.Run(() => GetSystemInfo.GetdGPUStats());
 
                 tbxCPUFan.Text = $"{cpuFan * 0x64} RPM";
                 tbxdGPUFan.Text = $"{gpuFan * 0x64} RPM";
