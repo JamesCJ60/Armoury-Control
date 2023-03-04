@@ -133,7 +133,17 @@ namespace acControl.Views.Windows
         private void UiWindow_StateChanged(object sender, EventArgs e)
         {
             if (this.WindowState == WindowState.Minimized) { this.ShowInTaskbar = false; Global.isMinimised = true; }
-            else { this.ShowInTaskbar = true; Global.isMinimised = false; }
+            else { 
+                this.ShowInTaskbar = true; 
+                Global.isMinimised = false;
+
+                if (Global.isMinimalGUI)
+                {
+                    var desktopWorkingArea = System.Windows.SystemParameters.WorkArea;
+                    this.Left = desktopWorkingArea.Right - this.Width - 12;
+                    this.Top = desktopWorkingArea.Bottom - this.Height - 12;
+                }
+            }
         }
 
         private void Silent_Click(object sender, RoutedEventArgs e)
