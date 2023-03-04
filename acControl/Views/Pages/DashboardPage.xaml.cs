@@ -76,6 +76,8 @@ namespace acControl.Views.Pages
                 gSysFan.Visibility = Visibility.Visible;
             }
 
+            updateFan();
+
             GetSystemInfo.CurrentDisplayRrefresh();
 
             //set up timer for sensor update
@@ -146,7 +148,6 @@ namespace acControl.Views.Pages
             SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
 
             update();
-            updateFan();
             SetSystemSettings.setBatteryLimit((int)sdBattery.Value);
             setup = true;
         }
@@ -522,6 +523,7 @@ namespace acControl.Views.Pages
                 cpuFan = App.wmi.DeviceGet2(ASUSWmi.CPU_Fan);
                 gpuFan = App.wmi.DeviceGet2(ASUSWmi.GPU_Fan);
 
+                tbxCPUFan.Text = $"{cpuFan * 0x64} RPM";
                 tbxdGPUFan.Text = $"{gpuFan * 0x64} RPM";
 
                 if ((int)GetSystemInfo.dGPUTemp == 0) tbxdGPUPer.Text = $"{Math.Round(gpuFan / maxFanGPU)}%";
