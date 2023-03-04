@@ -17,4 +17,3 @@ If you come across any issues or errors with this project, please open an issue 
 - [WPF UI (github)](https://github.com/lepoco/wpfui)
 - [reverse_engineering (github)](https://github.com/zllovesuki/reverse_engineering)  
 - [Laptops (github)](https://github.com/ahahahahahMtnf/Laptops/tree/main/Asus/WMI)  
-- [LibreHardwareMonitor (github)](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor)
