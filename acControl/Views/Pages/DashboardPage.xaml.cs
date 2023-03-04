@@ -54,11 +54,22 @@ namespace acControl.Views.Pages
             {
                 cdPowerModes.Visibility = Visibility.Visible;
                 svMain.Margin = new Thickness(0,6,0,12);
+                spDevice.Visibility = Visibility.Visible;
+                string deviceName = MotherboardInfo.Product;
+                if (deviceName.Contains("_")) deviceName = deviceName.Substring(0, deviceName.LastIndexOf('_'));
+                if (!deviceName.Contains("ASUS")) deviceName = "ASUS " + deviceName;
+                tbxDeviceName2.Text = deviceName;
+                tbxDeviceName.Text = null;
+            }
+            else
+            {
+                string deviceName = MotherboardInfo.Product;
+                if (deviceName.Contains("_")) deviceName = deviceName.Substring(0, deviceName.LastIndexOf('_'));
+                if (!deviceName.Contains("ASUS")) deviceName = "ASUS " + deviceName;
+                tbxDeviceName.Text = deviceName;
             }
 
-            string deviceName = MotherboardInfo.Product;
-            if (deviceName.Contains("_")) deviceName = deviceName.Substring(0, deviceName.LastIndexOf('_'));
-            tbxDeviceName.Text = deviceName;
+            
 
             tbxCPUName.Text = GetSystemInfo.GetCPUName().Replace("with Radeon Graphics", null);
             tbxiGPUName.Text = GetSystemInfo.GetiGPUName().Replace("(R)", null);
