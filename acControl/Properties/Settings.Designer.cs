@@ -118,5 +118,17 @@ namespace acControl.Properties {
                 this["StartMini"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool MinimalGUI {
+            get {
+                return ((bool)(this["MinimalGUI"]));
+            }
+            set {
+                this["MinimalGUI"] = value;
+            }
+        }
     }
 }

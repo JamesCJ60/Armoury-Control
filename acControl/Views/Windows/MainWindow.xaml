@@ -8,10 +8,10 @@
     xmlns:pages="clr-namespace:acControl.Views.Pages"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="{Binding ViewModel.ApplicationTitle, Mode=OneWay}"
-    MinWidth="1130"
+    MinWidth="1200"
     MinHeight="600"
-    Width="1200"
-    Height="709"
+    Width="1215"
+    Height="710"
     d:DataContext="{d:DesignInstance local:MainWindow,
                                      IsDesignTimeCreatable=True}"
     d:Background="{DynamicResource ApplicationBackgroundBrush}"
@@ -74,7 +74,7 @@
             Title="{Binding ViewModel.ApplicationTitle, Mode=OneWay}"
             Grid.Row="0"
             Icon="pack://application:,,,/Assets/applicationIcon-256.png"
-            UseSnapLayout="True">
+            UseSnapLayout="True" Name="tbMain">
             <ui:TitleBar.Tray>
                 <ui:NotifyIcon
                     FocusOnLeftClick="True"

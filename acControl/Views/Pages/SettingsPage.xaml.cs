@@ -23,6 +23,7 @@ namespace acControl.Views.Pages
 
             cbStart.IsChecked = Settings.Default.StartOnBoot;
             cbMini.IsChecked = Settings.Default.StartMini;
+            cbGUI.IsChecked = Settings.Default.MinimalGUI;
         }
 
         private void cbStart_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -82,6 +83,12 @@ namespace acControl.Views.Pages
                     ts.RootFolder.DeleteTask("Start Armoury Control");
                 }
             }
+        }
+
+        private void cbGUI_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            Settings.Default.MinimalGUI = (bool)cbGUI.IsChecked;
+            Settings.Default.Save();
         }
     }
 }

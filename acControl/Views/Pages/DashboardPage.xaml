@@ -15,7 +15,7 @@
 
     <Grid Margin="12,9,0,0">
         <DockPanel LastChildFill="True">
-            <ScrollViewer VerticalAlignment="Top" HorizontalAlignment="Center" DockPanel.Dock="Right" Width="365" HorizontalScrollBarVisibility="Disabled" CanContentScroll="False" Margin="0,3,0,12" PanningMode="Both" Stylus.IsFlicksEnabled="False" Stylus.IsTouchFeedbackEnabled="True">
+            <ScrollViewer x:Name="svMain" VerticalAlignment="Top" HorizontalAlignment="Center" DockPanel.Dock="Right" Width="378" HorizontalScrollBarVisibility="Disabled" CanContentScroll="False" Margin="0,3,0,12" PanningMode="Both" Stylus.IsFlicksEnabled="False" Stylus.IsTouchFeedbackEnabled="True">
                 <StackPanel Margin="0,0,4,0">
                     <ui:Card Padding="9,5,9,6">
                         <StackPanel>
@@ -87,9 +87,45 @@
                                 <TextBlock FontWeight="DemiBold" Margin="0,0,9,0" FontSize="15">Discharge Rate:</TextBlock>
                                 <TextBlock Name="tbxDischarge" Margin="0,0,9,0" FontSize="15" Text="0"/>
                             </StackPanel>
+                            
                         </StackPanel>
                     </ui:Card>
 
+                    <ui:Card Padding="9,5,9,6" Margin="0,9,0,0" Name="cdPowerModes" Visibility="Collapsed">
+                        <StackPanel Margin="0,0,0,-2" >
+                            <TextBlock FontWeight="Bold" FontSize="17">Power Modes:</TextBlock>
+                            <UniformGrid Columns="4" VerticalAlignment="Center" Height="54" HorizontalAlignment="Center" Margin="0,2,0,0">
+                                <ToggleButton Width="50" Margin="4.5,0" ToolTip=""  Name="tbSilent2" Click="tbSilent_Click">
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                        <ui:SymbolIcon Symbol="LeafTwo20" FontSize="24"/>
+
+                                    </StackPanel>
+                                </ToggleButton>
+
+                                <ToggleButton Width="50" Margin="4.5,0" ToolTip="" Name="tbPerf2" Click="tbPerf_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <ui:SymbolIcon Symbol="Scales20" FontSize="24"/>
+
+                                    </StackPanel>
+                                </ToggleButton>
+
+                                <ToggleButton Width="50" Margin="4.5,0" ToolTip="" Name="tbTurbo2" Click="tbTurbo_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <ui:SymbolIcon Symbol="Gauge20" FontSize="24"/>
+
+                                    </StackPanel>
+                                </ToggleButton>
+
+                                <ToggleButton Width="50" Margin="4.5,0" ToolTip="" Name="tbMan2" Click="tbMan_Click"> 
+                                    <StackPanel Orientation="Horizontal">
+                                        <ui:SymbolIcon Symbol="Book20" FontSize="24"/>
+
+                                    </StackPanel>
+                                </ToggleButton>
+                            </UniformGrid>
+                        </StackPanel>
+                    </ui:Card>
+                    
                     <ui:Card Padding="9,5,9,6" Margin="0,9,0,0" Name="cdGPU">
                         <StackPanel Margin="0,0,0,-2" >
                             <TextBlock FontWeight="Bold" FontSize="17">Graphics Performance Mode:</TextBlock>
@@ -115,7 +151,7 @@
                                     </StackPanel>
                                 </ToggleButton>
 
-                                <ToggleButton Width="50" Margin="4.5,0" Name="tbAuto" ToolTip="This options aims to create the perfect balence for your device. On battery this mode will disable the dGPU to save on power and will re-enable the dGPU when plugged into the wall." Click="tbAuto_Click">
+                                <ToggleButton Width="50" Margin="4.5,0" Name="tbAuto" ToolTip="This option aims to create the perfect balence for your device. On battery this mode will disable the dGPU to save on power and will re-enable the dGPU when plugged into the wall." Click="tbAuto_Click">
                                     <StackPanel Orientation="Horizontal">
                                         <ui:SymbolIcon Symbol="Scales20" FontSize="24"/>
 
@@ -130,28 +166,28 @@
 
                             <TextBlock FontWeight="Bold" FontSize="17">Display Control:</TextBlock>
                             <UniformGrid Columns="3" VerticalAlignment="Center" Height="108" HorizontalAlignment="Center" Margin="0,2,0,0">
-                                <ToggleButton Width="100" Margin="4.5,0" Name="tbMax" ToolTip="" Click="tbMax_Click">
+                                <ToggleButton Width="100" Margin="4.5,0" Name="tbMax" ToolTip="This option runs the display at it's maximum rated refresh rate at the cost of power consumption." Click="tbMax_Click">
                                     <StackPanel Orientation="Horizontal">
                                         <ui:SymbolIcon Symbol="FastAcceleration20" FontSize="24"/>
                                         <Label Name="lblMaxDisplay" Height="23" FontSize="16" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Manual</Label>
                                     </StackPanel>
                                 </ToggleButton>
 
-                                <ToggleButton Width="100" Margin="4.5,0" Name="tbMin" ToolTip="" Click="tbMin_Click">
+                                <ToggleButton Width="100" Margin="4.5,0" Name="tbMin" ToolTip="This option runs your display at it's lowest possible refresg rate to reduce display power consumption." Click="tbMin_Click">
                                     <StackPanel Orientation="Horizontal">
                                         <ui:SymbolIcon Symbol="BatterySaver20" FontSize="24"/>
                                         <Label Name="lblMinDisplay" Height="23" FontSize="16" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Manual</Label>
                                     </StackPanel>
                                 </ToggleButton>
 
-                                <ToggleButton Width="100" Margin="4.5,0" Name="tbDisplayAuto" ToolTip="" Click="tbDisplayAuto_Click">
+                                <ToggleButton Width="100" Margin="4.5,0" Name="tbDisplayAuto" ToolTip="This option aims to create the perfect balence for your device. On battery this mode will set your display to it's lowest rated refresh rate to save on power and will set it back to it's highest refresh rate when plugged into the wall." Click="tbDisplayAuto_Click">
                                     <StackPanel Orientation="Horizontal">
                                         <ui:SymbolIcon Symbol="Scales20" FontSize="24"/>
                                         <Label Name="lblDisplayAuto" Height="23" FontSize="16" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Manual</Label>
                                     </StackPanel>
                                 </ToggleButton>
 
-                                <ToggleButton Width="100" Margin="4.5,0" Name="tbDisplayOver" ToolTip="" Click="tbDisplayOver_Click">
+                                <ToggleButton Width="100" Margin="4.5,0" Name="tbDisplayOver" ToolTip="This option enables/disbales display panel overdrive. Enabling display panel overdrive on supported devices can improve display responce times." Click="tbDisplayOver_Click">
                                     <StackPanel Orientation="Horizontal">
                                         <ui:SymbolIcon Symbol="Gauge20" FontSize="24"/>
                                         <Label Name="lblDisplayOver" Height="23" FontSize="16" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Manual</Label>
@@ -165,7 +201,7 @@
 
                             <TextBlock FontWeight="Bold" FontSize="17">ROG XG Mobile Control:</TextBlock>
                             <UniformGrid Columns="1" VerticalAlignment="Center" Height="54" HorizontalAlignment="Center" Margin="0,2,0,0">
-                                <ToggleButton Width="234" Margin="4.5,0" Name="tbXG" ToolTip="" Click="tbXG_Click">
+                                <ToggleButton Width="234" Margin="4.5,0" Name="tbXG" ToolTip="This option opens a menu that can activate/deactivte your ROG XG Mobile." Click="tbXG_Click">
                                     <StackPanel Orientation="Horizontal">
                                         <ui:SymbolIcon Symbol="DeveloperBoardLightning20" FontSize="24" Margin="0,0,9,0"/>
                                         <Label Name="lblXGMobile" Height="23" FontSize="16" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Manual</Label>
@@ -179,11 +215,11 @@
             <StackPanel DockPanel.Dock="Top">
                 <TextBlock x:Name="tbxDeviceName" Text="TEST" FontSize="38" FontWeight="SemiBold" Margin="0,-5,0,0"/>
             </StackPanel>
-            <ui:Card DockPanel.Dock="Bottom" Height="55" Margin="10,0,10,12" Padding="0" MaxWidth="662">
+            <ui:Card DockPanel.Dock="Bottom" Height="55" Margin="0,0,9,12" Padding="0" MaxWidth="662">
                 <UniformGrid Columns="4" VerticalAlignment="Center" Height="60" HorizontalAlignment="Center">
                     <ToggleButton Width="155" Margin="4.5,0" Name="tbSilent" Click="tbSilent_Click">
                         <StackPanel Orientation="Horizontal">
-                            <ui:SymbolIcon Symbol="LeafTwo16" Margin="0,0,9,0" FontSize="24"/>
+                            <ui:SymbolIcon Symbol="LeafTwo20" Margin="0,0,9,0" FontSize="24"/>
                             <Label Height="23" FontSize="16" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Silent</Label>
                         </StackPanel>
                     </ToggleButton>

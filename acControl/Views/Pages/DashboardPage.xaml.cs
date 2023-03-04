@@ -50,6 +50,12 @@ namespace acControl.Views.Pages
         private bool hasSysFan = false;
         private void setupGUI()
         {
+            if (Global.isMinimalGUI)
+            {
+                cdPowerModes.Visibility = Visibility.Visible;
+                svMain.Margin = new Thickness(0,6,0,12);
+            }
+
             string deviceName = MotherboardInfo.Product;
             if (deviceName.Contains("_")) deviceName = deviceName.Substring(0, deviceName.LastIndexOf('_'));
             tbxDeviceName.Text = deviceName;
@@ -207,11 +213,21 @@ namespace acControl.Views.Pages
 
             if (profileData.TryGetValue(ACProfile, out var profile))
             {
-                tbSilent.IsChecked = profile.Item1;
-                tbTurbo.IsChecked = profile.Item2;
-                tbPerf.IsChecked = profile.Item3;
-                tbMan.IsChecked = profile.Item4;
-                imgPerformProfile.Source = new BitmapImage(new Uri(App.location + profile.Item5));
+                if (Global.isMinimalGUI)
+                {
+                    tbSilent2.IsChecked = profile.Item1;
+                    tbTurbo2.IsChecked = profile.Item2;
+                    tbPerf2.IsChecked = profile.Item3;
+                    tbMan2.IsChecked = profile.Item4;
+                }
+                else
+                {
+                    tbSilent.IsChecked = profile.Item1;
+                    tbTurbo.IsChecked = profile.Item2;
+                    tbPerf.IsChecked = profile.Item3;
+                    tbMan.IsChecked = profile.Item4;
+                    imgPerformProfile.Source = new BitmapImage(new Uri(App.location + profile.Item5));
+                }
 
                 await Task.Run(() => App.wmi.DeviceSet(ASUSWmi.PerformanceMode,
                     ACProfile == 0 ? ASUSWmi.PerformanceSilent :

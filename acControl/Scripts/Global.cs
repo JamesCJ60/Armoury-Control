@@ -13,5 +13,7 @@ namespace acControl.Scripts
         public static bool wasUsingOD = false;
 
         public static bool isMinimised = false;
+
+        public static bool isMinimalGUI = true;
     }
 }

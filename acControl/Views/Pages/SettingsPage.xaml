@@ -43,6 +43,8 @@
         <TextBlock Margin="0,12,0,0" Text="General Settings" FontSize="16"/>
         <CheckBox Name="cbStart" Margin="0,12,0,0" Click="cbStart_Click">Start on Boot</CheckBox>
         <CheckBox Name="cbMini" Margin="0,12,0,0" Click="cbMini_Click">Start Minimised</CheckBox>
+        <CheckBox Name="cbGUI" Margin="0,12,0,0" Click="cbGUI_Click">Use Minimal GUI</CheckBox>
+        <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}">Requires an application restart to apply</TextBlock>
         <TextBlock
             Margin="0,24,0,0"
             FontSize="20"

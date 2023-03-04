@@ -27,10 +27,16 @@
                     <ComboBoxItem>Manual</ComboBoxItem>
                 </ComboBox>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right">
-                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="120" Name="btnLoad" Click="btnLoad_Click">Load Settings</ui:Button>
-            <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="120" Name="btnSave" Click="btnSave_Click">Save Settings</ui:Button>
-                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="120" Name="btnApply" Click="btnApply_Click">Apply Settings</ui:Button>
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right" Margin="0,0,9,6">
+                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnLoad" Click="btnLoad_Click" ToolTip="Reload settings of current power preset">
+                    <ui:SymbolIcon Symbol="ArrowSync20" FontSize="24"/>
+                </ui:Button>
+                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnSave" Click="btnSave_Click" ToolTip="Save current settings">
+                    <ui:SymbolIcon Symbol="Save20" FontSize="24"/>
+                </ui:Button>
+                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnApply" Click="btnApply_Click" ToolTip="Save and apply current settings">
+                    <ui:SymbolIcon Symbol="DocumentCheckmark20" FontSize="24"/>
+                </ui:Button>
             </StackPanel>
             <ScrollViewer HorizontalScrollBarVisibility="Disabled" CanContentScroll="False" PanningMode="Both" Stylus.IsFlicksEnabled="False" Stylus.IsTouchFeedbackEnabled="True" Padding="0,9,6,9">
                 <StackPanel>
@@ -53,7 +59,7 @@
                                     <TextBlock
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="Provides the ability to set CPU thermal targets." />
+                            Text="Provides the ability to set CPU thermal targets." Name="tbxCPUTemp"/>
                                 </StackPanel>
                                 <ui:ToggleSwitch Name="tsCPUTemp" Grid.Column="1" Margin="-10,0,10,0"/>
                             </Grid>
@@ -100,11 +106,11 @@
                                     <TextBlock
                             FontSize="14"
                             FontWeight="Medium"
-                            Text="CPU Power Tuning" />
+                            Text="CPU Power Tuning"/>
                                     <TextBlock
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="Provides the ability to set CPU power targets." />
+                            Text="Provides the ability to set CPU power targets." Name="tbxCPUPower"/>
                                 </StackPanel>
                                 <ui:ToggleSwitch Name="tsCPUPower" Grid.Column="1" Margin="-10,0,10,0"/>
                             </Grid>
@@ -177,7 +183,7 @@
                                     <TextBlock
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="Provides the ability to set a custom CPU fan curve." />
+                            Text="Provides the ability to set a custom CPU fan curve." Name="tbxCPUFan"/>
                                 </StackPanel>
                                 <ui:ToggleSwitch Name="tsCPUFan" Grid.Column="1" Margin="-10,0,10,0"/>
                             </Grid>
@@ -248,7 +254,7 @@
                                     <TextBlock
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="Provides the ability to set NVIDIA GPU clock offsets." />
+                            Text="Provides the ability to set NVIDIA GPU clock offsets." Name="tbxdGPU"/>
                                 </StackPanel>
                                 <ui:ToggleSwitch Name="tsGPUOffset" Grid.Column="1" Margin="-10,0,10,0" />
                             </Grid>
@@ -301,7 +307,7 @@
                                     <TextBlock
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="Provides the ability to set a custom GPU fan curve." />
+                            Text="Provides the ability to set a custom GPU fan curve." Name="tbxdGPUFan"/>
                                 </StackPanel>
                                 <ui:ToggleSwitch Name="tsGPUFan" Grid.Column="1" Margin="-10,0,10,0"/>
                             </Grid>
@@ -374,7 +380,7 @@
                                     <TextBlock
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="Provides the ability to set a custom system fan curve." />
+                            Text="Provides the ability to set a custom system fan curve." Name="tbxSysFan"/>
                                 </StackPanel>
                                 <ui:ToggleSwitch Name="tsSYSFan" Grid.Column="1" Margin="-10,0,10,0"/>
                             </Grid>

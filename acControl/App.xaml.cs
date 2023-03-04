@@ -117,7 +117,7 @@ namespace acControl
                     Environment.Exit(0);
                 }
 
-
+                Global.isMinimalGUI = Settings.Default.MinimalGUI;
 
                 _ = Tablet.TabletDevices;
 

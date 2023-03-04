@@ -33,6 +33,19 @@ namespace acControl.Views.Windows
             ViewModel = viewModel;
             DataContext = this;
             InitializeComponent();
+
+            if (Global.isMinimalGUI)
+            {
+                this.MinWidth = 465;
+                this.Width = 465;
+
+                var desktopWorkingArea = System.Windows.SystemParameters.WorkArea;
+                this.Left = desktopWorkingArea.Right - this.Width - 12;
+                this.Top = desktopWorkingArea.Bottom - this.Height - 12;
+                this.ResizeMode = ResizeMode.NoResize;
+                tbMain.ShowMaximize = false;
+            }
+
             _ = Tablet.TabletDevices;
             SetPageService(pageService);
             if (Settings.Default.StartMini == true) { this.WindowState = WindowState.Minimized;}

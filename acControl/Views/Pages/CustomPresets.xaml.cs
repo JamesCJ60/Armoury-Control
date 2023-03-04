@@ -50,6 +50,17 @@ namespace acControl.Views.Pages
                 sdThermal.Visibility = Visibility.Collapsed;
                 tbSmart.Visibility = Visibility.Collapsed;
             }
+
+            if (Global.isMinimalGUI)
+            {
+                tbxCPUTemp.Visibility = Visibility.Collapsed;
+                tbxCPUPower.Visibility = Visibility.Collapsed;
+                tbxCPUFan.Visibility = Visibility.Collapsed;
+                tbxdGPU.Visibility = Visibility.Collapsed;
+                tbxdGPUFan.Visibility = Visibility.Collapsed;
+                tbxSysFan.Visibility = Visibility.Collapsed;
+            }
+                
         }
 
         async void loadSettings(string preset)
