@@ -15,6 +15,7 @@ using System.Drawing;
 using System.Windows.Input;
 using Microsoft.Win32;
 using System.Collections.Generic;
+using acControl.Services;
 
 namespace acControl.Views.Pages
 {
@@ -23,7 +24,8 @@ namespace acControl.Views.Pages
     /// </summary>
     public partial class DashboardPage : INavigableView<ViewModels.DashboardViewModel>
     {
-        public static int mux = App.wmi.DeviceGet(ASUSWmi.GPUMux);
+        public int mux = 0;
+        private readonly XgMobileConnectionService xgMobileConnectionService;
         public ViewModels.DashboardViewModel ViewModel
         {
             get;
@@ -31,21 +33,25 @@ namespace acControl.Views.Pages
 
         public static bool updateProfile = false;
 
-        public DashboardPage(ViewModels.DashboardViewModel viewModel)
+        public DashboardPage(ViewModels.DashboardViewModel viewModel, XgMobileConnectionService xgMobileConnectionService)
         {
             ViewModel = viewModel;
             _ = Tablet.TabletDevices;
             InitializeComponent();
+            mux = GetMux();
+            this.xgMobileConnectionService = xgMobileConnectionService;
+            xgMobileConnectionService.XgMobileStatus += OnXgMobileStatusUpdate;
+            this.Unloaded += (_, _) => xgMobileConnectionService.XgMobileStatus -= OnXgMobileStatusUpdate;
+            UpdateXgMobileStatus(xgMobileConnectionService.Detected, xgMobileConnectionService.Connected);
             _ = Tablet.TabletDevices;
             setupGUI();
-            mux = App.wmi.DeviceGet(ASUSWmi.GPUMux);
         }
         private bool setup = false;
         private bool hasSysFan = false;
         private void setupGUI()
         {
             string deviceName = MotherboardInfo.Product;
-            if(deviceName.Contains("_")) deviceName = deviceName.Substring(0, deviceName.LastIndexOf('_'));
+            if (deviceName.Contains("_")) deviceName = deviceName.Substring(0, deviceName.LastIndexOf('_'));
             tbxDeviceName.Text = deviceName;
 
             tbxCPUName.Text = GetSystemInfo.GetCPUName().Replace("with Radeon Graphics", null);
@@ -63,7 +69,7 @@ namespace acControl.Views.Pages
             lblDisplayAuto.Content = " Auto";
             lblDisplayOver.Content = " OD  ";
 
-            if(MotherboardInfo.Product.Contains("Flow X16"))
+            if (MotherboardInfo.Product.Contains("Flow X16"))
             {
                 ugFans.Columns = 3;
                 hasSysFan = true;
@@ -157,29 +163,6 @@ namespace acControl.Views.Pages
             {
                 updateFan();
 
-                if (tbxDeviceName.Text.Contains("Flow"))
-                {
-                    if (cdXGMobile.Visibility == Visibility.Collapsed) { cdXGMobile.Visibility = Visibility.Visible; }
-
-                    try
-                    {
-                        eGPU = await Task.Run(() => App.wmi.DeviceGet(ASUSWmi.eGPU));
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine(ex);
-                    }
-
-
-                    if (eGPU == 0 && lblXGMobile.Content != "Activate ROG XG Mobile")
-                    { lblXGMobile.Content = "Activate ROG XG Mobile"; cdGPU.Visibility = Visibility.Visible; }
-                    if (eGPU == 1 && lblXGMobile.Content != "Deactivate ROG XG Mobile") { lblXGMobile.Content = "Deactivate ROG XG Mobile"; cdGPU.Visibility = Visibility.Collapsed;}
-                    
-                    if(mux < 1 && tbXG.IsEnabled == true) { tbXG.IsEnabled = false; }
-                    else if (await Task.Run(() => GetSystemInfo.GetCPUName().Contains("Ryzen 9 5900HS")) || await Task.Run(() => GetSystemInfo.GetCPUName().Contains("Ryzen 9 5980HS"))) { tbXG.IsEnabled = true; }
-                    else { tbXG.IsEnabled = true; }
-                }
-
                 if (tbAuto.IsChecked == true && setup == true || tbDisplayAuto.IsChecked == true && setup == true)
                 {
                     if (Global.isMinimised == false)
@@ -236,6 +219,19 @@ namespace acControl.Views.Pages
 
                 SetSystemSettings.ApplyPresetSettings(profile.Item6, ACProfile);
             }
+        }
+
+        /**
+         * 0 - disabled, 1 - enabled, -1 - unsupported
+         */
+        private int GetMux()
+        {
+            int mux = App.wmi.DeviceGet(ASUSWmi.GPUMux);
+            if (mux == 0 || mux == 1)
+            {
+                return mux;
+            }
+            return -1;
         }
 
         private void sdBright_ValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
@@ -359,7 +355,7 @@ namespace acControl.Views.Pages
         private void tbAuto_Click(object sender, RoutedEventArgs e)
         {
             tbAuto.IsChecked = false;
-            
+
             if (mux > 0)
             {
                 tbAuto.IsChecked = true;
@@ -379,7 +375,7 @@ namespace acControl.Views.Pages
 
         private void tbUlti_Click(object sender, RoutedEventArgs e)
         {
-            int mux = App.wmi.DeviceGet(ASUSWmi.GPUMux);
+            int mux = GetMux();
             tbUlti.IsChecked = false;
             if (mux > 0)
             {
@@ -408,7 +404,7 @@ namespace acControl.Views.Pages
         int changeMode = 1;
         private void disbaleUltiMode()
         {
-            int mux = App.wmi.DeviceGet(ASUSWmi.GPUMux);
+            int mux = GetMux();
             tbUlti.IsChecked = false;
             if (mux < 1)
             {
@@ -446,7 +442,7 @@ namespace acControl.Views.Pages
             tbEco.IsChecked = false;
             tbUlti.IsChecked = false;
 
-            if(changeMode == 1) tbStan.IsChecked = true;
+            if (changeMode == 1) tbStan.IsChecked = true;
             if (changeMode == 2) tbEco.IsChecked = true;
             if (changeMode == 3) tbAuto.IsChecked = true;
 
@@ -468,9 +464,9 @@ namespace acControl.Views.Pages
         private void tbXG_Click(object sender, RoutedEventArgs e)
         {
             tbXG.IsChecked = false;
-            if (mux > 0 || GetSystemInfo.GetCPUName().Contains("Ryzen 9 5900HS") || GetSystemInfo.GetCPUName().Contains("Ryzen 9 5980HS"))
+            if (mux > 0 || mux == -1)
             {
-                if(eGPU < 1)
+                if (eGPU < 1)
                 {
                     tbStan.IsChecked = false;
                     tbStan.IsChecked = true;
@@ -482,7 +478,7 @@ namespace acControl.Views.Pages
                     Settings.Default.Save();
                 }
 
-                XG_Mobile_Prompt xg = new XG_Mobile_Prompt();
+                XG_Mobile_Prompt xg = new XG_Mobile_Prompt(xgMobileConnectionService);
                 xg.Show();
             }
         }
@@ -508,11 +504,11 @@ namespace acControl.Views.Pages
             prdGPUFan.Progress = gpuFanPercentage;
 
             tbxCPUPer.Text = $"{(int)GetSystemInfo.CpuTemp}°C";
-            if((int)GetSystemInfo.dGPUTemp != 0) tbxdGPUPer.Text = $"{(int)GetSystemInfo.dGPUTemp}°C";
+            if ((int)GetSystemInfo.dGPUTemp != 0) tbxdGPUPer.Text = $"{(int)GetSystemInfo.dGPUTemp}°C";
             else tbxdGPUPer.Text = $"{Math.Round(gpuFan / maxFanGPU)}%";
 
 
-            if(hasSysFan)
+            if (hasSysFan)
             {
                 var sysFan = App.wmi.DeviceGet(ASUSWmi.SYS_Fan);
                 double maxFanSYS = GetSystemInfo.getSYSFanSpeed();
@@ -546,6 +542,34 @@ namespace acControl.Views.Pages
                 tbxDischarge.Text = $"-{dischargeRate.ToString("0.00")} W";
             }
             else spDischarge.Visibility = Visibility.Collapsed;
+        }
+
+        private void OnXgMobileStatusUpdate(object? _, XgMobileConnectionService.XgMobileStatusEvent e)
+        {
+            Dispatcher.Invoke(() => UpdateXgMobileStatus(e.Detected, e.Connected));
+        }
+
+        private async void UpdateXgMobileStatus(bool detected, bool connected)
+        {
+            if (!detected)
+            {
+                cdXGMobile.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                cdXGMobile.Visibility = Visibility.Visible;
+            }
+            eGPU = detected && connected ? 1 : 0;
+            if (eGPU == 0 && lblXGMobile.Content != "Activate ROG XG Mobile")
+            { lblXGMobile.Content = "Activate ROG XG Mobile"; }
+            if (eGPU == 1 && lblXGMobile.Content != "Deactivate ROG XG Mobile") { lblXGMobile.Content = "Deactivate ROG XG Mobile"; }
+
+            if (mux == 0 && tbXG.IsEnabled == true) { tbXG.IsEnabled = false; }
+            else if (mux == -1)
+            {
+                tbXG.IsEnabled = true;
+            }
+            else { tbXG.IsEnabled = true; }
         }
 
     }
