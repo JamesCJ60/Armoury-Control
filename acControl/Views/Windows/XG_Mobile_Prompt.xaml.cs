@@ -115,11 +115,13 @@ namespace acControl.Views.Windows
             {
                 tbxInfo.Text = "Your ROG XG Mobile is now activated! \n\n\nWARNING: Do not remove ROG XG Mobile from device until it has been deactivated!";
                 updateLHM();
+                Global.updateGPU = true;
             }
             else
             {
                 tbxInfo.Text = "Your ROG XG Mobile is now deactivated. You can now safely detach it!";
                 updateLHM();
+                Global.updateGPU = true;
             }
             CloseButton.IsEnabled = true;
         }

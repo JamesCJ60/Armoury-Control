@@ -111,6 +111,8 @@ namespace acControl.Scripts
                 {
                     App.wmi.DeviceSet(ASUSWmi.GPUEco, index);
                 }
+
+                Global.updateGPU = true;
             });
         }
 

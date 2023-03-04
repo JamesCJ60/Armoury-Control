@@ -167,6 +167,8 @@ namespace acControl.Views.Pages
             update();
             SetSystemSettings.setBatteryLimit((int)sdBattery.Value);
             setup = true;
+
+            GarbageCollection.Garbage_Collect();
         }
 
         void SensorUpdate_Tick(object sender, EventArgs e)
@@ -181,18 +183,19 @@ namespace acControl.Views.Pages
             {
                 updateFan();
 
-                if (tbAuto.IsChecked == true && setup == true || tbDisplayAuto.IsChecked == true && setup == true)
+                if (Global.isMinimised == false && Global.updateGPU)
                 {
-                    if (Global.isMinimised == false)
+                    string dGPU = await Task.Run(() => GetSystemInfo.GetGPUName(1).Replace(" GPU", null));
+                    if (dGPU == "" && spdGPU.Visibility != System.Windows.Visibility.Collapsed) spdGPU.Visibility = System.Windows.Visibility.Collapsed;
+                    else if (dGPU != "" && spdGPU.Visibility == System.Windows.Visibility.Collapsed)
                     {
-                        string dGPU = await Task.Run(() => GetSystemInfo.GetGPUName(1).Replace(" GPU", null));
-                        if (dGPU == "" && spdGPU.Visibility != System.Windows.Visibility.Collapsed) spdGPU.Visibility = System.Windows.Visibility.Collapsed;
-                        else if (dGPU != "" && spdGPU.Visibility == System.Windows.Visibility.Collapsed)
-                        {
-                            spdGPU.Visibility = System.Windows.Visibility.Visible;
-                            tbxdGPUName.Text = dGPU;
-                        }
+                        spdGPU.Visibility = System.Windows.Visibility.Visible;
+                        tbxdGPUName.Text = dGPU;
                     }
+
+                    GarbageCollection.Garbage_Collect();
+
+                    Global.updateGPU = false;
                 }
             }
 

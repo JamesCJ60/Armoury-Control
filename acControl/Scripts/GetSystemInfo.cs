@@ -48,7 +48,6 @@ namespace acControl.Scripts
                     if (count == i)
                     {
                         return obj["Name"].ToString();
-                       
                     }
                     count++;
                 }

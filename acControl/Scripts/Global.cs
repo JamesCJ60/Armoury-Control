@@ -15,5 +15,7 @@ namespace acControl.Scripts
         public static bool isMinimised = false;
 
         public static bool isMinimalGUI = true;
+
+        public static bool updateGPU = false;
     }
 }

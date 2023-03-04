@@ -55,7 +55,7 @@ namespace acControl.Views.Windows
             navigationService.SetNavigationControl(RootNavigation);
             _navigationService = navigationService;
 
-            GC.Interval = TimeSpan.FromSeconds(5);
+            GC.Interval = TimeSpan.FromSeconds(2);
             GC.Tick += GC_Tick;
             GC.Start();
 
@@ -105,14 +105,16 @@ namespace acControl.Views.Windows
         {
             GarbageCollection.Garbage_Collect();
 
-            if (i < 5)
+            if(i < 3) i++;
+
+            if (i > 2)
             {
-                if (Settings.Default.StartMini == true && this.WindowState == WindowState.Minimized && i < 2) this.ShowInTaskbar = false;
+                if (Settings.Default.StartMini == true && this.WindowState == WindowState.Minimized) this.ShowInTaskbar = false;
                 GC.Stop();
-                GC.Interval = TimeSpan.FromSeconds(16);
+                GC.Interval = TimeSpan.FromSeconds(12);
                 GC.Tick += GC_Tick;
                 GC.Start();
-                i++;
+                
             }
         }
 
