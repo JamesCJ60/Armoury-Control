@@ -3,10 +3,11 @@ using acControl.Properties;
 using acControl.Scripts;
 using acControl.Services;
 using acControl.Views.Pages;
+using acControl.Views.Windows;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Win32;
+using Microsoft.Toolkit.Uwp.Notifications;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -29,6 +30,8 @@ namespace acControl
     /// 
     public partial class App
     {
+
+        public static ASUSWmi wmi = new ASUSWmi();
         public static bool IsAdministrator()
         {
             WindowsIdentity identity = WindowsIdentity.GetCurrent();
@@ -60,6 +63,8 @@ namespace acControl
 
                 // Service containing navigation, same as INavigationWindow... but without window
                 services.AddSingleton<INavigationService, NavigationService>();
+                services.AddSingleton(wmi);
+                services.AddSingleton<XgMobileConnectionService>();
 
                 // Main window with navigation
                 services.AddScoped<INavigationWindow, Views.Windows.MainWindow>();
@@ -96,7 +101,6 @@ namespace acControl
         /// Occurs when the application is loading.
         /// </summary>
         /// 
-        public static ASUSWmi wmi = new ASUSWmi();
         private async void OnStartup(object sender, StartupEventArgs e)
         {
             try
@@ -113,35 +117,40 @@ namespace acControl
                     Environment.Exit(0);
                 }
 
-                
+
 
                 _ = Tablet.TabletDevices;
 
                 location = AppDomain.CurrentDomain.BaseDirectory;
-
+                xgMobileConnectionService = GetService<XgMobileConnectionService>();
                 GetSystemInfo.start();
                 GetSystemInfo.getDisplayData();
                 GetSystemInfo.getBattery();
                 GetSystemInfo.CurrentDisplayRrefresh();
+                SetUpXgMobileDetection();
                 wmi.SubscribeToEvents(WatcherEventArrived);
 
                 await _host.StartAsync();
-            } catch(Exception ex)
-            { 
+            }
+            catch (Exception ex)
+            {
                 Environment.Exit(0);
+                App.wmi.Close();
             }
         }
 
-        
 
-            /// <summary>
-            /// Occurs when the application is closing.
-            /// </summary>
-            private async void OnExit(object sender, ExitEventArgs e)
+
+        /// <summary>
+        /// Occurs when the application is closing.
+        /// </summary>
+        private async void OnExit(object sender, ExitEventArgs e)
         {
+            App.wmi.Close();
             await _host.StopAsync();
 
             _host.Dispose();
+            ToastNotification.HideXgMobileActivateToasts();
         }
 
         /// <summary>
@@ -222,6 +231,54 @@ namespace acControl
                     }
                 }
                 catch { }
+            });
+        }
+
+        private XgMobileConnectionService xgMobileConnectionService;
+
+        private void SetUpXgMobileDetection()
+        {
+            xgMobileConnectionService.XgMobileStatus += (_, e) =>
+            {
+                if (e.DetectedChanged)
+                {
+                    ShowDetectedToast(e.Detected);
+                }
+                if (e.Connected)
+                {
+                    ToastNotification.HideXgMobileActivateToasts();
+                }
+            };
+            ToastNotificationManagerCompat.OnActivated += toastArgs =>
+            {
+                if (ToastNotification.IsActivateXgMobileToastButtonClicked(toastArgs))
+                {
+                    HandleXgMobileToast(true);
+                }
+                else if (ToastNotification.IsOpenXgMobileToastClicked(toastArgs))
+                {
+                    HandleXgMobileToast(false);
+                }
+            };
+        }
+
+        private void ShowDetectedToast(bool detected)
+        {
+            if (detected)
+            {
+                ToastNotification.PromptXgMobileActivate();
+            }
+            else
+            {
+                ToastNotification.HideXgMobileActivateToasts();
+            }
+        }
+
+        private void HandleXgMobileToast(bool activate)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                new XG_Mobile_Prompt(xgMobileConnectionService, activate).Show();
             });
         }
     }
