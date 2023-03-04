@@ -101,20 +101,21 @@ namespace acControl.Views.Windows
         }
 
         int i = 0;
+        bool setup = false;
         async void GC_Tick(object sender, EventArgs e)
         {
             GarbageCollection.Garbage_Collect();
 
-            if(i < 3) i++;
+            if (i < 4) i++;
 
-            if (i > 2)
+            if (i > 2 && setup == false)
             {
                 if (Settings.Default.StartMini == true && this.WindowState == WindowState.Minimized) this.ShowInTaskbar = false;
                 GC.Stop();
                 GC.Interval = TimeSpan.FromSeconds(20);
                 GC.Tick += GC_Tick;
                 GC.Start();
-                
+                setup = true;
             }
         }
 
