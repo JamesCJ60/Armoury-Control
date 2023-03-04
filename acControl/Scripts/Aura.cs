@@ -2,9 +2,10 @@
 using System.Drawing;
 
 //
-// This is a optimised/simplified version of Aura.cs from https://github.com/seerge/g-helper
+// This is an optimised/simplified version of Aura.cs from https://github.com/seerge/g-helper
 // I do not take credit for the full functionality of the code.
 //
+
 public static class Aura
 {
     private static readonly byte[] MESSAGE_SET = { 0x5d, 0xb5 };
@@ -14,7 +15,7 @@ public static class Aura
     public const int Breathe = 1;
     public const int Strobe = 2;
     public const int Rainbow = 3;
-    public const int Dingding = 10;
+    public const int Dingding = 4;
 
     public const int SpeedSlow = 0;
     public const int SpeedMedium = 1;
@@ -27,7 +28,7 @@ public static class Aura
 
     public static void ApplyAura()
     {
-        int[] deviceIds = { 0x1854, 0x1869, 0x1866, 0x19b6 };
+        int[] deviceIds = { 0x1854, 0x1869, 0x1866, 0x19b6, 0x1822, 0x1837, 0x1854, 0x184a, 0x183d, 0x8502, 0x1807, 0x17e0 };
 
         foreach (HidDevice device in HidDevices.Enumerate(0x0b05, deviceIds))
         {

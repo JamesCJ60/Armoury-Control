@@ -110,14 +110,6 @@ namespace acControl.Scripts
                 if (App.wmi.DeviceGet(ASUSWmi.GPUEco) != index)
                 {
                     App.wmi.DeviceSet(ASUSWmi.GPUEco, index);
-
-                    Thread.Sleep(1000);
-
-                    GetSystemInfo.stop();
-
-                    Thread.Sleep(1000);
-                    GetSystemInfo.start();
-
                 }
             });
         }

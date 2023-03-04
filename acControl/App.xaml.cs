@@ -123,12 +123,11 @@ namespace acControl
 
                 location = AppDomain.CurrentDomain.BaseDirectory;
                 xgMobileConnectionService = GetService<XgMobileConnectionService>();
-                GetSystemInfo.start();
                 GetSystemInfo.getDisplayData();
                 GetSystemInfo.getBattery();
                 GetSystemInfo.CurrentDisplayRrefresh();
                 SetUpXgMobileDetection();
-                wmi.SubscribeToEvents(WatcherEventArrived);
+                
 
                 await _host.StartAsync();
             }
@@ -161,38 +160,7 @@ namespace acControl
             // For more info see https://docs.microsoft.com/en-us/dotnet/api/system.windows.application.dispatcherunhandledexception?view=windowsdesktop-6.0
         }
 
-        static async void WatcherEventArrived(object sender, EventArrivedEventArgs e)
-        {
-            await Task.Run(() =>
-            {
-                var collection = (ManagementEventWatcher)sender;
-
-                if (e.NewEvent is null) return;
-
-                int EventID = int.Parse(e.NewEvent["EventID"].ToString());
-
-                switch (EventID)
-                {
-                    case 56:    // Rog button
-                    case 174:   // FN+F5
-                        int profile = Settings.Default.ACMode;
-                        profile++;
-                        if (profile > 3) profile = 0;
-
-                        if (profile == 0) ToastNotification.ShowToastNotification(false, "Switched to Silent", "Armoury Control has switched to the Silent power mode");
-                        if (profile == 1) ToastNotification.ShowToastNotification(false, "Switched to Performance", "Armoury Control has switched to the Performance power mode");
-                        if (profile == 2) ToastNotification.ShowToastNotification(false, "Switched to Turbo", "Armoury Control has switched to the Turbo power mode");
-                        if (profile == 3) ToastNotification.ShowToastNotification(false, "Switched to Manual", "Armoury Control has switched to the Manual power mode");
-
-                        Settings.Default.ACMode = profile;
-                        Settings.Default.Save();
-                        DashboardPage.updateProfile = true;
-                        break;
-                    case 179:   // FN+F4
-                        break;
-                }
-            });
-        }
+        
 
         public static Guid DLAHI_GUID = new Guid("{5c4c3332-344d-483c-8739-259e934c9cc8}");
         public static string DLAHI_Instance = @"SWD\DRIVERENUM\OEM_DAL_COMPONENT&4&293F28F0&0";

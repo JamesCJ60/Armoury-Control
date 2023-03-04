@@ -147,22 +147,15 @@ namespace acControl.Views.Windows
         {
             await Task.Run(() =>
             {
-
-                Thread.Sleep(1000);
-
-                GetSystemInfo.stop();
-
-                Thread.Sleep(1000);
-                GetSystemInfo.start();
-
                 try
                 {
                     GarbageCollection.Garbage_Collect();
 
                     if (IsEGPUConnected())
                     {
-                        GetSystemInfo.GetdGPUStats();
-                        string name = GetSystemInfo.GetdGPUName();
+                        Thread.Sleep(1000);
+
+                        string name = GetSystemInfo.GetGPUName(1);
                         name.Replace("GPU", null);
 
                         if (name.Contains("4090")) ToastNotification.ShowToastNotification(true, "ROG XG Mobile Detected", $"Armoury Control has detected ROG XG Mobile GC33Y ({name}) has been activated!");

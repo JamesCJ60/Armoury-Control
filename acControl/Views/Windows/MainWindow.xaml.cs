@@ -3,7 +3,10 @@ using acControl.Scripts;
 using acControl.Views.Pages;
 using System;
 using System.Diagnostics;
+using System.Management;
+using System.Runtime.CompilerServices;
 using System.Security.Principal;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -19,8 +22,6 @@ namespace acControl.Views.Windows
     /// </summary>
     public partial class MainWindow : INavigationWindow
     {
-        
-
         public ViewModels.MainWindowViewModel ViewModel
         {
             get;
@@ -33,6 +34,8 @@ namespace acControl.Views.Windows
             ViewModel = viewModel;
             DataContext = this;
             InitializeComponent();
+
+            App.wmi.SubscribeToEvents(WatcherEventArrived);
 
             if (Global.isMinimalGUI)
             {
@@ -48,10 +51,10 @@ namespace acControl.Views.Windows
 
             _ = Tablet.TabletDevices;
             SetPageService(pageService);
-            if (Settings.Default.StartMini == true) { this.WindowState = WindowState.Minimized;}
+            if (Settings.Default.StartMini == true) { this.WindowState = WindowState.Minimized; }
             navigationService.SetNavigationControl(RootNavigation);
             _navigationService = navigationService;
-            
+
             GC.Interval = TimeSpan.FromSeconds(5);
             GC.Tick += GC_Tick;
             GC.Start();
@@ -64,19 +67,47 @@ namespace acControl.Views.Windows
                     true                                   // Whether to change accents automatically
                 );
             };
-
-            var hwndSource = PresentationSource.FromVisual(this) as HwndSource;
-
-            if (hwndSource != null)
-                hwndSource.CompositionTarget.RenderMode = RenderMode.SoftwareOnly;
         }
+
+        void WatcherEventArrived(object sender, EventArrivedEventArgs e)
+        {
+
+            var collection = (ManagementEventWatcher)sender;
+
+            if (e.NewEvent is null) return;
+
+            int EventID = int.Parse(e.NewEvent["EventID"].ToString());
+
+            switch (EventID)
+            {
+                case 56:    // Rog button
+                case 174:   // FN+F5
+                    int profile = Settings.Default.ACMode;
+                    profile++;
+                    if (profile > 3) profile = 0;
+
+                    if (profile == 0) ToastNotification.ShowToastNotification(false, "Switched to Silent", "Armoury Control has switched to the Silent power mode");
+                    if (profile == 1) ToastNotification.ShowToastNotification(false, "Switched to Performance", "Armoury Control has switched to the Performance power mode");
+                    if (profile == 2) ToastNotification.ShowToastNotification(false, "Switched to Turbo", "Armoury Control has switched to the Turbo power mode");
+                    if (profile == 3) ToastNotification.ShowToastNotification(false, "Switched to Manual", "Armoury Control has switched to the Manual power mode");
+
+                    Settings.Default.ACMode = profile;
+                    Settings.Default.Save();
+                    DashboardPage.updateProfile = true;
+                    break;
+                case 179:   // FN+F4
+                    break;
+            }
+        }
+
         int i = 0;
         async void GC_Tick(object sender, EventArgs e)
         {
             GarbageCollection.Garbage_Collect();
-            
-            if (i < 5) { 
-                if (Settings.Default.StartMini == true && this.WindowState == WindowState.Minimized && i < 2) this.ShowInTaskbar = false; 
+
+            if (i < 5)
+            {
+                if (Settings.Default.StartMini == true && this.WindowState == WindowState.Minimized && i < 2) this.ShowInTaskbar = false;
                 GC.Stop();
                 GC.Interval = TimeSpan.FromSeconds(16);
                 GC.Tick += GC_Tick;
@@ -132,9 +163,14 @@ namespace acControl.Views.Windows
 
         private void UiWindow_StateChanged(object sender, EventArgs e)
         {
-            if (this.WindowState == WindowState.Minimized) { this.ShowInTaskbar = false; Global.isMinimised = true; }
-            else { 
-                this.ShowInTaskbar = true; 
+            if (this.WindowState == WindowState.Minimized) 
+            { 
+                this.ShowInTaskbar = false; 
+                Global.isMinimised = true;
+            }
+            else
+            {
+                this.ShowInTaskbar = true;
                 Global.isMinimised = false;
 
                 if (Global.isMinimalGUI)
