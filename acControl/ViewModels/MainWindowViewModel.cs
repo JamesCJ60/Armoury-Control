@@ -41,7 +41,7 @@ namespace acControl.ViewModels
                 {
                     Content = "Home",
                     PageTag = "dashboard",
-                    Icon = SymbolRegular.Home24,
+                    Icon = SymbolRegular.Home20,
                     PageType = typeof(Views.Pages.DashboardPage)
                 },
                 new NavigationItem()
@@ -51,13 +51,27 @@ namespace acControl.ViewModels
                     Icon = SymbolRegular.Book20,
                     PageType = typeof(Views.Pages.CustomPresets)
                 },
-                //new NavigationItem()
-                //{
-                //    Content = "Aura RGB",
-                //    PageTag = "aura",
-                //    Icon = SymbolRegular.Lightbulb20,
-                //    PageType = typeof(Views.Pages.AuraRGB)
-                //},
+                new NavigationItem()
+                {
+                    Content = "Aura RGB",
+                    PageTag = "aura",
+                    Icon = SymbolRegular.Lightbulb20,
+                    PageType = typeof(Views.Pages.AuraRGB)
+                },
+                new NavigationItem()
+                {
+                    Content = "AniMe",
+                    PageTag = "anime",
+                    Icon = SymbolRegular.GridDots20,
+                    PageType = typeof(Views.Pages.AuraRGB)
+                },
+                new NavigationItem()
+                {
+                    Content = "Auto",
+                    PageTag = "auto",
+                    Icon = SymbolRegular.Transmission20,
+                    PageType = typeof(Views.Pages.AuraRGB)
+                },
                 //new NavigationItem()
                 //{
                 //    Content = "Data",
@@ -73,7 +87,7 @@ namespace acControl.ViewModels
                 {
                     Content = "Settings",
                     PageTag = "settings",
-                    Icon = SymbolRegular.Settings24,
+                    Icon = SymbolRegular.Settings20,
                     PageType = typeof(Views.Pages.SettingsPage)
                 }
             };

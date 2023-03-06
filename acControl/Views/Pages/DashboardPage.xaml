@@ -27,15 +27,19 @@
                         <StackPanel>
                             <TextBlock FontWeight="Bold" FontSize="17" Margin="0,0,0,2">System Specification:</TextBlock>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock FontWeight="DemiBold" Margin="0,0,9,0" FontSize="15">CPU:</TextBlock>
+                                <TextBlock FontWeight="DemiBold" Margin="0,0,13.65,0" FontSize="15">CPU:</TextBlock>
                                 <TextBlock FontSize="14" Name="tbxCPUName">Intel Core i9 12900H</TextBlock>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock FontWeight="DemiBold" Margin="0,0,9,0" FontSize="15">GPU:</TextBlock>
+                                <TextBlock FontWeight="DemiBold" Margin="0,0,9,0" FontSize="15">RAM:</TextBlock>
+                                <TextBlock FontSize="14" Name="tbxRAM">Intel Core i9 12900H</TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontWeight="DemiBold" Margin="0,0,12.5,0" FontSize="15">GPU:</TextBlock>
                                 <TextBlock FontSize="14" Name="tbxiGPUName">Intel Core i9 12900H</TextBlock>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Name="spdGPU">
-                                <TextBlock FontWeight="DemiBold" Margin="0,0,9,0" FontSize="15">GPU:</TextBlock>
+                                <TextBlock FontWeight="DemiBold" Margin="0,0,12.5,0" FontSize="15">GPU:</TextBlock>
                                 <TextBlock FontSize="14" Name="tbxdGPUName">Intel Core i9 12900H</TextBlock>
                             </StackPanel>
                         </StackPanel>

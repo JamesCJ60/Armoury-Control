@@ -59,6 +59,46 @@ namespace acControl.Scripts
             return "";
         }
 
+        public static string GetRAM()
+        {
+            string RAM = "";
+
+            double capacity = 0;
+            int speed = 0;
+            int type = 0;
+            int i = 0;
+            try
+            {
+                ManagementObjectSearcher searcher =
+            new ManagementObjectSearcher("root\\CIMV2",
+            "SELECT * FROM Win32_PhysicalMemory");
+
+                foreach (ManagementObject queryObj in searcher.Get())
+                {
+                    capacity = capacity + Convert.ToDouble(queryObj["Capacity"]);
+                    speed = Convert.ToInt32(queryObj["Speed"]);
+                    type = Convert.ToInt32(queryObj["SMBIOSMemoryType"]);
+                    i++;
+                }
+
+
+
+                capacity = capacity / 1024 / 1024 / 1024;
+
+                string DDRType = "";
+                if (type == 26) DDRType = "DDR4";
+                else if (type == 30) DDRType = "LPDDR4";
+                else if (type == 35) DDRType = "LPDDR5";
+                else DDRType = $"Unknown ({type})";
+
+                if (MotherboardInfo.Product.Contains("Flow Z13") || Global.cpuName.Contains("12th") && speed > 5200) speed = 5200;
+
+                RAM = $"{capacity}GB {DDRType} {speed}MT/s";
+            }
+            catch { }
+            return RAM;
+        }
+
 
         //create a management scope object
         public static ManagementScope scope = new ManagementScope("\\\\.\\ROOT\\WMI");

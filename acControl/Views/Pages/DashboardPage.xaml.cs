@@ -71,11 +71,15 @@ namespace acControl.Views.Pages
 
             
             Global.cpuName = GetSystemInfo.GetCPUName().Replace("with Radeon Graphics", null);
+            Global.cpuName = Global.cpuName.Replace("(TM)", "™");
+            Global.cpuName = Global.cpuName.Replace("(R)", "®");
             tbxCPUName.Text = Global.cpuName;
-            tbxiGPUName.Text = GetSystemInfo.GetGPUName(0).Replace("(R)", null);
+            tbxiGPUName.Text = GetSystemInfo.GetGPUName(0).Replace("(R)", "®");
             string dGPU = GetSystemInfo.GetGPUName(1).Replace(" GPU", null);
             if (dGPU == null || dGPU == "") spdGPU.Visibility = System.Windows.Visibility.Collapsed;
             else tbxdGPUName.Text = dGPU;
+
+            tbxRAM.Text = GetSystemInfo.GetRAM();
 
             sdBattery.Value = (int)Settings.Default.BatLimit;
             sdBright.Value = (int)GetSystemInfo.getBrightness();
@@ -179,11 +183,11 @@ namespace acControl.Views.Pages
         int eGPU = 1;
         private async void update()
         {
-            if (Global.isMinimised == false)
+            if (!Global.isMinimised)
             {
                 updateFan();
 
-                if (Global.isMinimised == false && Global.updateGPU)
+                if (Global.updateGPU)
                 {
                     string dGPU = await Task.Run(() => GetSystemInfo.GetGPUName(1).Replace(" GPU", null));
                     if (dGPU == "" && spdGPU.Visibility != System.Windows.Visibility.Collapsed) spdGPU.Visibility = System.Windows.Visibility.Collapsed;
@@ -563,8 +567,7 @@ namespace acControl.Views.Pages
                     prdGPUFan.Progress = gpuFanPercentage;
                 }
 
-                await Task.Run(() => GetSystemInfo.ReadSensors());
-                float dischargeRate = await Task.Run(() => (float)GetSystemInfo.BatteryDischarge);
+                float dischargeRate = (float)GetSystemInfo.BatteryDischarge;
 
                 if (dischargeRate != 0)
                 {
