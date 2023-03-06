@@ -1,4 +1,7 @@
-﻿using System;
+﻿using HidLibrary;
+using System;
+using System.Diagnostics;
+using System.Linq;
 
 namespace acControl.Services
 {
@@ -63,6 +66,31 @@ namespace acControl.Services
                 throw new InvalidOperationException($"Unknown device status: {deviceStatus}");
             }
             return wmi.DeviceGet(ASUSWmi.eGPU) == 1;
+        }
+
+        public void EnableXgMobileLight()
+        {
+            SendXgMobileLightingCommand(new byte[] { 0x5e, 0xc5, 0x50 });
+        }
+
+        public void DisableXgMobileLight()
+        {
+            SendXgMobileLightingCommand(new byte[] { 0x5e, 0xc5 });
+        }
+
+        private void SendXgMobileLightingCommand(byte[] command)
+        {
+            var devices = HidDevices.Enumerate(0x0b05, new int[] { 0x1970 });
+            var xgMobileLight = devices.Where(device => device.IsConnected && device.Description.ToLower().StartsWith("hid") && device.Capabilities.FeatureReportByteLength > 64).ToList();
+            if (xgMobileLight.Count == 1)
+            {
+                var device = xgMobileLight[0];
+                device.OpenDevice();
+                var paramsArr = new byte[300];
+                Array.Copy(command, paramsArr, command.Length);
+                device.WriteFeatureData(paramsArr);
+                device.CloseDevice();
+            }
         }
     }
 }
