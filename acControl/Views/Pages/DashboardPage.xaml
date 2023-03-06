@@ -197,10 +197,17 @@
                                     </StackPanel>
                                 </ToggleButton>
 
-                                <ToggleButton Width="100" Margin="4.5,0" Name="tbDisplayOver" ToolTip="This option enables/disbales display panel overdrive. Enabling display panel overdrive on supported devices can improve display responce times." Click="tbDisplayOver_Click">
+                                <ToggleButton Width="100" Margin="4.5,0" Name="tbDisplayOver" ToolTip="This option enables/disables display panel overdrive. Enabling display panel overdrive on supported devices can improve display responce times." Click="tbDisplayOver_Click">
                                     <StackPanel Orientation="Horizontal">
                                         <ui:SymbolIcon Symbol="Gauge20" FontSize="24"/>
                                         <Label Name="lblDisplayOver" Height="23" FontSize="16" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Manual</Label>
+                                    </StackPanel>
+                                </ToggleButton>
+
+                                <ToggleButton Width="100" Margin="4.5,0" Name="tbMultizone" ToolTip="This option enables/disables display multi-zone for devices with mini-LED displays." Click="tbMultizone_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <ui:SymbolIcon Symbol="GridDots20" FontSize="24"/>
+                                        <Label Name="lblMultizone" Height="23" FontSize="16" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Manual</Label>
                                     </StackPanel>
                                 </ToggleButton>
                             </UniformGrid>

@@ -130,5 +130,17 @@ namespace acControl.Properties {
                 this["MinimalGUI"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool multiZone {
+            get {
+                return ((bool)(this["multiZone"]));
+            }
+            set {
+                this["multiZone"] = value;
+            }
+        }
     }
 }

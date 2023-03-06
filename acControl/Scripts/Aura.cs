@@ -8,8 +8,8 @@ using System.Drawing;
 
 public static class Aura
 {
-    private static readonly byte[] MESSAGE_SET = { 0x5d, 0xb5 };
-    private static readonly byte[] MESSAGE_APPLY = { 0x5d, 0xb4 };
+    private static readonly byte[] MESSAGE_SET = { 0x5d, 0xb5, 0, 0, 0 };
+    private static readonly byte[] MESSAGE_APPLY = { 0x5d, 0xb4, 0, 0, 0 };
 
     public const int Static = 0;
     public const int Breathe = 1;

@@ -107,6 +107,19 @@ namespace acControl.Views.Pages
             sensor.Tick += SensorUpdate_Tick;
             sensor.Start();
 
+            if (Settings.Default.multiZone == true)
+            {
+                tbMultizone.IsChecked = true;
+                App.wmi.DeviceSet(ASUSWmi.ScreenMultizone, 1);
+                lblMultizone.Content = "MZ";
+            }
+            else
+            {
+                tbMultizone.IsChecked = false;
+                App.wmi.DeviceSet(ASUSWmi.ScreenMultizone, 0);
+                lblMultizone.Content = "SZ";
+            }
+
             Global.wasUsingOD = Settings.Default.DisplayOver;
             if (Global.wasUsingOD == true)
             {
@@ -606,5 +619,22 @@ namespace acControl.Views.Pages
             else { tbXG.IsEnabled = true; }
         }
 
+        private void tbMultizone_Click(object sender, RoutedEventArgs e)
+        {
+            if (tbMultizone.IsChecked == true)
+            {
+                App.wmi.DeviceSet(ASUSWmi.ScreenMultizone, 1);
+                lblMultizone.Content = "MZ";
+                Settings.Default.multiZone = true;
+            }
+            else
+            {
+                App.wmi.DeviceSet(ASUSWmi.ScreenMultizone, 0);
+                lblMultizone.Content = "SZ";
+                Settings.Default.multiZone = false;
+            }
+
+            Settings.Default.Save();
+        }
     }
 }

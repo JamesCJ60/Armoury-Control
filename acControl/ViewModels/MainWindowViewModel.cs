@@ -63,14 +63,14 @@ namespace acControl.ViewModels
                     Content = "AniMe",
                     PageTag = "anime",
                     Icon = SymbolRegular.GridDots20,
-                    PageType = typeof(Views.Pages.AuraRGB)
+                    PageType = typeof(Views.Pages.AniMe)
                 },
                 new NavigationItem()
                 {
                     Content = "Auto",
                     PageTag = "auto",
                     Icon = SymbolRegular.Transmission20,
-                    PageType = typeof(Views.Pages.AuraRGB)
+                    PageType = typeof(Views.Pages.Auto)
                 },
                 //new NavigationItem()
                 //{
