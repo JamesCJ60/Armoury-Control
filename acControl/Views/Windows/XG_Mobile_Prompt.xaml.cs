@@ -1,4 +1,5 @@
-﻿using acControl.Scripts;
+﻿using acControl.Properties;
+using acControl.Scripts;
 using acControl.Services;
 using System;
 using System.Threading;
@@ -116,6 +117,9 @@ namespace acControl.Views.Windows
                 tbxInfo.Text = "Your ROG XG Mobile is now activated! \n\n\nWARNING: Do not remove ROG XG Mobile from device until it has been deactivated!";
                 updateLHM();
                 Global.updateGPU = true;
+
+                if (Settings.Default.xgMobileLED == true) xgMobileConnectionService.EnableXgMobileLight();
+                else xgMobileConnectionService.DisableXgMobileLight();
             }
             else
             {

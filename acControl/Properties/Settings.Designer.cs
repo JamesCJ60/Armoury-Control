@@ -142,5 +142,17 @@ namespace acControl.Properties {
                 this["multiZone"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool xgMobileLED {
+            get {
+                return ((bool)(this["xgMobileLED"]));
+            }
+            set {
+                this["xgMobileLED"] = value;
+            }
+        }
     }
 }

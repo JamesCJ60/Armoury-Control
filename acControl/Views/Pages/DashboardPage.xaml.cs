@@ -107,17 +107,30 @@ namespace acControl.Views.Pages
             sensor.Tick += SensorUpdate_Tick;
             sensor.Start();
 
+            if (Settings.Default.xgMobileLED == true)
+            {
+                tbLedOn.IsChecked = true;
+                tbLedOff.IsChecked = false;
+                xgMobileConnectionService.EnableXgMobileLight();
+            }
+            else
+            {
+                tbLedOn.IsChecked = false;
+                tbLedOff.IsChecked = true;
+                xgMobileConnectionService.DisableXgMobileLight();
+            }
+
             if (Settings.Default.multiZone == true)
             {
                 tbMultizone.IsChecked = true;
                 App.wmi.DeviceSet(ASUSWmi.ScreenMultizone, 1);
-                lblMultizone.Content = "MZ";
+                lblMultizone.Content = " MZ";
             }
             else
             {
                 tbMultizone.IsChecked = false;
                 App.wmi.DeviceSet(ASUSWmi.ScreenMultizone, 0);
-                lblMultizone.Content = "SZ";
+                lblMultizone.Content = " SZ";
             }
 
             Global.wasUsingOD = Settings.Default.DisplayOver;
@@ -624,16 +637,34 @@ namespace acControl.Views.Pages
             if (tbMultizone.IsChecked == true)
             {
                 App.wmi.DeviceSet(ASUSWmi.ScreenMultizone, 1);
-                lblMultizone.Content = "MZ";
+                lblMultizone.Content = " MZ";
                 Settings.Default.multiZone = true;
             }
             else
             {
                 App.wmi.DeviceSet(ASUSWmi.ScreenMultizone, 0);
-                lblMultizone.Content = "SZ";
+                lblMultizone.Content = " SZ";
                 Settings.Default.multiZone = false;
             }
 
+            Settings.Default.Save();
+        }
+
+        private void tbLedOff_Click(object sender, RoutedEventArgs e)
+        {
+            tbLedOn.IsChecked = false;
+            tbLedOff.IsChecked = true;
+            xgMobileConnectionService.DisableXgMobileLight();
+            Settings.Default.xgMobileLED = false;
+            Settings.Default.Save();
+        }
+
+        private void tbLedOn_Click(object sender, RoutedEventArgs e)
+        {
+            tbLedOn.IsChecked = true;
+            tbLedOff.IsChecked = false;
+            xgMobileConnectionService.EnableXgMobileLight();
+            Settings.Default.xgMobileLED = true;
             Settings.Default.Save();
         }
     }

@@ -50,6 +50,8 @@ public class ASUSWmi
     public const int PPT_CPU = 0x001200B0;
     public const int PPT_CPU1 = 0x001200B1;
 
+    public const int CPU_VOLTAGE = 0x00120079;
+
 
     [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
     private static extern IntPtr CreateFile(string lpFileName, uint dwDesiredAccess, uint dwShareMode, IntPtr lpSecurityAttributes, uint dwCreationDisposition, uint dwFlagsAndAttributes, IntPtr hTemplateFile);

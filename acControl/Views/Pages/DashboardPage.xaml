@@ -7,7 +7,7 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="DashboardPage"
     d:DataContext="{d:DesignInstance local:DashboardPage, IsDesignTimeCreatable=False}"
-    d:DesignHeight="450"
+    d:DesignHeight="1000"
     d:DesignWidth="800"
     d:Background="{DynamicResource ApplicationBackgroundBrush}"
     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
@@ -217,13 +217,28 @@
                         <StackPanel>
 
                             <TextBlock FontWeight="Bold" FontSize="17">ROG XG Mobile Control:</TextBlock>
-                            <UniformGrid Columns="1" VerticalAlignment="Center" Height="54" HorizontalAlignment="Center" Margin="0,2,0,0">
-                                <ToggleButton Width="234" Margin="4.5,0" Name="tbXG" ToolTip="This option opens a menu that can activate/deactivte your ROG XG Mobile." Click="tbXG_Click">
+                            <UniformGrid Columns="1" Rows="2" VerticalAlignment="Center" Height="108" HorizontalAlignment="Center" Margin="0,2,0,0">
+                                <ToggleButton Width="240" Margin="4.5,0" Name="tbXG" ToolTip="This option opens a menu that can activate/deactivte your ROG XG Mobile." Click="tbXG_Click">
                                     <StackPanel Orientation="Horizontal">
                                         <ui:SymbolIcon Symbol="DeveloperBoardLightning20" FontSize="24" Margin="0,0,9,0"/>
-                                        <Label Name="lblXGMobile" Height="23" FontSize="16" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Manual</Label>
+                                        <Label Name="lblXGMobile" Height="23" FontSize="16" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Activate ROG XG Mobile</Label>
                                     </StackPanel>
                                 </ToggleButton>
+                                <UniformGrid Height="100">
+                                    <ToggleButton Width="100" Margin="4.5,0" Name="tbLedOn" ToolTip="This option enables the ROG XG Mobile's LED lights" Click="tbLedOn_Click">
+                                        <StackPanel Orientation="Horizontal">
+                                            <ui:SymbolIcon Symbol="LightbulbFilament20" FontSize="24"/>
+                                            <Label Name="lblLedOn" Height="23" FontSize="16" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Content=" On"></Label>
+                                        </StackPanel>
+                                    </ToggleButton>
+
+                                    <ToggleButton Width="100" Margin="20,0,4.5,0" Name="tbLedOff" ToolTip="This option disables the ROG XG Mobile's LED lights." Click="tbLedOff_Click">
+                                        <StackPanel Orientation="Horizontal">
+                                            <ui:SymbolIcon Symbol="Lightbulb20" FontSize="24"/>
+                                            <Label Name="lblLEDOff" Height="23" FontSize="16" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Content=" Off"></Label>
+                                        </StackPanel>
+                                    </ToggleButton>
+                                </UniformGrid>
                             </UniformGrid>
                         </StackPanel>
                     </ui:Card>
