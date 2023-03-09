@@ -1,6 +1,7 @@
-﻿using HidLibrary;
+﻿using acControl.Models;
+using HidLibrary;
 using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace acControl.Services
@@ -8,6 +9,7 @@ namespace acControl.Services
     public class XgMobileConnectionService
     {
         private readonly ASUSWmi wmi;
+        private static readonly byte[] XG_MOBILE_CURVE_FUNC_NAME = { 0x5e, 0xd1, 0x01 };
 
         public bool Connected { get; private set; }
         public bool Detected { get; private set; }
@@ -78,17 +80,50 @@ namespace acControl.Services
             SendXgMobileLightingCommand(new byte[] { 0x5e, 0xc5 });
         }
 
-        private void SendXgMobileLightingCommand(byte[] command)
+        public bool SetXgMobileFan(List<CurvePoint> points)
+        {
+            if (!ValidatePoints(points))
+            {
+                return false;
+            }
+            var paramsBytes = new List<byte>(XG_MOBILE_CURVE_FUNC_NAME);
+            paramsBytes.AddRange(points.Select(point => (byte)point.Fan)); // 8 bytes of fan
+            paramsBytes.AddRange(points.Select(point => (byte)point.Temperature)); // 8 bytes of temperature
+            return SendXgMobileLightingCommand(paramsBytes.ToArray());
+        }
+
+        private bool ValidatePoints(List<CurvePoint> points)
+        {
+            if (points.Count != 8)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private bool SendXgMobileLightingCommand(byte[] command)
         {
             var devices = HidDevices.Enumerate(0x0b05, new int[] { 0x1970 });
             var xgMobileLight = devices.Where(device => device.IsConnected && device.Description.ToLower().StartsWith("hid") && device.Capabilities.FeatureReportByteLength > 64).ToList();
-            if (xgMobileLight.Count == 1)
+
+            if (xgMobileLight.Count != 1)
             {
-                var device = xgMobileLight[0];
+                return false;
+            }
+            var device = xgMobileLight[0];
+            try
+            {
                 device.OpenDevice();
                 var paramsArr = new byte[300];
                 Array.Copy(command, paramsArr, command.Length);
-                device.WriteFeatureData(paramsArr);
+                return device.WriteFeatureData(paramsArr);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
                 device.CloseDevice();
             }
         }
