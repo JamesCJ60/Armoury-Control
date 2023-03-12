@@ -1,4 +1,6 @@
 ﻿using acControl.Properties;
+using HidSharp.Reports.Units;
+using HidSharp;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
@@ -12,58 +14,34 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using static System.Net.Mime.MediaTypeNames;
+using Wpf.Ui.Controls;
+using Wpf.Ui.Dpi;
+using MessageBox = System.Windows.MessageBox;
 
 namespace acControl.Scripts
 {
     internal class GetSystemInfo
     {
-        [DllImport("gdi32.dll")]
-        private static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
-
-        private const int BITSPIXEL = 12;
-        private const int PLANES = 14;
-
-        public static bool IsHdrEnabled()
-        {
-            IntPtr hdc = Graphics.FromHwnd(IntPtr.Zero).GetHdc();
-
-            try
-            {
-                int bitsPerPixel = GetDeviceCaps(hdc, BITSPIXEL);
-                int planes = GetDeviceCaps(hdc, PLANES);
-
-                return (bitsPerPixel >= 10 && planes >= 1);
-            }
-            finally
-            {
-                Graphics.FromHdc(hdc).Dispose();
-            }
-        }
-
         public static string GetCPUName()
         {
-
             try
             {
                 ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_Processor");
                 ManagementObjectCollection collection = searcher.Get();
-
                 foreach (ManagementObject obj in collection)
                 {
                     return obj["Name"].ToString();
                 }
             }
             catch (Exception ex) { }
-
             return "";
         }
-
         public static string GetGPUName(int i)
         {
             try
             {
                 int count = 0;
-
                 ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", $"SELECT * FROM Win32_VideoController"); // Change AdapterCompatibility as per your requirement
                 ManagementObjectCollection collection = searcher.Get();
 

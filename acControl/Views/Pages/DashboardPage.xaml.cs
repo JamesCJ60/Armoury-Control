@@ -134,7 +134,7 @@ namespace acControl.Views.Pages
                 lblMultizone.Content = " SZ";
             }
 
-            if (GetSystemInfo.IsHdrEnabled() == true)
+            if (App.wmi.DeviceGet(ASUSWmi.ScreenMultizone) == 1)
             {
                 tbMultizone.IsChecked = true;
                 App.wmi.DeviceSet(ASUSWmi.ScreenMultizone, 1);
@@ -661,7 +661,7 @@ namespace acControl.Views.Pages
                 Settings.Default.multiZone = false;
             }
 
-            if (GetSystemInfo.IsHdrEnabled() == true)
+            if (App.wmi.DeviceGet(ASUSWmi.ScreenMultizone) == 1)
             {
                 tbMultizone.IsChecked = true;
                 App.wmi.DeviceSet(ASUSWmi.ScreenMultizone, 1);

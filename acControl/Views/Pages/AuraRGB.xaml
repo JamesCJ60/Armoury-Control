@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:acControl.Views.Pages"
       mc:Ignorable="d" 
       d:DataContext="{d:DesignInstance local:DashboardPage, IsDesignTimeCreatable=False}"
-    d:DesignHeight="450"
+    d:DesignHeight="1000"
     d:DesignWidth="800"
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     d:Background="{DynamicResource ApplicationBackgroundBrush}"
@@ -41,7 +41,122 @@
                 </ui:Button>
             </StackPanel>
             <ScrollViewer HorizontalScrollBarVisibility="Disabled" CanContentScroll="False" PanningMode="Both" Stylus.IsFlicksEnabled="False" Stylus.IsTouchFeedbackEnabled="True" Padding="0,9,6,9">
+                <StackPanel>
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12" >
+                            <ui:SymbolIcon Margin="0,0,12,0" FontSize="26" Symbol="Color24"></ui:SymbolIcon>
+                            <TextBlock FontSize="14" FontWeight="Medium" VerticalAlignment="Center">Aura RGB Colours</TextBlock>
+                        </StackPanel>
+                        
+                        <UniformGrid Columns="2">
+                            <StackPanel>
+                                <Border Name="bColor1" Width="160" Height="160" Background="White" CornerRadius="5" BorderBrush="#CC979797" BorderThickness="1.5">
+                                    <TextBlock FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center"
+                            FontWeight="Medium" Background="#CC979797" Width="80" TextAlignment="Center" Padding="0,0,0,2.5">Colour 1</TextBlock>
+                                </Border>
+                            </StackPanel>
+                            <StackPanel>
+                                <Border Name="bColor2" Width="160" Height="160" Background="Black" CornerRadius="5" BorderBrush="#CC979797" BorderThickness="1.5">
+                                    <TextBlock FontSize="18"
+                            FontWeight="Medium" VerticalAlignment="Center" HorizontalAlignment="Center" Background="#CC979797" Width="80" TextAlignment="Center" Padding="0,0,0,2.5">Colour 2</TextBlock>
+                                </Border>
+                            </StackPanel>
 
+                            <StackPanel HorizontalAlignment="Center">
+                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                    <TextBlock VerticalAlignment="Center" Margin="0,0,9,0" FontWeight="Medium" FontSize="14">R:</TextBlock>
+                                    <ui:NumberBox Name="nudC1Red" IntegersOnly="True" Max="255" Min="0" Value="255" TextChanged="RGBUpdate" Width="135" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                    <TextBlock VerticalAlignment="Center" Margin="0,0,8,0" FontWeight="Medium" FontSize="14">G:</TextBlock>
+                                    <ui:NumberBox Name="nudC1Green" IntegersOnly="True" Max="255" Min="0" Value="255" TextChanged="RGBUpdate" Width="135"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                    <TextBlock VerticalAlignment="Center" Margin="0,0,9,0" FontWeight="Medium" FontSize="14">B:</TextBlock>
+                                    <ui:NumberBox Name="nudC1Blue" IntegersOnly="True" Max="255" Min="0" Value="255" TextChanged="RGBUpdate" Width="135"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <StackPanel HorizontalAlignment="Center">
+                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                    <TextBlock VerticalAlignment="Center" Margin="0,0,9,0" FontWeight="Medium" FontSize="14">R:</TextBlock>
+                                    <ui:NumberBox Name="nudC2Red" IntegersOnly="True" Max="255" Min="0" Value="0" TextChanged="RGBUpdate" Width="135"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                    <TextBlock VerticalAlignment="Center" Margin="0,0,8,0" FontWeight="Medium" FontSize="14">G:</TextBlock>
+                                    <ui:NumberBox Name="nudC2Green" IntegersOnly="True" Max="255" Min="0" Value="0" TextChanged="RGBUpdate" Width="135"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                    <TextBlock VerticalAlignment="Center" Margin="0,0,9,0" FontWeight="Medium" FontSize="14">B:</TextBlock>
+                                    <ui:NumberBox Name="nudC2Blue" IntegersOnly="True" Max="255" Min="0" Value="0" TextChanged="RGBUpdate" Width="135"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </UniformGrid>
+                    </StackPanel>
+
+                    <ui:CardControl
+            Margin="0,8,0,0"
+            IsEnabled="True"
+            Icon="FlashSettings24">
+                        <ui:CardControl.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock
+                            FontSize="14"
+                            FontWeight="Medium"
+                            Text="Aura RGB Effect Mode" />
+                                    <TextBlock
+                            FontSize="12"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="Provides the ability to set an Aura RGB effect mode." Name="tbxMode"/>
+                                </StackPanel>
+                                <ComboBox MinWidth="110" SelectedIndex="0" Name="cbxMode" HorizontalAlignment="Right" >
+                                    <ComboBoxItem>Static</ComboBoxItem>
+                                    <ComboBoxItem>Breathe</ComboBoxItem>
+                                    <ComboBoxItem>Strobe</ComboBoxItem>
+                                    <ComboBoxItem>Rainbow</ComboBoxItem>
+                                    <ComboBoxItem>Dingding</ComboBoxItem>
+                                </ComboBox>
+                            </Grid>
+                        </ui:CardControl.Header>
+                       
+                    </ui:CardControl>
+                    <ui:CardControl
+            Margin="0,8,0,0"
+            IsEnabled="True"
+            Icon="FastAcceleration24">
+                        <ui:CardControl.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock
+                            FontSize="14"
+                            FontWeight="Medium"
+                            Text="Aura RGB Effect Speed" />
+                                    <TextBlock
+                            FontSize="12"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="Provides the ability to set an Aura RGB effect speed." Name="tbxSpeed"/>
+                                </StackPanel>
+                                <ComboBox MinWidth="110" SelectedIndex="0" Name="cbxSpeed" HorizontalAlignment="Right" >
+                                    <ComboBoxItem>Slow</ComboBoxItem>
+                                    <ComboBoxItem>Medium</ComboBoxItem>
+                                    <ComboBoxItem>High</ComboBoxItem>
+                                </ComboBox>
+                            </Grid>
+                        </ui:CardControl.Header>
+
+                    </ui:CardControl>
+                </StackPanel>
             </ScrollViewer>
         </DockPanel>
     </Grid>
