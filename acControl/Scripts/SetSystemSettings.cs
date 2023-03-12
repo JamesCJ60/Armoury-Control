@@ -10,9 +10,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using acControl;
+using acControl.Models;
 using acControl.Properties;
 using acControl.Scripts.Intel;
+using acControl.Services;
 using acControl.Views.Pages;
+using acControl.Views.Windows;
 using HidSharp;
 
 

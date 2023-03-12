@@ -19,6 +19,8 @@ namespace acControl.Scripts
 
         public static bool isSYSFan = false;
 
+        public static bool isXgFan = false;
+
         public static int cpuTemp = 95;
         public static int skinCPUTemp = 45;
 
@@ -56,54 +58,77 @@ namespace acControl.Scripts
         public static int sysFan6 = 30;
         public static int sysFan7 = 30;
         public static int sysFan8 = 30;
+
+        public static int xgFan1 = 30;
+        public static int xgFan2 = 30;
+        public static int xgFan3 = 30;
+        public static int xgFan4 = 30;
+        public static int xgFan5 = 30;
+        public static int xgFan6 = 30;
+        public static int xgFan7 = 30;
+        public static int xgFan8 = 30;
         public static async void LoadPreset(string preset)
         {
             await Task.Run(() =>
             {
-                var presetData = File.ReadAllLines(App.location + preset);
+                try
+                {
+                    var presetData = File.ReadAllLines(App.location + preset);
 
-                isCPUFan = Convert.ToBoolean(presetData[1]);
-                cpuFan1 = Convert.ToInt32(presetData[2]);
-                cpuFan2 = Convert.ToInt32(presetData[3]);
-                cpuFan3 = Convert.ToInt32(presetData[4]);
-                cpuFan4 = Convert.ToInt32(presetData[5]);
-                cpuFan5 = Convert.ToInt32(presetData[6]);
-                cpuFan6 = Convert.ToInt32(presetData[7]);
-                cpuFan7 = Convert.ToInt32(presetData[8]);
-                cpuFan8 = Convert.ToInt32(presetData[9]);
+                    isCPUFan = Convert.ToBoolean(presetData[1]);
+                    cpuFan1 = Convert.ToInt32(presetData[2]);
+                    cpuFan2 = Convert.ToInt32(presetData[3]);
+                    cpuFan3 = Convert.ToInt32(presetData[4]);
+                    cpuFan4 = Convert.ToInt32(presetData[5]);
+                    cpuFan5 = Convert.ToInt32(presetData[6]);
+                    cpuFan6 = Convert.ToInt32(presetData[7]);
+                    cpuFan7 = Convert.ToInt32(presetData[8]);
+                    cpuFan8 = Convert.ToInt32(presetData[9]);
 
-                isGPUFan = Convert.ToBoolean(presetData[12]);
-                gpuFan1 = Convert.ToInt32(presetData[13]);
-                gpuFan2 = Convert.ToInt32(presetData[14]);
-                gpuFan3 = Convert.ToInt32(presetData[15]);
-                gpuFan4 = Convert.ToInt32(presetData[16]);
-                gpuFan5 = Convert.ToInt32(presetData[17]);
-                gpuFan6 = Convert.ToInt32(presetData[18]);
-                gpuFan7 = Convert.ToInt32(presetData[19]);
-                gpuFan8 = Convert.ToInt32(presetData[20]);
+                    isGPUFan = Convert.ToBoolean(presetData[12]);
+                    gpuFan1 = Convert.ToInt32(presetData[13]);
+                    gpuFan2 = Convert.ToInt32(presetData[14]);
+                    gpuFan3 = Convert.ToInt32(presetData[15]);
+                    gpuFan4 = Convert.ToInt32(presetData[16]);
+                    gpuFan5 = Convert.ToInt32(presetData[17]);
+                    gpuFan6 = Convert.ToInt32(presetData[18]);
+                    gpuFan7 = Convert.ToInt32(presetData[19]);
+                    gpuFan8 = Convert.ToInt32(presetData[20]);
 
-                isGPUOffset = Convert.ToBoolean(presetData[23]);
-                gpuCoreOffset = Convert.ToInt32(presetData[24]);
-                gpuVRAMOffset = Convert.ToInt32(presetData[25]);
+                    isGPUOffset = Convert.ToBoolean(presetData[23]);
+                    gpuCoreOffset = Convert.ToInt32(presetData[24]);
+                    gpuVRAMOffset = Convert.ToInt32(presetData[25]);
 
-                isCPUPower = Convert.ToBoolean(presetData[31]);
-                cpuPower1 = Convert.ToInt32(presetData[34]);
-                cpuPower2 = Convert.ToInt32(presetData[37]);
-                apuSlowPPT = Convert.ToInt32(presetData[40]);
+                    isCPUPower = Convert.ToBoolean(presetData[31]);
+                    cpuPower1 = Convert.ToInt32(presetData[34]);
+                    cpuPower2 = Convert.ToInt32(presetData[37]);
+                    apuSlowPPT = Convert.ToInt32(presetData[40]);
 
-                isCPUTemp = Convert.ToBoolean(presetData[43]);
-                cpuTemp = Convert.ToInt32(presetData[44]);
-                skinCPUTemp = Convert.ToInt32(presetData[45]);
+                    isCPUTemp = Convert.ToBoolean(presetData[43]);
+                    cpuTemp = Convert.ToInt32(presetData[44]);
+                    skinCPUTemp = Convert.ToInt32(presetData[45]);
 
-                isGPUFan = Convert.ToBoolean(presetData[48]);
-                gpuFan1 = Convert.ToInt32(presetData[49]);
-                gpuFan2 = Convert.ToInt32(presetData[50]);
-                gpuFan3 = Convert.ToInt32(presetData[51]);
-                gpuFan4 = Convert.ToInt32(presetData[52]);
-                gpuFan5 = Convert.ToInt32(presetData[53]);
-                gpuFan6 = Convert.ToInt32(presetData[54]);
-                gpuFan7 = Convert.ToInt32(presetData[55]);
-                gpuFan8 = Convert.ToInt32(presetData[56]);
+                    isSYSFan = Convert.ToBoolean(presetData[48]);
+                    sysFan1 = Convert.ToInt32(presetData[49]);
+                    sysFan2 = Convert.ToInt32(presetData[50]);
+                    sysFan3 = Convert.ToInt32(presetData[51]);
+                    sysFan4 = Convert.ToInt32(presetData[52]);
+                    sysFan5 = Convert.ToInt32(presetData[53]);
+                    sysFan6 = Convert.ToInt32(presetData[54]);
+                    sysFan7 = Convert.ToInt32(presetData[55]);
+                    sysFan8 = Convert.ToInt32(presetData[56]);
+
+                    isXgFan = Convert.ToBoolean(presetData[59]);
+                    xgFan1 = Convert.ToInt32(presetData[60]);
+                    xgFan2 = Convert.ToInt32(presetData[61]);
+                    xgFan3 = Convert.ToInt32(presetData[62]);
+                    xgFan4 = Convert.ToInt32(presetData[63]);
+                    xgFan5 = Convert.ToInt32(presetData[64]);
+                    xgFan6 = Convert.ToInt32(presetData[65]);
+                    xgFan7 = Convert.ToInt32(presetData[66]);
+                    xgFan8 = Convert.ToInt32(presetData[67]);
+                }
+                catch { return; }
             });
         }
 
@@ -146,7 +171,11 @@ namespace acControl.Scripts
 
                 presetData = presetData + "SYS:\n";
                 presetData = presetData + $"{isSYSFan}\n";
-                presetData = presetData + $"{sysFan1}\n{sysFan2}\n{sysFan3}\n{sysFan4}\n{sysFan5}\n{sysFan6}\n{sysFan7}\n{sysFan8}";
+                presetData = presetData + $"{sysFan1}\n{sysFan2}\n{sysFan3}\n{sysFan4}\n{sysFan5}\n{sysFan6}\n{sysFan7}\n{sysFan8}\n\n";
+
+                presetData = presetData + "XG Mobile:\n";
+                presetData = presetData + $"{isXgFan}\n";
+                presetData = presetData + $"{xgFan1}\n{xgFan2}\n{xgFan3}\n{xgFan4}\n{xgFan5}\n{xgFan6}\n{xgFan7}\n{xgFan8}";
 
                 try
                 {

@@ -25,34 +25,41 @@ namespace acControl.Services
 
         public XgMobileConnectionService(ASUSWmi wmi)
         {
-            this.wmi = wmi;
-            UpdateXgMobileStatus();
-            wmi.SubscribeToEvents((a, b) => UpdateXgMobileStatus());
+            try
+            {
+                this.wmi = wmi;
+                UpdateXgMobileStatus();
+                wmi.SubscribeToEvents((a, b) => UpdateXgMobileStatus());
+            } catch { return; }
         }
 
         private void UpdateXgMobileStatus()
         {
-            bool prevDetected = Detected;
-            bool prevConnected = Connected;
-            Detected = IsEGPUDetected();
-            if (Detected)
+            try
             {
-                Connected = IsEGPUConnected();
-            }
-            else
-            {
-                Connected = false;
-            }
-            if (prevDetected != Detected || prevConnected != Connected)
-            {
-                XgMobileStatus?.Invoke(this, new XgMobileStatusEvent
+                bool prevDetected = Detected;
+                bool prevConnected = Connected;
+                Detected = IsEGPUDetected();
+                if (Detected)
                 {
-                    Detected = Detected,
-                    Connected = Connected,
-                    DetectedChanged = prevDetected != Detected,
-                    ConnectedChanged = prevConnected != Connected
-                });
+                    Connected = IsEGPUConnected();
+                }
+                else
+                {
+                    Connected = false;
+                }
+                if (prevDetected != Detected || prevConnected != Connected)
+                {
+                    XgMobileStatus?.Invoke(this, new XgMobileStatusEvent
+                    {
+                        Detected = Detected,
+                        Connected = Connected,
+                        DetectedChanged = prevDetected != Detected,
+                        ConnectedChanged = prevConnected != Connected
+                    });
+                }
             }
+            catch { return; }
         }
 
         private bool IsEGPUDetected()

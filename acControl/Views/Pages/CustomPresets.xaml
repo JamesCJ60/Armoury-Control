@@ -8,7 +8,7 @@
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
           d:Background="{DynamicResource ApplicationBackgroundBrush}"
     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="1000" d:DesignWidth="800"
       Title="CustomPresets">
 
     <Grid Margin="16,12,0,0">
@@ -426,6 +426,79 @@
                                 <StackPanel>
                                     <TextBlock Text="{Binding ElementName=sdSYSFan8, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
                                     <Slider HorizontalAlignment="Center" Name="sdSYSFan8" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <TextBlock Text="100°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,0"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </ui:CardExpander>
+
+                    <ui:CardExpander
+            Margin="0,8,0,0"
+            IsEnabled="True"
+            IsExpanded="False"
+                        Name="cXGFan"
+                        Visibility="Collapsed"
+            Icon="WeatherDuststorm20">
+                        <ui:CardExpander.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock
+                            FontSize="14"
+                            FontWeight="Medium"
+                            Text="ROG XG Mobile Fan Curve" />
+                                    <TextBlock
+                            FontSize="12"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="Provides the ability to set a custom ROG XG Mobile fan curve." Name="tbxXgFan"/>
+                                </StackPanel>
+                                <ui:ToggleSwitch Name="tsXGFan" Grid.Column="1" Margin="-10,0,10,0"/>
+                            </Grid>
+                        </ui:CardExpander.Header>
+                        <!--  CardExpander content  -->
+                        <StackPanel HorizontalAlignment="Center" Height="234">
+                            <StackPanel Orientation="Horizontal"  VerticalAlignment="Center">
+                                <StackPanel Margin="0,0,12,0">
+                                    <TextBlock Text="{Binding ElementName=sdXGFan1, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
+                                    <Slider HorizontalAlignment="Center" Name="sdXGFan1" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <TextBlock Text="30°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,0"/>
+                                </StackPanel>
+                                <StackPanel Margin="0,0,12,0">
+                                    <TextBlock Text="{Binding ElementName=sdXGFan2, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
+                                    <Slider HorizontalAlignment="Center" Name="sdXGFan2" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <TextBlock Text="40°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,90"/>
+                                </StackPanel>
+                                <StackPanel Margin="0,0,12,0">
+                                    <TextBlock Text="{Binding ElementName=sdXGFan3, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
+                                    <Slider HorizontalAlignment="Center" Name="sdXGFan3" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <TextBlock Text="50°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,0"></TextBlock>
+                                </StackPanel>
+                                <StackPanel Margin="0,0,12,0">
+                                    <TextBlock Text="{Binding ElementName=sdXGFan4, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
+                                    <Slider HorizontalAlignment="Center" Name="sdXGFan4" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <TextBlock Text="60°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,0"></TextBlock>
+                                </StackPanel>
+                                <StackPanel Margin="0,0,12,0">
+                                    <TextBlock Text="{Binding ElementName=sdXGFan5, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
+                                    <Slider HorizontalAlignment="Center" Name="sdXGFan5" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <TextBlock Text="70°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,0"></TextBlock>
+                                </StackPanel>
+                                <StackPanel Margin="0,0,12,0">
+                                    <TextBlock Text="{Binding ElementName=sdXGFan6, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
+                                    <Slider HorizontalAlignment="Center" Name="sdXGFan6" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <TextBlock Text="80°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,0"></TextBlock>
+                                </StackPanel>
+                                <StackPanel Margin="0,0,12,0">
+                                    <TextBlock Text="{Binding ElementName=sdXGFan7, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
+                                    <Slider HorizontalAlignment="Center" Name="sdXGFan7" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <TextBlock Text="90°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,0"/>
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding ElementName=sdXGFan8, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
+                                    <Slider HorizontalAlignment="Center" Name="sdXGFan8" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
                                     <TextBlock Text="100°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,0"/>
                                 </StackPanel>
                             </StackPanel>

@@ -13,7 +13,6 @@ namespace acControl.Models
             set
             {
                 x = Math.Max(Math.Min(value, 110), 0);
-
             }
         }
         public int Fan

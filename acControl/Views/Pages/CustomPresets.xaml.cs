@@ -1,5 +1,6 @@
 ﻿using acControl.Properties;
 using acControl.Scripts;
+using acControl.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,10 +24,17 @@ namespace acControl.Views.Pages
     /// </summary>
     public partial class CustomPresets : Page
     {
-        public CustomPresets()
+        private readonly XgMobileConnectionService xgMobileConnectionService;
+
+        public CustomPresets(XgMobileConnectionService xgMobileConnectionService)
         {
             InitializeComponent();
             _ = Tablet.TabletDevices;
+
+            this.xgMobileConnectionService = xgMobileConnectionService;
+            xgMobileConnectionService.XgMobileStatus += OnXgMobileStatusUpdate;
+            this.Unloaded += (_, _) => xgMobileConnectionService.XgMobileStatus -= OnXgMobileStatusUpdate;
+            UpdateXgMobileStatus(xgMobileConnectionService.Detected, xgMobileConnectionService.Connected);
 
             string preset = "presets\\Manual.txt";
 
@@ -59,8 +67,31 @@ namespace acControl.Views.Pages
                 tbxdGPU.Visibility = Visibility.Collapsed;
                 tbxdGPUFan.Visibility = Visibility.Collapsed;
                 tbxSysFan.Visibility = Visibility.Collapsed;
+                tbxXgFan.Visibility = Visibility.Collapsed;
             }
                 
+        }
+
+        private void OnXgMobileStatusUpdate(object? _, XgMobileConnectionService.XgMobileStatusEvent e)
+        {
+            Dispatcher.Invoke(() => UpdateXgMobileStatus(e.Detected, e.Connected));
+        }
+
+        private async void UpdateXgMobileStatus(bool detected, bool connected)
+        {
+            try
+            {
+                if (!detected)
+                {
+                    cXGFan.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    cXGFan.Visibility = Visibility.Visible;
+                }
+                
+            }
+            catch { }
         }
 
         async void loadSettings(string preset)
@@ -79,6 +110,8 @@ namespace acControl.Views.Pages
                 tsGPUOffset.IsChecked = CustomPresetHandler.isGPUOffset;
 
                 tsSYSFan.IsChecked = CustomPresetHandler.isSYSFan;
+
+                tsXGFan.IsChecked = CustomPresetHandler.isXgFan;
 
                 nudCPUTemp1.Value = CustomPresetHandler.cpuTemp;
                 nudCPUTemp2.Value = CustomPresetHandler.skinCPUTemp;
@@ -149,6 +182,15 @@ namespace acControl.Views.Pages
                 sdSYSFan7.Value = CustomPresetHandler.sysFan7;
                 sdSYSFan8.Value = CustomPresetHandler.sysFan8;
 
+                sdXGFan1.Value = CustomPresetHandler.xgFan1;
+                sdXGFan2.Value = CustomPresetHandler.xgFan2;
+                sdXGFan3.Value = CustomPresetHandler.xgFan3;
+                sdXGFan4.Value = CustomPresetHandler.xgFan4;
+                sdXGFan5.Value = CustomPresetHandler.xgFan5;
+                sdXGFan6.Value = CustomPresetHandler.xgFan6;
+                sdXGFan7.Value = CustomPresetHandler.xgFan7;
+                sdXGFan8.Value = CustomPresetHandler.xgFan8;
+
             } catch (Exception ex) { }
         }
 
@@ -162,6 +204,7 @@ namespace acControl.Views.Pages
             CustomPresetHandler.isGPUOffset = tsGPUOffset.IsChecked.Value;
 
             CustomPresetHandler.isSYSFan = tsSYSFan.IsChecked.Value;
+            CustomPresetHandler.isXgFan = tsXGFan.IsChecked.Value;
 
             CustomPresetHandler.cpuTemp = (int)nudCPUTemp1.Value;
             CustomPresetHandler.skinCPUTemp = (int)nudCPUTemp2.Value;
@@ -215,6 +258,20 @@ namespace acControl.Views.Pages
             if ((int)sdSYSFan6.Value < 30) CustomPresetHandler.sysFan6 = 30;
             if ((int)sdSYSFan7.Value < 30) CustomPresetHandler.sysFan7 = 30;
             if ((int)sdSYSFan8.Value < 30) CustomPresetHandler.sysFan8 = 30;
+
+            CustomPresetHandler.xgFan1 = (int)sdXGFan1.Value;
+            CustomPresetHandler.xgFan2 = (int)sdXGFan2.Value;
+            CustomPresetHandler.xgFan3 = (int)sdXGFan3.Value;
+            CustomPresetHandler.xgFan4 = (int)sdXGFan4.Value;
+            CustomPresetHandler.xgFan5 = (int)sdXGFan5.Value;
+            CustomPresetHandler.xgFan6 = (int)sdXGFan6.Value;
+            CustomPresetHandler.xgFan7 = (int)sdXGFan7.Value;
+            CustomPresetHandler.xgFan8 = (int)sdXGFan8.Value;
+
+            if ((int)sdXGFan5.Value < 30) CustomPresetHandler.xgFan5 = 30;
+            if ((int)sdXGFan6.Value < 30) CustomPresetHandler.xgFan6 = 30;
+            if ((int)sdXGFan7.Value < 30) CustomPresetHandler.xgFan7 = 30;
+            if ((int)sdXGFan8.Value < 30) CustomPresetHandler.xgFan8 = 30;
 
             CustomPresetHandler.SavePreset(preset);
         }

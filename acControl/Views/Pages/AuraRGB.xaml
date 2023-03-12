@@ -13,9 +13,36 @@
     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
       Title="AuraRGB">
 
-    <Grid>
+    <Grid Margin="16,12,0,0">
         <DockPanel>
-            <Label VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="38">Coming Soon</Label>
+            <TextBlock
+            FontSize="20"
+            FontWeight="Medium"
+            Text="Aura RGB Preset Customisation" DockPanel.Dock="Top"/>
+
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="0,12,0,0">
+                <TextBlock FontSize="17" FontWeight="Medium" Margin="0,0,12,0" VerticalAlignment="Center">Selected RGB Preset:</TextBlock>
+                <ComboBox Width="150" SelectedIndex="0" Name="cbxPowerPreset" >
+                    <ComboBoxItem>Profile 1</ComboBoxItem>
+                    <ComboBoxItem>Profile 2</ComboBoxItem>
+                    <ComboBoxItem>Profile 3</ComboBoxItem>
+                    <ComboBoxItem>Profile 4</ComboBoxItem>
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right" Margin="0,0,9,6">
+                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnLoad" ToolTip="Reload settings of current power preset">
+                    <ui:SymbolIcon Symbol="ArrowSync20" FontSize="24"/>
+                </ui:Button>
+                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnSave" ToolTip="Save current settings">
+                    <ui:SymbolIcon Symbol="Save20" FontSize="24"/>
+                </ui:Button>
+                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnApply" ToolTip="Save and apply current settings">
+                    <ui:SymbolIcon Symbol="DocumentCheckmark20" FontSize="24"/>
+                </ui:Button>
+            </StackPanel>
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" CanContentScroll="False" PanningMode="Both" Stylus.IsFlicksEnabled="False" Stylus.IsTouchFeedbackEnabled="True" Padding="0,9,6,9">
+
+            </ScrollViewer>
         </DockPanel>
     </Grid>
 </Page>

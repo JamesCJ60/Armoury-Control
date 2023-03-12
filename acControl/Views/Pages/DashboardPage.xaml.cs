@@ -16,6 +16,7 @@ using System.Windows.Input;
 using Microsoft.Win32;
 using System.Collections.Generic;
 using acControl.Services;
+using acControl.Models;
 
 namespace acControl.Views.Pages
 {
@@ -277,6 +278,7 @@ namespace acControl.Views.Pages
                     ACProfile == 2 ? ASUSWmi.PerformanceTurbo : ASUSWmi.PerformanceBalanced));
 
                 SetSystemSettings.ApplyPresetSettings(profile.Item6, ACProfile);
+                updateXGFan(ACProfile);
             }
         }
 
@@ -611,25 +613,29 @@ namespace acControl.Views.Pages
 
         private async void UpdateXgMobileStatus(bool detected, bool connected)
         {
-            if (!detected)
+            try
             {
-                cdXGMobile.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                cdXGMobile.Visibility = Visibility.Visible;
-            }
-            eGPU = detected && connected ? 1 : 0;
-            if (eGPU == 0 && lblXGMobile.Content != "Activate ROG XG Mobile")
-            { lblXGMobile.Content = "Activate ROG XG Mobile"; }
-            if (eGPU == 1 && lblXGMobile.Content != "Deactivate ROG XG Mobile") { lblXGMobile.Content = "Deactivate ROG XG Mobile"; }
+                if (!detected)
+                {
+                    cdXGMobile.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    cdXGMobile.Visibility = Visibility.Visible;
+                }
+                eGPU = detected && connected ? 1 : 0;
+                if (eGPU == 0 && lblXGMobile.Content != "Activate ROG XG Mobile")
+                { lblXGMobile.Content = "Activate ROG XG Mobile"; }
+                if (eGPU == 1 && lblXGMobile.Content != "Deactivate ROG XG Mobile") { lblXGMobile.Content = "Deactivate ROG XG Mobile"; }
 
-            if (mux == 0 && tbXG.IsEnabled == true) { tbXG.IsEnabled = false; }
-            else if (mux == -1)
-            {
-                tbXG.IsEnabled = true;
+                if (mux == 0 && tbXG.IsEnabled == true) { tbXG.IsEnabled = false; }
+                else if (mux == -1)
+                {
+                    tbXG.IsEnabled = true;
+                }
+                else { tbXG.IsEnabled = true; }
             }
-            else { tbXG.IsEnabled = true; }
+            catch { }
         }
 
         private void tbMultizone_Click(object sender, RoutedEventArgs e)
@@ -666,6 +672,66 @@ namespace acControl.Views.Pages
             xgMobileConnectionService.EnableXgMobileLight();
             Settings.Default.xgMobileLED = true;
             Settings.Default.Save();
+        }
+
+        private async void updateXGFan(int mode)
+        {
+            await Task.Run(() =>
+            {
+                Thread.Sleep(250);
+                if (Settings.Default.ACMode == mode)
+                {
+                    if(eGPU == 1)
+                    {
+                        if (CustomPresetHandler.isXgFan == true)
+                        {
+                            List<CurvePoint> xgFanCurve = new List<CurvePoint>();
+                            xgFanCurve.Add(new CurvePoint()
+                            {
+                                Temperature = 30,
+                                Fan = CustomPresetHandler.xgFan1
+                            });
+                            xgFanCurve.Add(new CurvePoint()
+                            {
+                                Temperature = 40,
+                                Fan = CustomPresetHandler.xgFan2
+                            });
+                            xgFanCurve.Add(new CurvePoint()
+                            {
+                                Temperature = 50,
+                                Fan = CustomPresetHandler.xgFan3
+                            });
+                            xgFanCurve.Add(new CurvePoint()
+                            {
+                                Temperature = 60,
+                                Fan = CustomPresetHandler.xgFan4
+                            });
+                            xgFanCurve.Add(new CurvePoint()
+                            {
+                                Temperature = 70,
+                                Fan = CustomPresetHandler.xgFan5
+                            });
+                            xgFanCurve.Add(new CurvePoint()
+                            {
+                                Temperature = 80,
+                                Fan = CustomPresetHandler.xgFan6
+                            });
+                            xgFanCurve.Add(new CurvePoint()
+                            {
+                                Temperature = 90,
+                                Fan = CustomPresetHandler.xgFan7
+                            });
+                            xgFanCurve.Add(new CurvePoint()
+                            {
+                                Temperature = 100,
+                                Fan = CustomPresetHandler.xgFan8
+                            });
+
+                            xgMobileConnectionService.SetXgMobileFan(xgFanCurve);
+                        }
+                    }
+                }
+            });
         }
     }
 }

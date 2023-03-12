@@ -55,7 +55,7 @@ namespace acControl.ViewModels
                 {
                     Content = "Aura RGB",
                     PageTag = "aura",
-                    Icon = SymbolRegular.Lightbulb20,
+                    Icon = SymbolRegular.LightbulbFilament20,
                     PageType = typeof(Views.Pages.AuraRGB)
                 },
                 new NavigationItem()
