@@ -134,6 +134,14 @@ namespace acControl.Views.Pages
                 lblMultizone.Content = " SZ";
             }
 
+            if (GetSystemInfo.IsHdrEnabled() == true)
+            {
+                tbMultizone.IsChecked = true;
+                App.wmi.DeviceSet(ASUSWmi.ScreenMultizone, 1);
+                lblMultizone.Content = " MZ";
+                Settings.Default.multiZone = true;
+            }
+
             Global.wasUsingOD = Settings.Default.DisplayOver;
             if (Global.wasUsingOD == true)
             {
@@ -651,6 +659,14 @@ namespace acControl.Views.Pages
                 App.wmi.DeviceSet(ASUSWmi.ScreenMultizone, 0);
                 lblMultizone.Content = " SZ";
                 Settings.Default.multiZone = false;
+            }
+
+            if (GetSystemInfo.IsHdrEnabled() == true)
+            {
+                tbMultizone.IsChecked = true;
+                App.wmi.DeviceSet(ASUSWmi.ScreenMultizone, 1);
+                lblMultizone.Content = " MZ";
+                Settings.Default.multiZone = true;
             }
 
             Settings.Default.Save();

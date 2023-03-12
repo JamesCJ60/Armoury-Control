@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Management;
 using System.Runtime.InteropServices;
@@ -16,6 +17,29 @@ namespace acControl.Scripts
 {
     internal class GetSystemInfo
     {
+        [DllImport("gdi32.dll")]
+        private static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
+
+        private const int BITSPIXEL = 12;
+        private const int PLANES = 14;
+
+        public static bool IsHdrEnabled()
+        {
+            IntPtr hdc = Graphics.FromHwnd(IntPtr.Zero).GetHdc();
+
+            try
+            {
+                int bitsPerPixel = GetDeviceCaps(hdc, BITSPIXEL);
+                int planes = GetDeviceCaps(hdc, PLANES);
+
+                return (bitsPerPixel >= 10 && planes >= 1);
+            }
+            finally
+            {
+                Graphics.FromHdc(hdc).Dispose();
+            }
+        }
+
         public static string GetCPUName()
         {
 

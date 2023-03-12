@@ -15,7 +15,7 @@
 
     <Grid Margin="12,9,0,0">
         <DockPanel LastChildFill="True">
-            <ScrollViewer x:Name="svMain" VerticalAlignment="Top" HorizontalAlignment="Center" DockPanel.Dock="Right" Width="378" HorizontalScrollBarVisibility="Disabled" CanContentScroll="False" Margin="0,3,0,12" PanningMode="Both" Stylus.IsFlicksEnabled="False" Stylus.IsTouchFeedbackEnabled="True">
+            <ScrollViewer x:Name="svMain" VerticalAlignment="Top" HorizontalAlignment="Center" DockPanel.Dock="Right" Width="378" HorizontalScrollBarVisibility="Disabled" CanContentScroll="False" Margin="0,3,0,12" PanningMode="VerticalOnly">
                 <StackPanel Margin="0,0,4,0">
                     <ui:Card Padding="9,5,9,3.2" Margin="0,0,0,9" Name="spDevice" Visibility="Collapsed">
                         <StackPanel>
