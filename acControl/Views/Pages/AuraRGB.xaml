@@ -21,29 +21,23 @@
             Text="Aura RGB Preset Customisation" DockPanel.Dock="Top"/>
 
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="0,12,0,0">
-                <TextBlock FontSize="17" FontWeight="Medium" Margin="0,0,12,0" VerticalAlignment="Center">Selected RGB Preset:</TextBlock>
-                <ComboBox Width="150" SelectedIndex="0" Name="cbxPowerPreset" >
-                    <ComboBoxItem>Profile 1</ComboBoxItem>
-                    <ComboBoxItem>Profile 2</ComboBoxItem>
-                    <ComboBoxItem>Profile 3</ComboBoxItem>
-                    <ComboBoxItem>Profile 4</ComboBoxItem>
-                </ComboBox>
+                <TextBlock FontSize="17" FontWeight="Medium" Margin="0,0,12,0" VerticalAlignment="Center">Aura RGB Control:</TextBlock>
             </StackPanel>
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right" Margin="0,0,9,6">
-                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnLoad" ToolTip="Reload settings of current power preset">
+                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnLoad" ToolTip="Reload settings of current power preset" Click="btnLoad_Click">
                     <ui:SymbolIcon Symbol="ArrowSync20" FontSize="24"/>
                 </ui:Button>
-                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnSave" ToolTip="Save current settings">
+                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnSave" ToolTip="Save current settings" Click="btnSave_Click">
                     <ui:SymbolIcon Symbol="Save20" FontSize="24"/>
                 </ui:Button>
-                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnApply" ToolTip="Save and apply current settings">
+                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnApply" ToolTip="Save and apply current settings" Click="btnApply_Click">
                     <ui:SymbolIcon Symbol="DocumentCheckmark20" FontSize="24"/>
                 </ui:Button>
             </StackPanel>
             <ScrollViewer HorizontalScrollBarVisibility="Disabled" CanContentScroll="False" PanningMode="Both" Stylus.IsFlicksEnabled="False" Stylus.IsTouchFeedbackEnabled="True" Padding="0,9,6,9">
                 <StackPanel>
                     <StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12" >
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,9" >
                             <ui:SymbolIcon Margin="0,0,12,0" FontSize="26" Symbol="Color24"></ui:SymbolIcon>
                             <TextBlock FontSize="14" FontWeight="Medium" VerticalAlignment="Center">Aura RGB Colours</TextBlock>
                         </StackPanel>
@@ -63,43 +57,24 @@
                             </StackPanel>
 
                             <StackPanel HorizontalAlignment="Center">
-                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                                    <TextBlock VerticalAlignment="Center" Margin="0,0,9,0" FontWeight="Medium" FontSize="14">R:</TextBlock>
-                                    <ui:NumberBox Name="nudC1Red" IntegersOnly="True" Max="255" Min="0" Value="255" TextChanged="RGBUpdate" Width="135" />
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                                    <TextBlock VerticalAlignment="Center" Margin="0,0,8,0" FontWeight="Medium" FontSize="14">G:</TextBlock>
-                                    <ui:NumberBox Name="nudC1Green" IntegersOnly="True" Max="255" Min="0" Value="255" TextChanged="RGBUpdate" Width="135"/>
-                                </StackPanel>
-
-                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                                    <TextBlock VerticalAlignment="Center" Margin="0,0,9,0" FontWeight="Medium" FontSize="14">B:</TextBlock>
-                                    <ui:NumberBox Name="nudC1Blue" IntegersOnly="True" Max="255" Min="0" Value="255" TextChanged="RGBUpdate" Width="135"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,9,0,0">
+                                    <TextBlock VerticalAlignment="Center" Margin="0,0,9,0" FontWeight="Medium" FontSize="14">HEX:</TextBlock>
+                                    <ui:TextBox Width="120" Name="tbC1" TextChanged="tbC1_TextChanged"></ui:TextBox>
                                 </StackPanel>
                             </StackPanel>
 
                             <StackPanel HorizontalAlignment="Center">
-                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                                    <TextBlock VerticalAlignment="Center" Margin="0,0,9,0" FontWeight="Medium" FontSize="14">R:</TextBlock>
-                                    <ui:NumberBox Name="nudC2Red" IntegersOnly="True" Max="255" Min="0" Value="0" TextChanged="RGBUpdate" Width="135"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                                    <TextBlock VerticalAlignment="Center" Margin="0,0,8,0" FontWeight="Medium" FontSize="14">G:</TextBlock>
-                                    <ui:NumberBox Name="nudC2Green" IntegersOnly="True" Max="255" Min="0" Value="0" TextChanged="RGBUpdate" Width="135"/>
-                                </StackPanel>
-
-                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                                    <TextBlock VerticalAlignment="Center" Margin="0,0,9,0" FontWeight="Medium" FontSize="14">B:</TextBlock>
-                                    <ui:NumberBox Name="nudC2Blue" IntegersOnly="True" Max="255" Min="0" Value="0" TextChanged="RGBUpdate" Width="135"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,9,0,0">
+                                    <TextBlock VerticalAlignment="Center" Margin="0,0,9,0" FontWeight="Medium" FontSize="14">HEX:</TextBlock>
+                                    <ui:TextBox Width="120" Name="tbC2" TextChanged="tbC2_TextChanged"></ui:TextBox>
                                 </StackPanel>
                             </StackPanel>
                         </UniformGrid>
                     </StackPanel>
 
                     <ui:CardControl
-            Margin="0,8,0,0"
             IsEnabled="True"
-            Icon="FlashSettings24">
+            Icon="FlashSettings24" Margin="0,-115,0,0">
                         <ui:CardControl.Header>
                             <Grid>
                                 <Grid.ColumnDefinitions>

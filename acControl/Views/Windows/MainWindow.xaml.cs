@@ -37,18 +37,6 @@ namespace acControl.Views.Windows
 
             App.wmi.SubscribeToEvents(WatcherEventArrived);
 
-            if (Global.isMinimalGUI)
-            {
-                this.MinWidth = 465;
-                this.Width = 465;
-                this.Height = 705;
-                var desktopWorkingArea = System.Windows.SystemParameters.WorkArea;
-                this.Left = desktopWorkingArea.Right - this.Width - 12;
-                this.Top = desktopWorkingArea.Bottom - this.Height - 12;
-                this.ResizeMode = ResizeMode.NoResize;
-                tbMain.ShowMaximize = false;
-            }
-
             _ = Tablet.TabletDevices;
             SetPageService(pageService);
             if (Settings.Default.StartMini == true) { this.WindowState = WindowState.Minimized; }
@@ -67,6 +55,18 @@ namespace acControl.Views.Windows
                     true                                   // Whether to change accents automatically
                 );
             };
+
+            if (Global.isMinimalGUI == true)
+            {
+                this.MinWidth = 465;
+                this.Width = 465;
+                this.Height = 705;
+                var desktopWorkingArea = System.Windows.SystemParameters.WorkArea;
+                this.Left = desktopWorkingArea.Right - this.Width - 12;
+                this.Top = desktopWorkingArea.Bottom - this.Height - 12;
+                this.ResizeMode = ResizeMode.NoResize;
+                tbMain.ShowMaximize = false;
+            }
         }
 
         void WatcherEventArrived(object sender, EventArrivedEventArgs e)

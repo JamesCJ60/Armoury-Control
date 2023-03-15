@@ -80,7 +80,7 @@
                     FocusOnLeftClick="True"
                     Icon="pack://application:,,,/Assets/applicationIcon-256.png"
                     MenuOnRightClick="True"
-                    TooltipText="acControl">
+                    TooltipText="Armoury Control">
                     <ui:NotifyIcon.Menu>
                         <ContextMenu>
                             <!--<MenuItem Header="Menus:" IsCheckable="False" IsEnabled="False"/>-->

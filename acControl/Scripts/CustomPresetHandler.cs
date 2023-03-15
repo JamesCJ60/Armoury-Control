@@ -67,6 +67,7 @@ namespace acControl.Scripts
         public static int xgFan6 = 30;
         public static int xgFan7 = 30;
         public static int xgFan8 = 30;
+
         public static async void LoadPreset(string preset)
         {
             await Task.Run(() =>

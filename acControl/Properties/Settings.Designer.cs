@@ -154,5 +154,89 @@ namespace acControl.Properties {
                 this["xgMobileLED"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int auraPreset {
+            get {
+                return ((int)(this["auraPreset"]));
+            }
+            set {
+                this["auraPreset"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FFFFFF")]
+        public string HexC1Profile1 {
+            get {
+                return ((string)(this["HexC1Profile1"]));
+            }
+            set {
+                this["HexC1Profile1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#000000")]
+        public string HexC1Profile2 {
+            get {
+                return ((string)(this["HexC1Profile2"]));
+            }
+            set {
+                this["HexC1Profile2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FFFFFF")]
+        public string HexC2Profile1 {
+            get {
+                return ((string)(this["HexC2Profile1"]));
+            }
+            set {
+                this["HexC2Profile1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#000000")]
+        public string HexC2Profile2 {
+            get {
+                return ((string)(this["HexC2Profile2"]));
+            }
+            set {
+                this["HexC2Profile2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int AuraMode1 {
+            get {
+                return ((int)(this["AuraMode1"]));
+            }
+            set {
+                this["AuraMode1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int AuraSpeed {
+            get {
+                return ((int)(this["AuraSpeed"]));
+            }
+            set {
+                this["AuraSpeed"] = value;
+            }
+        }
     }
 }
