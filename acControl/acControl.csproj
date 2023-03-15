@@ -62,7 +62,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Assets\AMD\ryzenadj.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Assets\AMD\WinRing0x64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
