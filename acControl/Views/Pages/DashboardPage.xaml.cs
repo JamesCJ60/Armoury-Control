@@ -696,7 +696,7 @@ namespace acControl.Views.Pages
         {
             await Task.Run(() =>
             {
-                Thread.Sleep(250);
+                Thread.Sleep(500);
                 if (Settings.Default.ACMode == mode)
                 {
                     if(eGPU == 1)

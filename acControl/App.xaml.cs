@@ -156,11 +156,15 @@ namespace acControl
                     {
                         case PowerModes.Suspend:
                             // Disable Windows Update and Microsoft Store Service
-                            DisableServices("UpdateOrchestrator", "InstallService");
+                            DisableServices("UpdateOrchestrator", "wuauserv", "InstallService");
+                            // Prevent the services from starting automatically
+                            PreventServiceAutoStart("UpdateOrchestrator", "wuauserv", "InstallService");
                             break;
                         case PowerModes.Resume:
                             // Enable Windows Update and Microsoft Store Service
-                            EnableServices("UpdateOrchestrator", "InstallService");
+                            EnableServices("UpdateOrchestrator", "wuauserv", "InstallService");
+                            // Allow the services to start automatically
+                            AllowServiceAutoStart("UpdateOrchestrator", "wuauserv", "InstallService");
                             break;
                     }
                 }
@@ -193,6 +197,33 @@ namespace acControl
             }
         }
 
+        private void PreventServiceAutoStart(params string[] serviceNames)
+        {
+            foreach (string serviceName in serviceNames)
+            {
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.FileName = "sc.exe";
+                startInfo.Arguments = $"config {serviceName} start= disabled";
+                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                startInfo.CreateNoWindow = true;
+                Process process = Process.Start(startInfo);
+                process.WaitForExit();
+            }
+        }
+
+        private void AllowServiceAutoStart(params string[] serviceNames)
+        {
+            foreach (string serviceName in serviceNames)
+            {
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.FileName = "sc.exe";
+                startInfo.Arguments = $"config {serviceName} start= auto";
+                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                startInfo.CreateNoWindow = true;
+                Process process = Process.Start(startInfo);
+                process.WaitForExit();
+            }
+        }
 
         /// <summary>
         /// Occurs when the application is closing.
