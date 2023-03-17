@@ -8,11 +8,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Toolkit.Uwp.Notifications;
+using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Management;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,6 +22,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using Wpf.Ui.Mvvm.Contracts;
 using Wpf.Ui.Mvvm.Services;
+using System.ServiceProcess;
 using static acControl.Scripts.SystemDeviceControl;
 
 namespace acControl
@@ -30,6 +33,8 @@ namespace acControl
     /// 
     public partial class App
     {
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
 
         public static ASUSWmi wmi = new ASUSWmi();
         public static bool IsAdministrator()
@@ -129,7 +134,8 @@ namespace acControl
                 GetSystemInfo.getBattery();
                 GetSystemInfo.CurrentDisplayRrefresh();
                 SetUpXgMobileDetection();
-                
+
+                SystemEvents.PowerModeChanged += OnPowerModeChanged;
 
                 await _host.StartAsync();
             }
@@ -140,6 +146,52 @@ namespace acControl
             }
         }
 
+        private void OnPowerModeChanged(object sender, PowerModeChangedEventArgs e)
+        {
+            if(Settings.Default.ModernStandby == true)
+            {
+                try
+                {
+                    switch (e.Mode)
+                    {
+                        case PowerModes.Suspend:
+                            // Disable Windows Update and Microsoft Store Service
+                            DisableServices("UpdateOrchestrator", "InstallService");
+                            break;
+                        case PowerModes.Resume:
+                            // Enable Windows Update and Microsoft Store Service
+                            EnableServices("UpdateOrchestrator", "InstallService");
+                            break;
+                    }
+                }
+                catch { }
+            }
+
+        }
+
+        private void DisableServices(params string[] serviceNames)
+        {
+            foreach (string serviceName in serviceNames)
+            {
+                ServiceController sc = new ServiceController(serviceName);
+                if (sc.Status == ServiceControllerStatus.Running)
+                {
+                    sc.Stop();
+                }
+            }
+        }
+
+        private void EnableServices(params string[] serviceNames)
+        {
+            foreach (string serviceName in serviceNames)
+            {
+                ServiceController sc = new ServiceController(serviceName);
+                if (sc.Status == ServiceControllerStatus.Stopped)
+                {
+                    sc.Start();
+                }
+            }
+        }
 
 
         /// <summary>

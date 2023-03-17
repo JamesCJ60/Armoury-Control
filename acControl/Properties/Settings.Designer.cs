@@ -238,5 +238,17 @@ namespace acControl.Properties {
                 this["AuraSpeed"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ModernStandby {
+            get {
+                return ((bool)(this["ModernStandby"]));
+            }
+            set {
+                this["ModernStandby"] = value;
+            }
+        }
     }
 }

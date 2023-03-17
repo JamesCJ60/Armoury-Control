@@ -110,10 +110,7 @@ namespace acControl.Scripts
         {
             await Task.Run(() =>
             {
-                if (App.wmi.DeviceGet(ASUSWmi.GPUEco) != index)
-                {
-                    App.wmi.DeviceSet(ASUSWmi.GPUEco, index);
-                }
+                App.wmi.DeviceSet(ASUSWmi.GPUEco, index);
 
                 Global.updateGPU = true;
             });

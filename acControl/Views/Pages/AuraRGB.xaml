@@ -74,7 +74,7 @@
 
                     <ui:CardControl
             IsEnabled="True"
-            Icon="FlashSettings24" Margin="0,-115,0,0">
+            Icon="FlashSettings24" Margin="0,-120,0,0">
                         <ui:CardControl.Header>
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -103,9 +103,8 @@
                        
                     </ui:CardControl>
                     <ui:CardControl
-            Margin="0,8,0,0"
             IsEnabled="True"
-            Icon="FastAcceleration24">
+            Icon="FastAcceleration24" Margin="0,-9,0,0">
                         <ui:CardControl.Header>
                             <Grid>
                                 <Grid.ColumnDefinitions>

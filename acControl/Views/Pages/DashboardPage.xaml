@@ -93,9 +93,14 @@
                             </StackPanel>
                             <Slider Minimum="50" Maximum="100" Value="100" Name="sdBattery" SmallChange="1" LargeChange="2" IsSnapToTickEnabled="True" ValueChanged="sdBattery_ValueChanged"/>
 
-                            <StackPanel Orientation="Horizontal" Name="spDischarge" Visibility="Collapsed">
+                            <StackPanel Orientation="Horizontal" Name="spDischarge" Visibility="Collapsed" Margin="0,0,0,5">
                                 <TextBlock FontWeight="DemiBold" Margin="0,0,9,0" FontSize="15">Discharge Rate:</TextBlock>
                                 <TextBlock Name="tbxDischarge" Margin="0,0,9,0" FontSize="15" Text="0"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontWeight="DemiBold" Margin="0,0,9,0" FontSize="15">Modern Standby Assistant</TextBlock>
+                                <ui:ToggleSwitch Name="tsModernStandby" Click="tsModernStandby_Click" />
                             </StackPanel>
                             
                         </StackPanel>

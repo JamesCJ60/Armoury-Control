@@ -102,6 +102,8 @@ namespace acControl.Views.Pages
 
             GetSystemInfo.CurrentDisplayRrefresh();
 
+            tsModernStandby.IsChecked = Settings.Default.ModernStandby;
+
             //set up timer for sensor update
             DispatcherTimer sensor = new DispatcherTimer();
             sensor.Interval = TimeSpan.FromSeconds(1.7);
@@ -748,6 +750,11 @@ namespace acControl.Views.Pages
                     }
                 }
             });
+        }
+
+        private void tsModernStandby_Click(object sender, RoutedEventArgs e)
+        {
+            Settings.Default.ModernStandby = (bool)tsModernStandby.IsChecked;
         }
     }
 }

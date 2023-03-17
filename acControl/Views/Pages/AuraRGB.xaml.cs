@@ -51,7 +51,10 @@ namespace acControl.Views.Pages
             bColor1.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(color1.A, color1.R, color1.G, color1.B));
             bColor2.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(color2.A, color2.R, color2.G, color2.B));
 
-            Aura.Speed = cbxSpeed.SelectedIndex;
+            if(cbxSpeed.SelectedIndex == 0) Aura.Speed = 0xe1;
+            if (cbxSpeed.SelectedIndex == 1) Aura.Speed = 0xeb;
+            if (cbxSpeed.SelectedIndex == 2) Aura.Speed = 0xf5;
+
             Aura.Mode = cbxMode.SelectedIndex;
         }
 
