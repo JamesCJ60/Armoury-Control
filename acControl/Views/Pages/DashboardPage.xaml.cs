@@ -556,64 +556,67 @@ namespace acControl.Views.Pages
 
         private async void updateFan()
         {
-            if (!Global.isMinimised)
-            {
-                var cpuFan = App.wmi.DeviceGet(ASUSWmi.CPU_Fan);
-                var gpuFan = App.wmi.DeviceGet(ASUSWmi.GPU_Fan);
-
-                double maxFanCPU = GetSystemInfo.getCPUFanSpeed();
-                double maxFanGPU = GetSystemInfo.getGPUFanSpeed();
-
-                await Task.Run(() => GetSystemInfo.ReadSensors());
-
-                tbxCPUFan.Text = $"{cpuFan * 0x64} RPM";
-                tbxdGPUFan.Text = $"{gpuFan * 0x64} RPM";
-
-                double cpuFanPercentage = Math.Round(cpuFan / maxFanCPU);
-                double gpuFanPercentage = Math.Round(gpuFan / maxFanGPU);
-
-                prCPUFan.Progress = cpuFanPercentage;
-                prdGPUFan.Progress = gpuFanPercentage;
-
-                tbxCPUPer.Text = $"{(int)GetSystemInfo.CpuTemp}°C";
-                tbxdGPUPer.Text = $"{Math.Round(gpuFan / maxFanGPU)}%";
-
-
-                if (hasSysFan)
+            try {
+                if (!Global.isMinimised)
                 {
-                    var sysFan = App.wmi.DeviceGet(ASUSWmi.SYS_Fan);
-                    double maxFanSYS = GetSystemInfo.getSYSFanSpeed();
-                    tbxSysFan.Text = $"{sysFan * 0x64} RPM";
-                    double sysFanPercentage = Math.Round(sysFan / maxFanCPU);
-                    tbxSysPer.Text = $"{Math.Round(sysFan / maxFanSYS)}%";
-                }
+                    var cpuFan = App.wmi.DeviceGet(ASUSWmi.CPU_Fan);
+                    var gpuFan = App.wmi.DeviceGet(ASUSWmi.GPU_Fan);
 
-                if (tbxCPUFan.Text.Contains("-") || tbxdGPUFan.Text.Contains("-"))
-                {
-                    cpuFan = App.wmi.DeviceGet2(ASUSWmi.CPU_Fan);
-                    gpuFan = App.wmi.DeviceGet2(ASUSWmi.GPU_Fan);
+                    double maxFanCPU = GetSystemInfo.getCPUFanSpeed();
+                    double maxFanGPU = GetSystemInfo.getGPUFanSpeed();
+
+                    await Task.Run(() => GetSystemInfo.ReadSensors());
 
                     tbxCPUFan.Text = $"{cpuFan * 0x64} RPM";
                     tbxdGPUFan.Text = $"{gpuFan * 0x64} RPM";
 
-                    tbxdGPUPer.Text = $"{Math.Round(gpuFan / maxFanGPU)}%";
-
-                    cpuFanPercentage = Math.Round(cpuFan / 0.69);
-                    gpuFanPercentage = Math.Round(gpuFan / 0.69);
+                    double cpuFanPercentage = Math.Round(cpuFan / maxFanCPU);
+                    double gpuFanPercentage = Math.Round(gpuFan / maxFanGPU);
 
                     prCPUFan.Progress = cpuFanPercentage;
                     prdGPUFan.Progress = gpuFanPercentage;
-                }
 
-                float dischargeRate = (float)GetSystemInfo.BatteryDischarge;
+                    tbxCPUPer.Text = $"{(int)GetSystemInfo.CpuTemp}°C";
+                    tbxdGPUPer.Text = $"{Math.Round(gpuFan / maxFanGPU)}%";
 
-                if (dischargeRate != 0)
-                {
-                    spDischarge.Visibility = Visibility.Visible;
-                    tbxDischarge.Text = $"-{dischargeRate.ToString("0.00")} W";
+
+                    if (hasSysFan)
+                    {
+                        var sysFan = App.wmi.DeviceGet(ASUSWmi.SYS_Fan);
+                        double maxFanSYS = GetSystemInfo.getSYSFanSpeed();
+                        tbxSysFan.Text = $"{sysFan * 0x64} RPM";
+                        double sysFanPercentage = Math.Round(sysFan / maxFanCPU);
+                        tbxSysPer.Text = $"{Math.Round(sysFan / maxFanSYS)}%";
+                    }
+
+                    if (tbxCPUFan.Text.Contains("-") || tbxdGPUFan.Text.Contains("-"))
+                    {
+                        cpuFan = App.wmi.DeviceGet2(ASUSWmi.CPU_Fan);
+                        gpuFan = App.wmi.DeviceGet2(ASUSWmi.GPU_Fan);
+
+                        tbxCPUFan.Text = $"{cpuFan * 0x64} RPM";
+                        tbxdGPUFan.Text = $"{gpuFan * 0x64} RPM";
+
+                        tbxdGPUPer.Text = $"{Math.Round(gpuFan / maxFanGPU)}%";
+
+                        cpuFanPercentage = Math.Round(cpuFan / 0.69);
+                        gpuFanPercentage = Math.Round(gpuFan / 0.69);
+
+                        prCPUFan.Progress = cpuFanPercentage;
+                        prdGPUFan.Progress = gpuFanPercentage;
+                    }
+
+                    float dischargeRate = (float)GetSystemInfo.BatteryDischarge;
+
+                    if (dischargeRate != 0)
+                    {
+                        spDischarge.Visibility = Visibility.Visible;
+                        tbxDischarge.Text = $"-{dischargeRate.ToString("0.00")} W";
+                    }
+                    else spDischarge.Visibility = Visibility.Collapsed;
                 }
-                else spDischarge.Visibility = Visibility.Collapsed;
             }
+            catch { }
         }
 
         private void OnXgMobileStatusUpdate(object? _, XgMobileConnectionService.XgMobileStatusEvent e)

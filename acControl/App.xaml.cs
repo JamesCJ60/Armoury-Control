@@ -156,15 +156,15 @@ namespace acControl
                     {
                         case PowerModes.Suspend:
                             // Disable Windows Update and Microsoft Store Service
-                            DisableServices("UpdateOrchestrator", "wuauserv", "InstallService");
+                            DisableServices("UpdateOrchestrator", "wuauserv", "InstallService", "WaaSMedicSvc", "UsoSvc");
                             // Prevent the services from starting automatically
-                            PreventServiceAutoStart("UpdateOrchestrator", "wuauserv", "InstallService");
+                            PreventServiceAutoStart("UpdateOrchestrator", "wuauserv", "InstallService", "WaaSMedicSvc", "UsoSvc");
                             break;
                         case PowerModes.Resume:
                             // Enable Windows Update and Microsoft Store Service
-                            EnableServices("UpdateOrchestrator", "wuauserv", "InstallService");
+                            EnableServices("UpdateOrchestrator", "wuauserv", "InstallService", "WaaSMedicSvc", "UsoSvc");
                             // Allow the services to start automatically
-                            AllowServiceAutoStart("UpdateOrchestrator", "wuauserv", "InstallService");
+                            AllowServiceAutoStart("UpdateOrchestrator", "wuauserv", "InstallService", "WaaSMedicSvc", "UsoSvc");
                             break;
                     }
                 }
