@@ -699,7 +699,7 @@ namespace acControl.Views.Pages
                 Thread.Sleep(500);
                 if (Settings.Default.ACMode == mode)
                 {
-                    if(eGPU == 1)
+                    if (eGPU == 1)
                     {
                         if (CustomPresetHandler.isXgFan == true)
                         {
@@ -746,6 +746,9 @@ namespace acControl.Views.Pages
                             });
 
                             xgMobileConnectionService.SetXgMobileFan(xgFanCurve);
+                        } else
+                        {
+                            xgMobileConnectionService.ResetXgMobileFan();
                         }
                     }
                 }
