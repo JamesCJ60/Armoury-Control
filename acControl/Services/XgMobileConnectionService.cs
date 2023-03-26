@@ -10,6 +10,7 @@ namespace acControl.Services
     {
         private readonly ASUSWmi wmi;
         private static readonly byte[] XG_MOBILE_CURVE_FUNC_NAME = { 0x5e, 0xd1, 0x01 };
+        private static readonly byte[] XG_MOBILE_DISABLE_FAN_CONTROL_FUNC_NAME = { 0x5e, 0xd1, 0x02 };
 
         public bool Connected { get; private set; }
         public bool Detected { get; private set; }
@@ -79,12 +80,12 @@ namespace acControl.Services
 
         public void EnableXgMobileLight()
         {
-            SendXgMobileLightingCommand(new byte[] { 0x5e, 0xc5, 0x50 });
+            SendXgMobileUsbCommand(new byte[] { 0x5e, 0xc5, 0x50 });
         }
 
         public void DisableXgMobileLight()
         {
-            SendXgMobileLightingCommand(new byte[] { 0x5e, 0xc5 });
+            SendXgMobileUsbCommand(new byte[] { 0x5e, 0xc5 });
         }
 
         public bool SetXgMobileFan(List<CurvePoint> points)
@@ -94,9 +95,14 @@ namespace acControl.Services
                 return false;
             }
             var paramsBytes = new List<byte>(XG_MOBILE_CURVE_FUNC_NAME);
-            paramsBytes.AddRange(points.Select(point => (byte)point.Fan)); // 8 bytes of fan
             paramsBytes.AddRange(points.Select(point => (byte)point.Temperature)); // 8 bytes of temperature
-            return SendXgMobileLightingCommand(paramsBytes.ToArray());
+            paramsBytes.AddRange(points.Select(point => (byte)point.Fan)); // 8 bytes of fan
+            return SendXgMobileUsbCommand(paramsBytes.ToArray());
+        }
+
+        public bool ResetXgMobileFan()
+        {
+            return SendXgMobileUsbCommand(XG_MOBILE_DISABLE_FAN_CONTROL_FUNC_NAME);
         }
 
         private bool ValidatePoints(List<CurvePoint> points)
@@ -108,7 +114,7 @@ namespace acControl.Services
             return true;
         }
 
-        private bool SendXgMobileLightingCommand(byte[] command)
+        private bool SendXgMobileUsbCommand(byte[] command)
         {
             var devices = HidDevices.Enumerate(0x0b05, new int[] { 0x1970 });
             var xgMobileLight = devices.Where(device => device.IsConnected && device.Description.ToLower().StartsWith("hid") && device.Capabilities.FeatureReportByteLength > 64).ToList();
