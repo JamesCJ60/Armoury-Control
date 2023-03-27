@@ -74,7 +74,7 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <ui:NumberBox Name="nudCPUTemp1" Text="{Binding ElementName=sdCPUTemp1, Path=Value}" Value="95" Max="100" Min="10" Grid.Column="0" Step="1" IntegersOnly="True"/>
-                                    <Slider Name="sdCPUTemp1" Value="{Binding ElementName=nudCPUTemp1, Path=Value}" Maximum="100" Minimum="10" Grid.Column="1" Margin="10,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True"/>
+                                    <Slider Name="sdCPUTemp1" Value="{Binding ElementName=nudCPUTemp1, Path=Value}" Maximum="100" Minimum="10" Grid.Column="1" Margin="10,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                 </Grid>
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
@@ -85,7 +85,7 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <ui:NumberBox Name="nudCPUTemp2" Text="{Binding ElementName=sdCPUTemp2, Path=Value}" Value="45" Max="250" Min="8" Grid.Column="0" Step="1" IntegersOnly="True"/>
-                                    <Slider Name="sdCPUTemp2" Value="{Binding ElementName=nudCPUTemp2, Path=Value}" Maximum="250" Minimum="8" Grid.Column="1" Margin="10,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True"/>
+                                    <Slider Name="sdCPUTemp2" Value="{Binding ElementName=nudCPUTemp2, Path=Value}" Maximum="250" Minimum="8" Grid.Column="1" Margin="10,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                 </Grid>
                             </StackPanel>
 
@@ -125,7 +125,7 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <ui:NumberBox Name="nudCPUPow1" Text="{Binding ElementName=sdCPUPow1, Path=Value}" Value="45" Max="250" Min="8" Grid.Column="0" Step="1" IntegersOnly="True"/>
-                                    <Slider Name="sdCPUPow1" Value="{Binding ElementName=nudCPUPow1, Path=Value}" Maximum="250" Minimum="8" Grid.Column="1" Margin="10,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True"/>
+                                    <Slider Name="sdCPUPow1" Value="{Binding ElementName=nudCPUPow1, Path=Value}" Maximum="250" Minimum="8" Grid.Column="1" Margin="10,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                 </Grid>
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
@@ -136,7 +136,7 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <ui:NumberBox Name="nudCPUPow2" Text="{Binding ElementName=sdCPUPow2, Path=Value}" Value="65" Max="250" Min="8" Grid.Column="0" Step="1" IntegersOnly="True"/>
-                                    <Slider Name="sdCPUPow2" Value="{Binding ElementName=nudCPUPow2, Path=Value}" Maximum="250" Minimum="8" Grid.Column="1" Margin="10,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True"/>
+                                    <Slider Name="sdCPUPow2" Value="{Binding ElementName=nudCPUPow2, Path=Value}" Maximum="250" Minimum="8" Grid.Column="1" Margin="10,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                 </Grid>
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0" Name="spAPUSlow">
@@ -147,7 +147,7 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <ui:NumberBox Name="nudAPUPow" Text="{Binding ElementName=sdAPUPow, Path=Value}" Value="45" Max="250" Min="8" Grid.Column="0" Step="1" IntegersOnly="True"/>
-                                    <Slider Name="sdAPUPow" Value="{Binding ElementName=nudAPUPow, Path=Value}" Maximum="250" Minimum="8" Grid.Column="1" Margin="10,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True"/>
+                                    <Slider Name="sdAPUPow" Value="{Binding ElementName=nudAPUPow, Path=Value}" Maximum="250" Minimum="8" Grid.Column="1" Margin="10,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                 </Grid>
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0" Name="spAPUCO">
@@ -158,7 +158,7 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <ui:NumberBox Name="nudAPUCO" Text="{Binding ElementName=sdAPUCO, Path=Value}" Value="0" Max="0" Min="-30" Grid.Column="0" Step="1" IntegersOnly="True"/>
-                                <Slider Name="sdAPUCO" Value="{Binding ElementName=nudAPUCO, Path=Value}" Maximum="0" Minimum="-30" Grid.Column="1" Margin="10,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True"/>
+                                    <Slider Name="sdAPUCO" Value="{Binding ElementName=nudAPUCO, Path=Value}" Maximum="0" Minimum="-30" Grid.Column="1" Margin="10,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                             </Grid>
                                 <TextBlock Name="tbSmart" Foreground="{DynamicResource TextFillColorTertiaryBrush}" FontSize="12" Margin="0,12,0,0">Note: SmartShift for SmartShift-enabled devices utilises Power Limit 1 and Power Limit 2 as the device's overall APU/CPU+GPU power limit</TextBlock>
                         </StackPanel>
@@ -193,42 +193,42 @@
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <StackPanel Margin="0,0,12,0">
                                     <TextBlock Text="{Binding ElementName=sdCPUFan1, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
-                                    <Slider HorizontalAlignment="Center" Name="sdCPUFan1" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <Slider HorizontalAlignment="Center" Name="sdCPUFan1" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                     <TextBlock Text="30°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,0"/>
                                 </StackPanel>
                                 <StackPanel Margin="0,0,12,0">
                                     <TextBlock Text="{Binding ElementName=sdCPUFan2, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
-                                    <Slider HorizontalAlignment="Center" Name="sdCPUFan2" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <Slider HorizontalAlignment="Center" Name="sdCPUFan2" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                     <TextBlock Text="40°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,90"/>
                                 </StackPanel>
                                 <StackPanel Margin="0,0,12,0">
                                     <TextBlock Text="{Binding ElementName=sdCPUFan3, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
-                                    <Slider HorizontalAlignment="Center" Name="sdCPUFan3" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <Slider HorizontalAlignment="Center" Name="sdCPUFan3" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                     <TextBlock Text="50°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,0"></TextBlock>
                                 </StackPanel>
                                 <StackPanel Margin="0,0,12,0">
                                     <TextBlock Text="{Binding ElementName=sdCPUFan4, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
-                                    <Slider HorizontalAlignment="Center" Name="sdCPUFan4" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <Slider HorizontalAlignment="Center" Name="sdCPUFan4" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                     <TextBlock Text="60°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,0"></TextBlock>
                                 </StackPanel>
                                 <StackPanel Margin="0,0,12,0">
                                     <TextBlock Text="{Binding ElementName=sdCPUFan5, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
-                                    <Slider HorizontalAlignment="Center" Name="sdCPUFan5" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <Slider HorizontalAlignment="Center" Name="sdCPUFan5" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                     <TextBlock Text="70°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,0"></TextBlock>
                                 </StackPanel>
                                 <StackPanel Margin="0,0,12,0">
                                     <TextBlock Text="{Binding ElementName=sdCPUFan6, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
-                                    <Slider HorizontalAlignment="Center" Name="sdCPUFan6" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <Slider HorizontalAlignment="Center" Name="sdCPUFan6" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                     <TextBlock Text="80°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,0"></TextBlock>
                                 </StackPanel>
                                 <StackPanel Margin="0,0,12,0">
                                     <TextBlock Text="{Binding ElementName=sdCPUFan7, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
-                                    <Slider HorizontalAlignment="Center" Name="sdCPUFan7" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <Slider HorizontalAlignment="Center" Name="sdCPUFan7" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                     <TextBlock Text="90°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,0"/>
                                 </StackPanel>
                                 <StackPanel>
                                     <TextBlock Text="{Binding ElementName=sdCPUFan8, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
-                                    <Slider HorizontalAlignment="Center" Name="sdCPUFan8" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <Slider HorizontalAlignment="Center" Name="sdCPUFan8" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                     <TextBlock Text="100°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,0"/>
                                 </StackPanel>
                             </StackPanel>
@@ -269,7 +269,7 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <ui:NumberBox Name="nudGPUCore" Text="{Binding ElementName=sdGPUCore, Path=Value}" Value="0" Max="500" Min="0" Grid.Column="0" Step="5" IntegersOnly="True"/>
-                                    <Slider Name="sdGPUCore" Value="{Binding ElementName=nudGPUCore, Path=Value}" Maximum="500" Minimum="0" Grid.Column="1" Margin="10,0,0,0" TickFrequency="5" VerticalAlignment="Center" IsSnapToTickEnabled="True"/>
+                                    <Slider Name="sdGPUCore" Value="{Binding ElementName=nudGPUCore, Path=Value}" Maximum="500" Minimum="0" Grid.Column="1" Margin="10,0,0,0" TickFrequency="5" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                 </Grid>
                             </StackPanel>
 
@@ -281,7 +281,7 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <ui:NumberBox Name="nudGPUVRAM" Text="{Binding ElementName=sdGPUVRAM, Path=Value}" Value="0" Max="1000" Min="0" Grid.Column="0" Step="5" IntegersOnly="True"/>
-                                    <Slider Name="sdGPUVRAM" Value="{Binding ElementName=nudGPUVRAM, Path=Value}" Maximum="1000" Minimum="0" Grid.Column="1" Margin="10,0,0,0" TickFrequency="5" VerticalAlignment="Center" IsSnapToTickEnabled="True"/>
+                                    <Slider Name="sdGPUVRAM" Value="{Binding ElementName=nudGPUVRAM, Path=Value}" Maximum="1000" Minimum="0" Grid.Column="1" Margin="10,0,0,0" TickFrequency="5" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                 </Grid>
                             </StackPanel>
 
@@ -317,42 +317,42 @@
                             <StackPanel Orientation="Horizontal"  VerticalAlignment="Center">
                                 <StackPanel Margin="0,0,12,0">
                                     <TextBlock Text="{Binding ElementName=sdGPUFan1, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
-                                    <Slider HorizontalAlignment="Center" Name="sdGPUFan1" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <Slider HorizontalAlignment="Center" Name="sdGPUFan1" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                     <TextBlock Text="30°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,0"/>
                                 </StackPanel>
                                 <StackPanel Margin="0,0,12,0">
                                     <TextBlock Text="{Binding ElementName=sdGPUFan2, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
-                                    <Slider HorizontalAlignment="Center" Name="sdGPUFan2" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <Slider HorizontalAlignment="Center" Name="sdGPUFan2" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                     <TextBlock Text="40°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,90"/>
                                 </StackPanel>
                                 <StackPanel Margin="0,0,12,0">
                                     <TextBlock Text="{Binding ElementName=sdGPUFan3, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
-                                    <Slider HorizontalAlignment="Center" Name="sdGPUFan3" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <Slider HorizontalAlignment="Center" Name="sdGPUFan3" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                     <TextBlock Text="50°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,0"></TextBlock>
                                 </StackPanel>
                                 <StackPanel Margin="0,0,12,0">
                                     <TextBlock Text="{Binding ElementName=sdGPUFan4, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
-                                    <Slider HorizontalAlignment="Center" Name="sdGPUFan4" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <Slider HorizontalAlignment="Center" Name="sdGPUFan4" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                     <TextBlock Text="60°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,0"></TextBlock>
                                 </StackPanel>
                                 <StackPanel Margin="0,0,12,0">
                                     <TextBlock Text="{Binding ElementName=sdGPUFan5, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
-                                    <Slider HorizontalAlignment="Center" Name="sdGPUFan5" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <Slider HorizontalAlignment="Center" Name="sdGPUFan5" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                     <TextBlock Text="70°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,0"></TextBlock>
                                 </StackPanel>
                                 <StackPanel Margin="0,0,12,0">
                                     <TextBlock Text="{Binding ElementName=sdGPUFan6, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
-                                    <Slider HorizontalAlignment="Center" Name="sdGPUFan6" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <Slider HorizontalAlignment="Center" Name="sdGPUFan6" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                     <TextBlock Text="80°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,0"></TextBlock>
                                 </StackPanel>
                                 <StackPanel Margin="0,0,12,0">
                                     <TextBlock Text="{Binding ElementName=sdGPUFan7, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
-                                    <Slider HorizontalAlignment="Center" Name="sdGPUFan7" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <Slider HorizontalAlignment="Center" Name="sdGPUFan7" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                     <TextBlock Text="90°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,0"/>
                                 </StackPanel>
                                 <StackPanel>
                                     <TextBlock Text="{Binding ElementName=sdGPUFan8, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
-                                    <Slider HorizontalAlignment="Center" Name="sdGPUFan8" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <Slider HorizontalAlignment="Center" Name="sdGPUFan8" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                     <TextBlock Text="100°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,0"/>
                                 </StackPanel>
                             </StackPanel>
@@ -463,42 +463,42 @@
                             <StackPanel Orientation="Horizontal"  VerticalAlignment="Center">
                                 <StackPanel Margin="0,0,12,0">
                                     <TextBlock Text="{Binding ElementName=sdXGFan1, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
-                                    <Slider HorizontalAlignment="Center" Name="sdXGFan1" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <Slider HorizontalAlignment="Center" Name="sdXGFan1" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                     <TextBlock Text="30°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,0"/>
                                 </StackPanel>
                                 <StackPanel Margin="0,0,12,0">
                                     <TextBlock Text="{Binding ElementName=sdXGFan2, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
-                                    <Slider HorizontalAlignment="Center" Name="sdXGFan2" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <Slider HorizontalAlignment="Center" Name="sdXGFan2" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                     <TextBlock Text="40°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,90"/>
                                 </StackPanel>
                                 <StackPanel Margin="0,0,12,0">
                                     <TextBlock Text="{Binding ElementName=sdXGFan3, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
-                                    <Slider HorizontalAlignment="Center" Name="sdXGFan3" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <Slider HorizontalAlignment="Center" Name="sdXGFan3" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                     <TextBlock Text="50°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,0"></TextBlock>
                                 </StackPanel>
                                 <StackPanel Margin="0,0,12,0">
                                     <TextBlock Text="{Binding ElementName=sdXGFan4, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
-                                    <Slider HorizontalAlignment="Center" Name="sdXGFan4" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <Slider HorizontalAlignment="Center" Name="sdXGFan4" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                     <TextBlock Text="60°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,0"></TextBlock>
                                 </StackPanel>
                                 <StackPanel Margin="0,0,12,0">
                                     <TextBlock Text="{Binding ElementName=sdXGFan5, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
-                                    <Slider HorizontalAlignment="Center" Name="sdXGFan5" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <Slider HorizontalAlignment="Center" Name="sdXGFan5" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                     <TextBlock Text="70°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,0"></TextBlock>
                                 </StackPanel>
                                 <StackPanel Margin="0,0,12,0">
                                     <TextBlock Text="{Binding ElementName=sdXGFan6, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
-                                    <Slider HorizontalAlignment="Center" Name="sdXGFan6" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <Slider HorizontalAlignment="Center" Name="sdXGFan6" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                     <TextBlock Text="80°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,0"></TextBlock>
                                 </StackPanel>
                                 <StackPanel Margin="0,0,12,0">
                                     <TextBlock Text="{Binding ElementName=sdXGFan7, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
-                                    <Slider HorizontalAlignment="Center" Name="sdXGFan7" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <Slider HorizontalAlignment="Center" Name="sdXGFan7" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                     <TextBlock Text="90°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,0"/>
                                 </StackPanel>
                                 <StackPanel>
                                     <TextBlock Text="{Binding ElementName=sdXGFan8, Path=Value, StringFormat={}{0}%}" TextAlignment="Center" Width="36" FontSize="14" Margin="0,0,0,9"></TextBlock>
-                                    <Slider HorizontalAlignment="Center" Name="sdXGFan8" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                                    <Slider HorizontalAlignment="Center" Name="sdXGFan8" RenderTransformOrigin="0.5,0.5" Value="30" Maximum="100" Minimum="0" Orientation="Vertical" Height="180" LargeChange="5" SmallChange="1" TickFrequency="2" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                     <TextBlock Text="100°C" TextAlignment="Center" Width="36" FontSize="14" Margin="0,9,0,0"/>
                                 </StackPanel>
                             </StackPanel>

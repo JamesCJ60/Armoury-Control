@@ -314,5 +314,11 @@ namespace acControl.Views.Pages
             if (cbxPowerPreset.SelectedIndex == 2) preset = "presets\\Turbo.txt";
             loadSettings(preset);
         }
+
+        private void SizeSlider_TouchDown(object sender, TouchEventArgs e)
+        {
+            // Mark event as handled
+            e.Handled = true;
+        }
     }
 }

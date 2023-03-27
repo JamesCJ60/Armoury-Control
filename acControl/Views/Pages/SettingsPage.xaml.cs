@@ -89,6 +89,7 @@ namespace acControl.Views.Pages
         private void cbGUI_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             Settings.Default.MinimalGUI = (bool)cbGUI.IsChecked;
+            cbMini.IsChecked = true;
             Settings.Default.Save();
         }
     }

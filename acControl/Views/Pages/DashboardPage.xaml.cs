@@ -762,5 +762,11 @@ namespace acControl.Views.Pages
         {
             Settings.Default.ModernStandby = (bool)tsModernStandby.IsChecked;
         }
+
+        private void SizeSlider_TouchDown(object sender, TouchEventArgs e)
+        {
+            // Mark event as handled
+            e.Handled = true;
+        }
     }
 }
