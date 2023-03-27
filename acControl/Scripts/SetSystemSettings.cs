@@ -249,7 +249,7 @@ namespace acControl.Scripts
                         string bitCurve = BitConverter.ToString(curve);
                         Debug.WriteLine(bitCurve);
 
-                        App.wmi.SetFanCurve(1, curve);
+                        App.wmi.SetFanCurve(2, curve);
                     }
                 }
             });

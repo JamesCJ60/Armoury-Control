@@ -110,28 +110,28 @@
                         <StackPanel Margin="0,0,0,-2" >
                             <TextBlock FontWeight="Bold" FontSize="17">Power Modes:</TextBlock>
                             <UniformGrid Columns="4" VerticalAlignment="Center" Height="54" HorizontalAlignment="Center" Margin="0,2,0,0">
-                                <ToggleButton Width="50" Margin="4.5,0" ToolTip=""  Name="tbSilent2" Click="tbSilent_Click">
+                                <ToggleButton Width="50" Margin="4.5,0"  Name="tbSilent2" Click="tbSilent_Click" ToolTip="Silent Mode">
                                     <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
                                         <ui:SymbolIcon Symbol="LeafTwo20" FontSize="24"/>
 
                                     </StackPanel>
                                 </ToggleButton>
 
-                                <ToggleButton Width="50" Margin="4.5,0" ToolTip="" Name="tbPerf2" Click="tbPerf_Click">
+                                <ToggleButton Width="50" Margin="4.5,0" Name="tbPerf2" Click="tbPerf_Click" ToolTip="Performance Mode">
                                     <StackPanel Orientation="Horizontal">
                                         <ui:SymbolIcon Symbol="Scales20" FontSize="24"/>
 
                                     </StackPanel>
                                 </ToggleButton>
 
-                                <ToggleButton Width="50" Margin="4.5,0" ToolTip="" Name="tbTurbo2" Click="tbTurbo_Click">
+                                <ToggleButton Width="50" Margin="4.5,0" ToolTip="Turbo Mode" Name="tbTurbo2" Click="tbTurbo_Click">
                                     <StackPanel Orientation="Horizontal">
                                         <ui:SymbolIcon Symbol="Gauge20" FontSize="24"/>
 
                                     </StackPanel>
                                 </ToggleButton>
 
-                                <ToggleButton Width="50" Margin="4.5,0" ToolTip="" Name="tbMan2" Click="tbMan_Click"> 
+                                <ToggleButton Width="50" Margin="4.5,0" ToolTip="Manual Mode" Name="tbMan2" Click="tbMan_Click"> 
                                     <StackPanel Orientation="Horizontal">
                                         <ui:SymbolIcon Symbol="Book20" FontSize="24"/>
 
