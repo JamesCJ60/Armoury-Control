@@ -266,7 +266,7 @@ namespace acControl.Scripts
             double maxFanCPU = 0.6;
             if (MotherboardInfo.Product.Contains("Flow Z13"))
             {
-                maxFanCPU = 0.69;
+                maxFanCPU = 0.7;
             }
 
             return maxFanCPU;

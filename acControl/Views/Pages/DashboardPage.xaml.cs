@@ -49,7 +49,7 @@ namespace acControl.Views.Pages
         }
         private bool setup = false;
         private bool hasSysFan = false;
-        private void setupGUI()
+        private async void setupGUI()
         {
             if (Global.isMinimalGUI)
             {
@@ -209,7 +209,14 @@ namespace acControl.Views.Pages
             SetSystemSettings.setBatteryLimit((int)sdBattery.Value);
             setup = true;
 
+            if (tbAuto.IsChecked == true && setup == true || tbDisplayAuto.IsChecked == true && setup == true)
+            {
+                await Task.Run(() => GetSystemInfo.getBattery());
+                await Task.Run(() => SetSystemSettings.setACDCSettings());
+            }
+
             GarbageCollection.Garbage_Collect();
+
         }
 
         void SensorUpdate_Tick(object sender, EventArgs e)
@@ -243,12 +250,17 @@ namespace acControl.Views.Pages
 
         private async void SystemEvents_PowerModeChanged(object sender, PowerModeChangedEventArgs e)
         {
-            if (tbAuto.IsChecked == true && setup == true || tbDisplayAuto.IsChecked == true && setup == true)
+            try
             {
-                await Task.Run(() => GetSystemInfo.getBattery());
-                await Task.Run(() => SetSystemSettings.setACDCSettings());
+                if (tbAuto.IsChecked == true && setup == true || tbDisplayAuto.IsChecked == true && setup == true)
+                {
+                    await Task.Run(() => GetSystemInfo.getBattery());
+                    await Task.Run(() => SetSystemSettings.setACDCSettings());
+                }
+                SetSystemSettings.setBatteryLimit((int)sdBattery.Value);
+            } catch {
+
             }
-            SetSystemSettings.setBatteryLimit((int)sdBattery.Value);
         }
 
         public async void switchProfile(int ACProfile)
@@ -576,9 +588,10 @@ namespace acControl.Views.Pages
                     prCPUFan.Progress = cpuFanPercentage;
                     prdGPUFan.Progress = gpuFanPercentage;
 
-                    tbxCPUPer.Text = $"{(int)GetSystemInfo.CpuTemp}°C";
-                    tbxdGPUPer.Text = $"{Math.Round(gpuFan / maxFanGPU)}%";
+                    tbxCPUPer.Text = $"{App.wmi.DeviceGet(ASUSWmi.Temp_CPU)}°C";
 
+                    if(App.wmi.DeviceGet(ASUSWmi.Temp_GPU) > 0) tbxdGPUPer.Text = $"{App.wmi.DeviceGet(ASUSWmi.Temp_GPU)}°C";
+                    else tbxdGPUPer.Text = $"{Math.Round(gpuFan / maxFanGPU)}%";
 
                     if (hasSysFan)
                     {

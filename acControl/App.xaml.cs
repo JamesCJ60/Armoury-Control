@@ -255,36 +255,36 @@ namespace acControl
 
         private async void Application_SessionEnding(object sender, SessionEndingCancelEventArgs e)
         {
-            await Task.Run(() =>
-            {
-                try
-                {
-                    if (MotherboardInfo.Product.Contains("Flow Z13") && Settings.Default.StartOnBoot == true)
-                    {
-                        DeviceHelper.SetDeviceEnabled(DLAHI_GUID, DLAHI_Instance, false);
-                        DeviceHelper.SetDeviceEnabled(DTTDE_GUID, DTTDE_Instance, false);
-                    }
-                }
-                catch { }
-            });
+            //await Task.Run(() =>
+            //{
+            //    try
+            //    {
+            //        if (MotherboardInfo.Product.Contains("Flow Z13") && Settings.Default.StartOnBoot == true)
+            //        {
+            //            DeviceHelper.SetDeviceEnabled(DLAHI_GUID, DLAHI_Instance, false);
+            //            DeviceHelper.SetDeviceEnabled(DTTDE_GUID, DTTDE_Instance, false);
+            //        }
+            //    }
+            //    catch { }
+            //});
         }
 
         public static async void ApplyFix()
         {
-            await Task.Run(() =>
-            {
-                System.Threading.Thread.Sleep(25000);
+            //await Task.Run(() =>
+            //{
+            //    System.Threading.Thread.Sleep(25000);
 
-                try
-                {
-                    if (MotherboardInfo.Product.Contains("Flow Z13") && Settings.Default.StartOnBoot == true)
-                    {
-                        DeviceHelper.SetDeviceEnabled(DLAHI_GUID, DLAHI_Instance, true);
-                        DeviceHelper.SetDeviceEnabled(DTTDE_GUID, DTTDE_Instance, true);
-                    }
-                }
-                catch { }
-            });
+            //    try
+            //    {
+            //        if (MotherboardInfo.Product.Contains("Flow Z13") && Settings.Default.StartOnBoot == true)
+            //        {
+            //            DeviceHelper.SetDeviceEnabled(DLAHI_GUID, DLAHI_Instance, true);
+            //            DeviceHelper.SetDeviceEnabled(DTTDE_GUID, DTTDE_Instance, true);
+            //        }
+            //    }
+            //    catch { }
+            //});
         }
 
         private XgMobileConnectionService xgMobileConnectionService;

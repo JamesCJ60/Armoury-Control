@@ -1,4 +1,6 @@
-﻿using HidLibrary;
+﻿using acControl;
+using acControl.Scripts;
+using HidLibrary;
 using System.Drawing;
 
 //
@@ -45,6 +47,8 @@ public static class Aura
                 device.Write(MESSAGE_APPLY);
                 device.CloseDevice();
             }
+
+            if (MotherboardInfo.Product.Contains("TUF")) App.wmi.TUFKeyboardRGB(Mode, Color1, Speed);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using System;
 using System.Linq;
+using System.Drawing;
 
 //
 // This is a optimised/simplified version of ASUSWmi.cs from https://github.com/seerge/g-helper
@@ -16,6 +17,10 @@ public class ASUSWmi
     const uint DSTS = 0x53545344;
     const uint DEVS = 0x53564544;
 
+    public const uint UniversalControl = 0x00100021;
+    public const int KB_Light_Up = 0xc4;
+    public const int KB_Light_Down = 0xc5;
+
     public const uint CPU_Fan = 0x00110013;
     public const uint GPU_Fan = 0x00110014;
     public const uint SYS_Fan = 0x00110031;
@@ -26,6 +31,9 @@ public class ASUSWmi
     public const uint GPUMux = 0x00090016;
     public const uint eGPU = 0x00090019;
     public const uint eGPUConnected = 0x00090018;
+
+    public const int Temp_CPU = 0x00120094;
+    public const int Temp_GPU = 0x00120097;
 
     public const uint BatteryLimit = 0x00120057;
     public const uint ScreenOverdrive = 0x00050019;
@@ -43,12 +51,19 @@ public class ASUSWmi
     public const int GPUModeStandard = 1;
     public const int GPUModeUltimate = 2;
 
-    public const int PPT_Total = 0x001200A0;
-    public const int PPT_Total1 = 0x001200A1;
-    public const int PPT_Total2 = 0x001200A2;
+    public const int PPT_TotalA0 = 0x001200A0;
+    public const int PPT_EDCA1 = 0x001200A1;  
+    public const int PPT_TDCA2 = 0x001200A2;  
+    public const int PPT_APUA3 = 0x001200A3;  
 
-    public const int PPT_CPU = 0x001200B0;
-    public const int PPT_CPU1 = 0x001200B1;
+    public const int PPT_CPUB0 = 0x001200B0;  
+    public const int PPT_CPUB1 = 0x001200B1;  
+
+    public const int PPT_APUC1 = 0x001200C1;
+    public const int PPT_APUC2 = 0x001200C2;
+
+    public const int TUF_KB = 0x00100056;
+    public const int TUF_KB_STATE = 0x00100057;
 
     public const int CPU_VOLTAGE = 0x00120079;
 
@@ -185,6 +200,20 @@ public class ASUSWmi
             .Concat(BitConverter.GetBytes(status))
             .ToArray();
         return CallMethod(DSTS, args);
+    }
+
+    public void TUFKeyboardRGB(int mode, Color color, int speed)
+    {
+
+        byte[] setting = new byte[12];
+        setting[0] = (byte)1;
+        setting[1] = (byte)mode;
+        setting[2] = color.R;
+        setting[3] = color.G;
+        setting[4] = color.B;
+        setting[5] = (byte)speed;
+
+        DeviceSet(TUF_KB, setting);
     }
 
     public void SubscribeToEvents(Action<object, EventArrivedEventArgs> EventHandler)

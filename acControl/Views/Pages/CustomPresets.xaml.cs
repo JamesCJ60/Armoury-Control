@@ -122,8 +122,7 @@ namespace acControl.Views.Pages
                 {
                     if (Global.cpuName.Contains("Ryzen"))
                     {
-                        if (App.wmi.DeviceGet(ASUSWmi.PPT_Total) > 0) nudCPUPow1.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_Total);
-                        else if (App.wmi.DeviceGet(ASUSWmi.PPT_Total1) > 0) nudCPUPow1.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_Total1);
+                        if (App.wmi.DeviceGet(ASUSWmi.PPT_TotalA0) > 0) nudCPUPow1.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_TotalA0);
                         else nudCPUPow1.Value = 65;
                     }
                     else nudCPUPow1.Value = 65;
@@ -133,9 +132,7 @@ namespace acControl.Views.Pages
                 {
                     if (Global.cpuName.Contains("Ryzen"))
                     {
-                        if (App.wmi.DeviceGet(ASUSWmi.PPT_Total) > 0) nudCPUPow2.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_Total);
-                        else if (App.wmi.DeviceGet(ASUSWmi.PPT_Total1) > 0) nudCPUPow2.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_Total1);
-                        else if (App.wmi.DeviceGet(ASUSWmi.PPT_Total2) > 0) nudCPUPow2.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_Total2);
+                        if (App.wmi.DeviceGet(ASUSWmi.PPT_TotalA0) > 0) nudCPUPow2.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_TotalA0);
                         else nudCPUPow2.Value = 65;
                     }
                     else nudCPUPow2.Value = 65;
@@ -145,9 +142,7 @@ namespace acControl.Views.Pages
                 {
                     if (Global.cpuName.Contains("Ryzen"))
                     {
-                        if (App.wmi.DeviceGet(ASUSWmi.PPT_CPU) > 0) nudAPUPow.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_CPU1);
-                        else if (App.wmi.DeviceGet(ASUSWmi.PPT_CPU1) > 0) nudAPUPow.Value = (int)App.wmi.DeviceGet(ASUSWmi.PPT_CPU1);
-                        else nudCPUPow2.Value = 45;
+                        nudCPUPow2.Value = 45;
                     }
                     else nudCPUPow2.Value = 45;
                 }
