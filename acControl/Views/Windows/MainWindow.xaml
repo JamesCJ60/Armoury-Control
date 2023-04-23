@@ -77,7 +77,8 @@
             UseSnapLayout="True" Name="tbMain">
             <ui:TitleBar.Tray>
                 <ui:NotifyIcon
-                    FocusOnLeftClick="True"
+                    LeftClick="NotifyIcon_LeftClick"
+                    FocusOnLeftClick="False"
                     Icon="pack://application:,,,/Assets/applicationIcon-256.png"
                     MenuOnRightClick="True"
                     TooltipText="Armoury Control">

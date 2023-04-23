@@ -219,5 +219,17 @@ namespace acControl.Views.Windows
             if (this.WindowState == WindowState.Minimized) this.WindowState = WindowState.Normal;
             _navigationService.Navigate(typeof(Views.Pages.CustomPresets));
         }
+
+        private void NotifyIcon_LeftClick(Wpf.Ui.Controls.NotifyIcon sender, RoutedEventArgs e)
+        {
+            if (this.WindowState != WindowState.Minimized)
+            {
+                this.WindowState = WindowState.Minimized;
+            } else
+            {
+                this.WindowState = WindowState.Normal;
+                this.Activate();
+            }
+        }
     }
 }
