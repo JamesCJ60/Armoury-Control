@@ -52,11 +52,12 @@ namespace acControl.Views.Pages
                     TaskDefinition td = ts.NewTask();
                     td.Principal.RunLevel = TaskRunLevel.Highest;
                     td.RegistrationInfo.Description = "Start Armoury Control";
+                    td.Settings.DisallowStartIfOnBatteries = false;
 
                     // Create a trigger that will fire the task at this time every other day
                     td.Triggers.Add(new LogonTrigger());
 
-                    // Create an action that will launch Notepad whenever the trigger fires
+                    // Create an action that will launch program whenever the trigger fires
                     string path = System.Reflection.Assembly.GetEntryAssembly().Location;
                     path = path.Replace("Armoury Control.dll", "Armoury Control.exe");
                     td.Actions.Add(path);

@@ -354,7 +354,7 @@ namespace acControl.Views.Pages
         private async void tbStan_Click(object sender, RoutedEventArgs e)
         {
             tbStan.IsChecked = false;
-            if (mux > 0)
+            if (mux > 0 || mux <= -1)
             {
                 tbStan.IsChecked = true;
                 tbEco.IsChecked = false;
@@ -374,7 +374,7 @@ namespace acControl.Views.Pages
         private async void tbEco_Click(object sender, RoutedEventArgs e)
         {
             tbEco.IsChecked = false;
-            if (mux > 0)
+            if (mux > 0 || mux <= -1)
             {
                 tbEco.IsChecked = true;
                 tbStan.IsChecked = false;
@@ -439,7 +439,7 @@ namespace acControl.Views.Pages
         {
             tbAuto.IsChecked = false;
 
-            if (mux > 0)
+            if (mux > 0 || mux < 0)
             {
                 tbAuto.IsChecked = true;
                 tbUlti.IsChecked = false;
@@ -489,7 +489,7 @@ namespace acControl.Views.Pages
         {
             int mux = GetMux();
             tbUlti.IsChecked = false;
-            if (mux < 1)
+            if (mux < 1 && mux > -1)
             {
                 var messageBox = new Wpf.Ui.Controls.MessageBox();
 
@@ -547,7 +547,7 @@ namespace acControl.Views.Pages
         private void tbXG_Click(object sender, RoutedEventArgs e)
         {
             tbXG.IsChecked = false;
-            if (mux > 0 || mux == -1)
+            if (mux > 0 || mux <= -1)
             {
                 if (eGPU < 1)
                 {
